@@ -13,7 +13,7 @@ import { useSearchParams } from "next/navigation";
 
 export default function Home() {
   const [searchQuery, setSearchQuery] = useState({});
-  const searchParams = useSearchParams();
+  // const searchParams = useSearchParams();
   function sortHappyHours(happyHourDataList: HappyHoursData) {
     return happyHourDataList.CO.Denver.sort((a, b) => {
       if (a.name < b.name) {
@@ -78,15 +78,15 @@ export default function Home() {
   }
 
   // update current search queries
-  useEffect(() => {
-    let newSearchQuery: { [key: string]: string } = {};
-    const entriesArray = Array.from(searchParams.entries());
-    for (const [key, value] of entriesArray) {
-      newSearchQuery[key] = value;
-    }
-    console.log(entriesArray);
-    setSearchQuery(newSearchQuery);
-  }, [searchParams]);
+  // useEffect(() => {
+  //   let newSearchQuery: { [key: string]: string } = {};
+  //   const entriesArray = Array.from(searchParams.entries());
+  //   for (const [key, value] of entriesArray) {
+  //     newSearchQuery[key] = value;
+  //   }
+  //   console.log(entriesArray);
+  //   setSearchQuery(newSearchQuery);
+  // }, [searchParams]);
 
   return (
     <div className="_home p-8 bg-slate-700 flex flex-col gap-5 items-center">

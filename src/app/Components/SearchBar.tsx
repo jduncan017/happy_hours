@@ -14,7 +14,7 @@ const SearchBar = () => {
     "Sat",
   ]);
   const filterParams = ["category", "woodType", "minPrice", "maxPrice"];
-  const searchParams = useSearchParams();
+  // const searchParams = useSearchParams();
   const pathname = usePathname();
   const router = useRouter();
 

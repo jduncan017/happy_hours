@@ -1,4 +1,40 @@
-const happyHours = {
+// Defines the start and end times for a single happy hour session
+export interface HappyHourTime {
+  Start: string;
+  End: string;
+}
+
+// Maps each day of the week to an array of HappyHourTime objects
+export interface HappyHours {
+  [day: string]: HappyHourTime[] | undefined;
+}
+
+// Represents a restaurant, with a corrected type for happyHours
+export interface Restaurant {
+  name: string;
+  address: string;
+  area: string;
+  website?: string;
+  happyHours: HappyHours;
+  notes: string[];
+}
+
+// Represents the cities within a state
+export interface City {
+  [cityName: string]: Restaurant[];
+}
+
+// Represents the states, each containing cities
+export interface States {
+  [stateAbbreviation: string]: City;
+}
+
+// an interface for the entire data structure
+export interface HappyHoursData {
+  CO: City;
+}
+
+export const HAPPY_HOURS = {
   CO: {
     Denver: [
       {
@@ -1714,11 +1750,6 @@ const happyHours = {
               Start: "14:00",
               End: "18:00",
             },
-            {
-              Start: "11:30",
-              End: "21:00",
-              Special: "$1 Oysters",
-            },
           ],
           Tue: [
             {
@@ -1757,7 +1788,7 @@ const happyHours = {
             },
           ],
         },
-        notes: [],
+        notes: ["Monday - $1 Oysters All Day!"],
       },
       {
         name: "Hapa Sushi",
@@ -2907,11 +2938,6 @@ const happyHours = {
               End: "18:00",
             },
             {
-              Start: "12:00",
-              End: "18:00",
-              Note: "Alternative Schedule",
-            },
-            {
               Start: "20:30",
               End: "21:30",
             },
@@ -2977,7 +3003,7 @@ const happyHours = {
             },
           ],
         },
-        notes: ["Website unclear, provided both potential schedules."],
+        notes: [],
       },
       {
         name: "Vital Root",
@@ -4708,5 +4734,3 @@ const happyHours = {
     ],
   },
 };
-
-export default happyHours;

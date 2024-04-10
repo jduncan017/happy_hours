@@ -1,5 +1,3 @@
-import HappyHours from "./denver-happy-hours.mjs";
-
 function formatHappyHours(happyHours) {
   let output = "";
 
@@ -56,7 +54,7 @@ function formatHappyHours(happyHours) {
     output += "No Denver areas found.";
   }
 
-  console.log(output);
+  return output;
 }
 
-formatHappyHours(HappyHours);
+export default formatHappyHours;

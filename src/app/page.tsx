@@ -1,5 +1,5 @@
 "use client";
-import React, { useEffect, useState } from "react";
+import React, { Suspense, useEffect, useState } from "react";
 import {
   HAPPY_HOURS,
   HappyHourTime,
@@ -91,7 +91,9 @@ export default function Home() {
   return (
     <div className="_home p-8 bg-slate-700 flex flex-col gap-5 items-center">
       <h1 className="_title font-bold mb-2 text-4xl">Denver Happy Hours</h1>
-      <SearchBar />
+      <Suspense>
+        <SearchBar />
+      </Suspense>
       {sortHappyHours(HAPPY_HOURS).map((restaurant) => {
         return (
           <div

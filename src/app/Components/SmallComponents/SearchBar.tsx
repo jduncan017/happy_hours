@@ -64,13 +64,13 @@ const SearchBar = () => {
   return (
     <form
       id="filters"
-      className="_search-bar bg-black p-4 rounded-lg max-w-screen-md w-full"
+      className="SearchBar p-4 rounded-lg max-w-screen-md w-full"
       onSubmit={(e) => e.preventDefault()}
     >
-      <div className="_inner-container">
-        <div className="_main-options">
+      <div className="InnerContainer">
+        <div className="MainOptions">
           {/* SEARCH BAR */}
-          {/* <div className="_search-input flex flex-col sm:flex-row gap-2 items-center w-full">
+          <div className="_search-input flex flex-col sm:flex-row gap-2 items-center w-full">
             <label htmlFor="search" className="_label block">
               Search:
             </label>
@@ -83,13 +83,13 @@ const SearchBar = () => {
               onChange={(e) => handleSearchFilters(e)}
               defaultValue={searchParams.get("query")?.toString()}
             />
-          </div> */}
+          </div>
           {/* FILTER OPTIONS */}
-          <div className="_filter-options flex flex-col my-2 sm:flex-row gap-2 items-center">
-            <label className="_label block">Filter By:</label>
-            <div className="_filter-checkboxes flex gap-2 items-center h-7">
-              {/* HAPPY HOUR NOW! */}
-              {/* <label className="_checkbox-label flex items-center gap-2">
+          {/* <div className="FilterOptions flex flex-col my-2 sm:flex-row gap-2 items-center">
+            <label className="Label block">Filter By:</label>
+            <div className="Checkboxes flex gap-2 items-center h-7"> */}
+          {/* HAPPY HOUR NOW! */}
+          {/* <label className="_checkbox-label flex items-center gap-2">
                 <input
                   type="checkbox"
                   name="happyHourNow"
@@ -98,15 +98,15 @@ const SearchBar = () => {
                   checked={searchParams.get("inStock") === "true"}
                 />
                 HappyHour Now!
-              </label> */}
+              </label>
             </div>
-          </div>
+          </div> */}
         </div>
 
         {/* Additional FILTER */}
-        <div className="_filters flex flex-wrap gap-4 justify-between w-full">
-          {/* LOCATION FILTER */}
-          {/* <div className="_field item1 flex gap-2 items-center">
+        {/* <div className="Filters flex flex-wrap gap-4 justify-between w-full"> */}
+        {/* LOCATION FILTER */}
+        {/* <div className="_field item1 flex gap-2 items-center">
             <label htmlFor="location" className="_label block">
               Location:
             </label>
@@ -125,15 +125,15 @@ const SearchBar = () => {
             </select>
           </div> */}
 
-          {/* DAY OF WEEK FILTER */}
-          <div className="_field item2 flex gap-2 items-center">
-            <label htmlFor="day-of-week" className="_label block">
+        {/* DAY OF WEEK FILTER */}
+        {/* <div className="Field item2 flex gap-2 items-center">
+            <label htmlFor="day-of-week" className="Label block">
               Day of Week:
             </label>
             <select
+              className="Select bg-white border-none rounded px-2 text-base text-black"
               id="day-of-week"
               name="dayOfWeek"
-              className="_select bg-white border-none rounded px-2 text-base text-black"
               onChange={(e) => handleSearchFilters(e)}
               defaultValue={searchParams.get("dayOfWeek")?.toString()}
             >
@@ -144,10 +144,10 @@ const SearchBar = () => {
                 </option>
               ))}
             </select>
-          </div>
+          </div> */}
 
-          {/* TIME OF DAY FILTER */}
-          {/* <div className="_price-filters item3 flex gap-4">
+        {/* TIME OF DAY FILTER */}
+        {/* <div className="_price-filters item3 flex gap-4">
             <div className="_field flex gap-2 items-center">
               <label htmlFor="time" className="_label block">
                 Time:
@@ -168,7 +168,7 @@ const SearchBar = () => {
               </select>
             </div>
           </div> */}
-        </div>
+        {/* </div> */}
       </div>
     </form>
   );

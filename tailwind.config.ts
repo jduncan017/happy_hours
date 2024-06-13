@@ -16,7 +16,7 @@ const config: Config = {
         neutral: "#FFFBF4",
         neutralLight: "#FFFBF4",
         neutralDark: "#FFF1DD",
-        primary: "#B94A65",
+        primary: "#004e59",
         primaryDark: "#5E0712",
         primaryLight: "#F8B999",
         secondaryBlue: "#406A91",

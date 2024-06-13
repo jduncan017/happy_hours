@@ -17,11 +17,7 @@ const NavBar = () => {
     setMobileActive(!mobileActive);
   }
 
-  const links = [
-    { text: "About Us" },
-    { text: "Services" },
-    { text: "Articles" },
-  ];
+  const links = [{ text: "Happy Hour Now!" }, { text: "Search" }];
 
   const renderMenu = () => {
     return (
@@ -57,19 +53,17 @@ const NavBar = () => {
 
   return (
     <nav className="NavContainer">
-      <div className="NavBar fixed z-30 hidden w-full max-w-[1728px] overflow-hidden bg-blurWhite font-sans shadow-md backdrop-blur-lg backdrop-filter sm:absolute sm:block">
+      <div className="NavBar fixed z-30 hidden w-full max-w-[1728px] overflow-hidden bg-blurBlack font-sans shadow-md backdrop-blur-lg backdrop-filter sm:absolute sm:block">
         <div className="Container mx-auto flex h-[74px] items-center justify-between px-3 md:px-5">
-          <Link
-            href="/"
-            className="transition-all duration-300 hover:scale-105 hover:contrast-125"
-          >
-            <Image
-              src="/logo-wide-black.webp"
-              alt="LifeGuide Holistic Healing Logo"
-              width={190}
-              height={50}
-            />
-          </Link>
+          <div className="LogoSection flex gap-5 h-full items-center">
+            <Link
+              href="/"
+              className="transition-all duration-300 hover:scale-105 hover:contrast-125"
+            >
+              <Image src="/h3-logo.png" alt="H3 Logo" width={50} height={50} />
+            </Link>
+            <p className="Title text-white uppercase">Happy Hour Hunt</p>
+          </div>
           {renderMenu()}
         </div>
       </div>

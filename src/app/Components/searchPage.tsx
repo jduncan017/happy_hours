@@ -89,44 +89,39 @@ export default function SearchPage() {
   // }, [searchParams]);
 
   return (
-    <div className="_home p-8 bg-slate-700 flex flex-col gap-5 items-center">
-      <h1 className="_title font-bold mb-2 text-4xl">Denver Happy Hours</h1>
-      <Suspense>
+    <div className="Search p-8 bg-black flex flex-col gap-5 items-center">
+      <h2 className="Title font-bold mt-10 mb-2 text-white">
+        Find Your Denver Happy Hour
+      </h2>
+      {/* <Suspense fallback={<div>Loading...</div>}>
         <SearchBar />
-      </Suspense>
+      </Suspense> */}
       {sortHappyHours(HAPPY_HOURS).map((restaurant) => {
         return (
           <div
-            className="_restaurant w-full p-4 bg-black rounded-lg flex max-w-screen-md gap-5"
+            className="DisplayBox w-full p-4 bg-gray-800 text-white rounded-lg flex max-w-screen-md gap-5"
             key={restaurant.name}
           >
-            <div className="_left-column w-1/2">
-              <h2 className="_restaurant__name font-semibold">
-                {restaurant.name}
-              </h2>
-              <p className="_restaurant__area">{`Location: ${restaurant.area}`}</p>
-              <p className="_restaurant__address">{`Address: ${restaurant.address}`}</p>
-              <h3 className="_notes font-semibold mt-2">Notes:</h3>
+            <div className="LeftColumn w-1/2">
+              <h2 className="RestaurantName">{restaurant.name}</h2>
+              <p className="Area">{`Location: ${restaurant.area}`}</p>
+              <p className="Address">{`Address: ${restaurant.address}`}</p>
+              <h3 className="Notes mt-2">Notes:</h3>
               {restaurant.notes.map((note) => {
                 return (
-                  <p className="_note" key={note}>
+                  <p className="Note" key={note}>
                     {note}
                   </p>
                 );
               })}
-              <Link
-                className="_restaurant__website"
-                href={`${restaurant.website}`}
-              >
-                <button className="_site__button bg-teal-800 text-white py-1 px-2 rounded-md mt-2">
+              <Link className="Website" href={`${restaurant.website}`}>
+                <button className="Button bg-primary text-white py-1 px-2 rounded-md mt-2">
                   Visit Website
                 </button>
               </Link>
             </div>
-            <div className="_hh__times">
-              <h3 className="_hh__times-title font-semibold">
-                Happy Hour Times:
-              </h3>
+            <div className="HHTimes">
+              <h3 className="TimeTitle font-semibold">Happy Hour Times:</h3>
               {formatHappyHours(restaurant.happyHours)}
             </div>
           </div>

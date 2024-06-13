@@ -13,24 +13,24 @@ export const metadata = {
   metadataBase: new URL(process.env.NEXT_PUBLIC_BASE_URL),
   title: "Denver Happy Hours!",
   keywords:
-    "brainspotting, holistic healing, holistic wellness, energy medicine, intuitive healing, integrative medicine, life coaching, transitions, grief, transformation, Oklahoma holistic healing, nationwide services",
+    "Denver happy hours, happy hour deals, Denver bars, Denver restaurants, happy hour specials, Denver nightlife, community events, local happy hours",
   authors: { name: "Joshua Duncan" },
   creator: "Joshua Duncan",
   publisher: "WebSavvy, LLC",
   description:
-    "Energy medicine, intuitive healing, and life coaching to help you clear limiting beliefs and create the life you want.",
+    "Discover the best happy hour deals in Denver! Join the community to suggest and confirm happy hours, and explore the top spots for drinks and fun.",
   alternates: {
     canonical: "/",
   },
   openGraph: {
     images: {
-      url: "/opengraph.webp",
+      url: "/opengraph.png",
       width: 1903,
       height: 997,
     },
-    title: "LifeGuide Holistic Healing",
+    title: "Denver Happy Hours!",
     description:
-      "Energy medicine, intuitive healing, and life coaching to help you clear limiting beliefs and create the life you want.",
+      "Discover the best happy hour deals in Denver! Join the community to suggest and confirm happy hours, and explore the top spots for drinks and fun.",
     url: "/",
     locale: "en_US",
     type: "website",

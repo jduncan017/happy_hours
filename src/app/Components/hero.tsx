@@ -16,10 +16,10 @@ const HeroSection = () => {
           priority
         />
       </div>
-      <div className="TitleSection text-white mt-24 ml-10 z-20 p-10 h-fit max-h-[1000px] max-w-[705px] rounded bg-blurBlack shadow-themeShadow backdrop-blur-md backdrop-filter sm:w-[60%] sm:rounded-2xl lg:w-1/2">
+      <div className="TitleSection text-white mx-auto mt-5 sm:mt-24 sm:mx-10 z-20 p-10 h-fit max-h-[1000px] max-w-[705px] rounded bg-blurBlack shadow-themeShadow backdrop-blur-md backdrop-filter sm:w-[60%] sm:rounded-2xl lg:w-1/2">
         <div className="LogoSection flex gap-5 h-fit pb-6">
           <Image
-            className="Logo"
+            className="Logo h-auto w-auto"
             src="/h3-logo.png"
             alt="H3 Logo"
             width={100}
@@ -39,7 +39,7 @@ const HeroSection = () => {
           size="md"
         />
       </div>
-      <div className="BackgroundLighting -bottom-5 h-full w-full rounded-lg bg-tertiaryYellow blur-[50px] sm:absolute sm:h-[340px]"></div>
+      <div className="BackgroundLighting bottom-5 h-full w-full rounded-full bg-yellow-100 blur-[50px] sm:absolute sm:h-[340px]"></div>
     </div>
   );
 };

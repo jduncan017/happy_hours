@@ -99,10 +99,10 @@ export default function SearchPage() {
       {sortHappyHours(HAPPY_HOURS).map((restaurant) => {
         return (
           <div
-            className="DisplayBox w-full p-4 bg-gray-800 text-white rounded-lg flex max-w-screen-md gap-5"
+            className="DisplayBox w-full p-4 md:flex-row flex-col bg-gray-800 text-wrap text-white rounded-lg flex max-w-screen-md gap-5"
             key={restaurant.name}
           >
-            <div className="LeftColumn w-1/2">
+            <div className="LeftColumn md:w-1/2 overflow-hidden">
               <h2 className="RestaurantName">{restaurant.name}</h2>
               <p className="Area">{`Location: ${restaurant.area}`}</p>
               <p className="Address">{`Address: ${restaurant.address}`}</p>
@@ -120,7 +120,7 @@ export default function SearchPage() {
                 </button>
               </Link>
             </div>
-            <div className="HHTimes">
+            <div className="HHTimes md:w-1/2">
               <h3 className="TimeTitle font-semibold">Happy Hour Times:</h3>
               {formatHappyHours(restaurant.happyHours)}
             </div>

@@ -30,7 +30,7 @@ const NavBar = () => {
               setMobileActive(false);
             }}
           >
-            <p className="AboutText text-2xl uppercase text-primaryDark transition-all duration-300 hover:text-gray-700 hover:underline sm:text-base sm:text-white md:text-xl">
+            <p className="AboutText text-2xl uppercase transition-all duration-300 hover:text-gray-700 hover:underline sm:text-base text-white md:text-xl">
               {link.text}
             </p>
           </button>
@@ -73,21 +73,19 @@ const NavBar = () => {
         className={`
           ${
             mobileActive ? "h-[360px] rounded-xl" : "h-[74px]"
-          } ${"MobileNav fixed z-30 flex w-full flex-col overflow-hidden bg-blurWhite px-6 py-3 font-sans shadow-md backdrop-blur-lg backdrop-filter transition-all duration-500 sm:hidden"}
+          } ${"MobileNav fixed z-30 flex w-full flex-col overflow-hidden bg-blurBlack px-6 py-3 font-sans shadow-md backdrop-blur-lg backdrop-filter transition-all duration-500 sm:hidden"}
         `}
       >
         <div className="NavBar flex w-full items-center justify-between">
-          <Link
-            href="/"
-            className="transition-all duration-300 hover:scale-105 hover:contrast-125"
-          >
-            <Image
-              src="/logo-wide-black.webp"
-              alt="LifeGuide Holistic Healing Logo"
-              width={190}
-              height={50}
-            />
-          </Link>
+          <div className="LogoSection flex gap-5 h-full items-center">
+            <Link
+              href="/"
+              className="transition-all duration-300 hover:scale-105 hover:contrast-125"
+            >
+              <Image src="/h3-logo.png" alt="H3 Logo" width={50} height={50} />
+            </Link>
+            <p className="Title text-white uppercase">Happy Hour Hunt</p>
+          </div>
           <HamburgerIcon onToggleMenu={toggleMenu} menuOpen={mobileActive} />
         </div>
         {mobileActive && renderMenu()}

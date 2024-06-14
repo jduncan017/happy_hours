@@ -39,7 +39,7 @@ const SiteButton = ({
 
   switch (colorFill) {
     case true:
-      buttonColor = "bg-primary text-white";
+      buttonColor = "bg-orange-500 text-white";
       break;
     case false:
       buttonColor = "border border-gray-800 text-gray-800";
@@ -52,7 +52,9 @@ const SiteButton = ({
 
   return (
     <button
-      className={`SiteButton duration-400 font-sans text-sm shadow-sm transition-all hover:scale-105 hover:bg-gray-600 hover:text-primaryLight disabled:bg-gray-500 disabled:hover:cursor-not-allowed disabled:hover:text-white sm:text-base ${buttonSize} ${addClasses} ${rounded ? "rounded-full" : "rounded-sm"} ${buttonColor}`}
+      className={`SiteButton duration-300 font-sans text-sm shadow-sm transition-all hover:scale-105 hover:bg-gray-100 hover:text-black disabled:bg-gray-500 disabled:hover:cursor-not-allowed disabled:hover:text-white sm:text-base ${buttonSize} ${addClasses} ${
+        rounded ? "rounded-full" : "rounded-sm"
+      } ${buttonColor}`}
       type={type ?? "button"}
       onClick={onSubmit}
       disabled={disabled}

@@ -121,7 +121,7 @@ export default function SearchPage() {
               </Link>
             </div>
             <div className="HHTimes md:w-1/2">
-              <h3 className="TimeTitle font-semibold">Happy Hour Times:</h3>
+              <h3 className="TimeTitle font-semibold">Happy Hours:</h3>
               {formatHappyHours(restaurant.happyHours)}
             </div>
           </div>

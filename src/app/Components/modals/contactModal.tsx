@@ -49,12 +49,12 @@ export default function ContactModal() {
   return (
     <ModalWrapper>
       <div className="contactModal">
-        <div className="formWrapper relative flex max-h-[100dvh] w-full max-w-[550px] flex-col px-2 font-sans text-gray-800 sm:px-6">
+        <div className="formWrapper relative flex max-h-[100dvh] w-full max-w-[550px] flex-col px-2 font-sans sm:px-6">
           <h1 className="font-3xl mb-2 mt-0 border-b border-dotted border-gray-500 font-serif font-bold uppercase leading-10 sm:text-4xl">
-            Start Your Journey Today:
+            Contact Us!
           </h1>
           <p className="formDescription m-0 w-full">
-            Have a question? Looking to try one of our services?
+            Have a question or suggestion for our site?
             <br /> Reach out below!
           </p>
 

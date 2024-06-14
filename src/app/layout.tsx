@@ -44,7 +44,7 @@ export default function RootLayout({
 }) {
   return (
     <html lang="en">
-      <body className="Body h-fit overflow-x-hidden bg-gray-700">
+      <body className="Body h-fit overflow-x-hidden bg-black">
         <ModalProvider>
           <div className="Page -z-20 m-auto h-fit max-w-[1728px] overflow-hidden bg-gradient-to-b from-neutralLight to-neutralDark">
             <NavBar />

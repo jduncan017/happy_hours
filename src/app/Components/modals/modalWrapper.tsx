@@ -27,14 +27,14 @@ const ModalWrapper: FC<ModalWrapperProps> = ({ children }) => {
 
   return (
     <div
-      className="modal__backdrop fixed inset-0 z-20 flex h-dvh items-center justify-center bg-blurWhite p-6 backdrop-blur-sm backdrop-filter"
+      className="modal__backdrop fixed inset-0 z-20 flex h-dvh items-center justify-center p-6 backdrop-blur-md backdrop-filter"
       onClick={hideModal}
     >
       <motion.div
         animate={{ scale: 1 }}
         initial={{ scale: 0 }}
         transition={{ duration: 0.2 }}
-        className="modal__content scrollbar-hide relative mt-16 h-fit max-h-[84vh] w-fit max-w-[98vw] overflow-y-scroll rounded-2xl bg-gradient-to-br from-neutral to-neutralDark px-6 py-6 text-center shadow-themeShadow backdrop-blur-md sm:py-10"
+        className="modal__content scrollbar-hide relative mt-16 h-fit max-h-[84vh] w-fit max-w-[98vw] overflow-y-scroll rounded-2xl bg-gray-300 px-6 py-6 text-center shadow-themeShadow backdrop-blur-md sm:py-10"
         onClick={handleModalContentClick}
       >
         <button

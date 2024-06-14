@@ -25,7 +25,7 @@ const config: Config = {
         heroOrange: "rgba(253, 186, 116, 0.65)",
         heroStone: "rgba(250, 250, 250, 0.75)",
         blurWhite: "rgba(255, 255, 255, 0.5)",
-        blurBlack: "rgba(0, 0, 0, 0.4)",
+        blurBlack: "rgba(0, 0, 0, 0.7)",
       },
       boxShadow: {
         themeShadow: "0 4px 12px rgba(0, 0, 0, 0.8)",

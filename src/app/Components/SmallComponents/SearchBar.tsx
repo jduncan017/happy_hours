@@ -1,6 +1,7 @@
 "use client";
 import React, { ChangeEvent, useState, useEffect } from "react";
 import { useSearchParams, usePathname, useRouter } from "next/navigation";
+import Image from "next/image";
 import { HAPPY_HOURS, HappyHoursData } from "@/lib/hh_list";
 
 const SearchBar = () => {
@@ -64,25 +65,31 @@ const SearchBar = () => {
   return (
     <form
       id="filters"
-      className="SearchBar p-4 rounded-lg max-w-screen-md w-full"
+      className="SearchBar pr-4 rounded-full bg-gradient-to-b from-red-500 via-orange-500 to-orange-400 max-w-screen-md w-full"
       onSubmit={(e) => e.preventDefault()}
     >
       <div className="InnerContainer">
         <div className="MainOptions">
           {/* SEARCH BAR */}
-          <div className="_search-input flex flex-col sm:flex-row gap-2 items-center w-full">
-            <label htmlFor="search" className="_label block">
-              Search:
-            </label>
+          <div className="SearchInput flex gap-2 items-center w-full">
             <input
+              className="Input text-black w-full border-none rounded-full h-10 px-3 text-base capitalize"
               type="text"
               id="search"
               name="query"
-              placeholder="Search by name only for now..."
-              className="_input text-black w-full border-none rounded h-7 px-2 text-base capitalize"
+              placeholder="Search:"
               onChange={(e) => handleSearchFilters(e)}
               defaultValue={searchParams.get("query")?.toString()}
             />
+            <button className="SearchButton" type="button">
+              <Image
+                className="SearchImage hover:scale-105"
+                src="/ui-elements/search.png"
+                width={24}
+                height={24}
+                alt="search"
+              />
+            </button>
           </div>
           {/* FILTER OPTIONS */}
           {/* <div className="FilterOptions flex flex-col my-2 sm:flex-row gap-2 items-center">

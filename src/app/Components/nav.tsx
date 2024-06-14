@@ -21,7 +21,7 @@ const NavBar = () => {
 
   const renderMenu = () => {
     return (
-      <div className="LinksContainer flex flex-col gap-6 px-16 pt-8 sm:flex-row sm:items-center sm:gap-3 sm:p-0 md:gap-6">
+      <div className="LinksContainer mt-6 sm:mt-0 flex flex-col gap-6 p-1 sm:flex-row sm:items-center sm:gap-3 md:gap-4 rounded-full">
         {links.map((link, index) => (
           <button
             key={index}
@@ -30,40 +30,32 @@ const NavBar = () => {
               setMobileActive(false);
             }}
           >
-            <p className="AboutText text-2xl uppercase transition-all duration-300 hover:text-gray-700 hover:underline sm:text-base text-white md:text-xl">
-              {link.text}
-            </p>
+            <div className="LinkContainer py-2.5 px-3 text-white hover:text-black bg-orange-500 rounded-full transition-all duration-200 hover:scale-105 hover:bg-slate-100">
+              <p className="AboutText text-2xl duration-300 sm:text-base lg:text-lg">
+                {link.text}
+              </p>
+            </div>
           </button>
         ))}
-
-        {/* Contact SiteButton */}
-        <SiteButton
-          colorFill={true}
-          rounded={mobileActive}
-          text="CONTACT"
-          onSubmit={() => {
-            setMobileActive(false);
-            showModal(<ContactModal />);
-          }}
-          size="sm"
-        />
       </div>
     );
   };
 
   return (
     <nav className="NavContainer">
-      <div className="NavBar fixed z-30 hidden w-full max-w-[1728px] overflow-hidden bg-blurBlack font-sans shadow-md backdrop-blur-lg backdrop-filter sm:absolute sm:block">
-        <div className="Container mx-auto flex h-[74px] items-center justify-between px-3 md:px-5">
-          <div className="LogoSection flex gap-5 h-full items-center">
-            <Link
-              href="/"
-              className="transition-all duration-300 hover:scale-105 hover:contrast-125"
-            >
-              <Image src="/h3-logo.png" alt="H3 Logo" width={50} height={50} />
-            </Link>
-            <p className="Title text-white uppercase">Happy Hour Hunt</p>
-          </div>
+      <div className="NavBar fixed z-30 hidden w-full max-w-[1728px] font-sans sm:absolute sm:block">
+        <div className="Container mx-auto flex h-[80px] items-center justify-between px-3 md:px-5">
+          <Link
+            href="/"
+            className="transition-all duration-300 hover:scale-105 hover:contrast-125"
+          >
+            <div className="LogoSection flex gap-2 h-fit items-center bg-black rounded-full pl-1 pr-6 py-1.5">
+              <Image src="/h3-logo4.png" alt="H3 Logo" width={50} height={50} />
+              <p className="Title text-orange-50 italic font-semibold text-3xl lg:text-4xl">
+                Happy Hour Hunt
+              </p>
+            </div>
+          </Link>
           {renderMenu()}
         </div>
       </div>
@@ -72,8 +64,8 @@ const NavBar = () => {
       <div
         className={`
           ${
-            mobileActive ? "h-[360px] rounded-xl" : "h-[74px]"
-          } ${"MobileNav fixed z-30 flex w-full flex-col overflow-hidden bg-blurBlack px-6 py-3 font-sans shadow-md backdrop-blur-lg backdrop-filter transition-all duration-500 sm:hidden"}
+            mobileActive ? "h-[260px] rounded-xl" : "h-[74px]"
+          } ${"MobileNav fixed z-30 flex w-full flex-col overflow-hidden bg-black px-6 py-3 font-sans transition-all duration-500 sm:hidden"}
         `}
       >
         <div className="NavBar flex w-full items-center justify-between">

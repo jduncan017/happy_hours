@@ -22,6 +22,7 @@ const HeroSection = () => {
             alt="H3 Logo"
             width={540}
             height={250}
+            priority
           />
           <div className="TextContainer flex flex-col items-center gap-4 text-center sm:text-start">
             <div className="HeroSlogan flex w-fit gap-2">

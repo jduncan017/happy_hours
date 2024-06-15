@@ -104,7 +104,7 @@ export default function SearchPage() {
         </div>
       </div>
 
-      <div className="RestaurantList scrollbar-hide max-h-[100vh] w-full overflow-y-scroll">
+      <div className="RestaurantList scrollbar-hide max-h-[150vh] w-full overflow-y-scroll">
         {/* If No Restaurants */}
         {displayedRestaurants.length === 0 && (
           <p className="NoRestaurants my-6 text-center text-gray-700">

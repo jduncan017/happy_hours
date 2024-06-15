@@ -5,7 +5,7 @@ import { useMemo } from "react";
 
 export default function Home() {
   return (
-    <div className="Page">
+    <div className="Page mb-12">
       <HeroSection />
       <SearchPage />
     </div>

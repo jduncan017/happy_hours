@@ -86,7 +86,7 @@ export default function SearchPage() {
   };
 
   return (
-    <div className="Search mx-auto mt-8 flex max-w-[1000px] flex-col items-center gap-2 rounded-md border border-solid border-stone-700 bg-neutralLight p-4 sm:p-8">
+    <div className="Search mx-auto mt-8 flex max-w-[1000px] flex-col items-center gap-2 rounded-md border border-solid border-stone-700 bg-neutralLight p-4 shadow-themeShadow sm:p-8">
       <div className="TitleBar mb-2 w-full max-w-[1000px] rounded-lg bg-stone-800 p-4 text-center font-sans text-white">
         <h2 className="Title font-bold">Find Your Happy Hour In Denver!</h2>
         <div className="Filters my-2 w-full">

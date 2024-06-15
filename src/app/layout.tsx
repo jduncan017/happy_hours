@@ -44,9 +44,9 @@ export default function RootLayout({
 }) {
   return (
     <html lang="en">
-      <body className="Body h-fit overflow-x-hidden bg-black">
+      <body className="Body h-fit overflow-x-hidden bg-stone-900">
         <ModalProvider>
-          <div className="Page -z-20 m-auto h-fit max-w-[1728px] overflow-hidden bg-neutral">
+          <div className="Page -z-20 m-auto h-fit max-w-[1728px] overflow-hidden bg-stone-100">
             <NavBar />
             {children}
             <Footer />

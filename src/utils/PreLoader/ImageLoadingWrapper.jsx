@@ -8,10 +8,16 @@ const ImageLoadingWrapper = ({ restaurant, className }) => {
   const [isError, setIsError] = useState(false);
 
   useEffect(() => {
+    setIsLoading(true);
     fetchOgImage(restaurant.website)
       .then((url) => {
-        setImageUrl(url);
-        setIsLoading(false);
+        if (url === "Image Not Found") {
+          setIsError(true);
+          setIsLoading(false);
+        } else {
+          setImageUrl(url);
+          setIsLoading(false);
+        }
       })
       .catch(() => {
         setIsError(true);
@@ -19,6 +25,7 @@ const ImageLoadingWrapper = ({ restaurant, className }) => {
       });
   }, [restaurant.website]);
 
+  // Error Return
   if (isLoading) return <Loader />;
   if (isError)
     return (
@@ -27,11 +34,12 @@ const ImageLoadingWrapper = ({ restaurant, className }) => {
         <img
           src="/image-error.png"
           alt="Error loading image"
-          className={className}
+          className={`p-10 ${className}`}
         />
       </>
     );
 
+  // Image Return
   return (
     <>
       {/*eslint-disable-next-line @next/next/no-img-element*/}

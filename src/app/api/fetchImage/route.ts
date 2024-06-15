@@ -21,10 +21,8 @@ export async function GET(req: Request) {
     const response = await fetch(baseUrl);
     const html = await response.text();
     const metaTags = html.match(/<meta[^>]+>/g);
-    console.log("Meta tags:", metaTags);
 
     if (!metaTags) {
-      console.log("metaTags not found");
       return NextResponse.json(
         { error: "metaTags not found" },
         { status: 400 }
@@ -36,10 +34,7 @@ export async function GET(req: Request) {
         tag.includes('property="og:image"') || tag.includes('name="og:image"')
     );
 
-    console.log("Found og:image tag:", ogImageTag);
-
     if (!ogImageTag) {
-      console.log("ogImageTag not found");
       return NextResponse.json(
         { error: "ogImageTag not found" },
         { status: 400 }
@@ -48,7 +43,6 @@ export async function GET(req: Request) {
 
     const ogImageUrlMatch = ogImageTag.match(/content="([^"]+)"/);
     if (!ogImageUrlMatch) {
-      console.log("ogImageUrl not found");
       return NextResponse.json(
         { error: "ogImageUrl not found" },
         { status: 400 }
@@ -56,7 +50,6 @@ export async function GET(req: Request) {
     }
 
     const ogImageUrl = ogImageUrlMatch[1];
-    console.log("ogImageUrl:", ogImageUrl);
 
     return NextResponse.json({ ogImageUrl }, { status: 200 });
   } catch (error) {

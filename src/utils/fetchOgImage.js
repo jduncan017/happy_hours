@@ -2,7 +2,7 @@ export const fetchOgImage = async (url) => {
   try {
     const res = await fetch(`/api/fetchImage`, {
       method: "GET",
-      headers: { xurl: "https://www.gingerpig.com" },
+      headers: { xurl: url },
     });
     if (!res.ok) {
       throw new Error(`Fetch failed with status: ${res.status}`);
@@ -10,7 +10,6 @@ export const fetchOgImage = async (url) => {
     const data = await res.json();
     return data.ogImageUrl;
   } catch (error) {
-    console.error("Failed to fetch OpenGraph image:", error);
-    return "";
+    throw new Error(`An error occurred: ${error}`);
   }
 };

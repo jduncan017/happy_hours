@@ -93,32 +93,32 @@ body {
 @-webkit-keyframes color {
   100%,
   0% {
-    stroke: #fff;
+    stroke: #000;
   }
   40% {
-    stroke: #285128;
+    stroke: #ac8313;
   }
   66% {
-    stroke: #4b6049;
+    stroke: #b78b44;
   }
   80%,
   90% {
-    stroke: #abdda7;
+    stroke: #ffd99f;
   }
 }
 @keyframes color {
   100%,
   0% {
-    stroke: #fff;
+    stroke: #000;
   }
   40% {
-    stroke: #285128;
+    stroke: #b05b0b;
   }
   66% {
-    stroke: #4b6049;
+    stroke: #93600d;
   }
   80%,
   90% {
-    stroke: #abdda7;
+    stroke: #c8492c;
   }
 }

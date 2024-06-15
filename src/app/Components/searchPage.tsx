@@ -9,6 +9,7 @@ import {
 } from "../../lib/hh_list";
 import Link from "next/link";
 import ImageLoadingWrapper from "../../utils/PreLoader/ImageLoadingWrapper";
+import SiteButton from "./SmallComponents/siteButton";
 
 export default function SearchPage() {
   function sortHappyHours(happyHourDataList: HappyHoursData) {
@@ -86,39 +87,48 @@ export default function SearchPage() {
   // }, [searchParams]);
 
   return (
-    <div className="Search p-8 bg-black flex flex-col gap-5 items-center">
-      <h2 className="Title font-bold mt-10 mb-2 text-white">
+    <div className="Search p-8 bg-neutral flex flex-col gap-5 items-center">
+      <h2 className="Title font-bold mt-10 mb-2 text-black font-sans">
         Find Your Denver Happy Hour
       </h2>
       {/* <Suspense fallback={<div>Loading...</div>}>
         <SearchBar />
       </Suspense> */}
-      {sortHappyHours(HAPPY_HOURS).map((restaurant) => {
+      {sortHappyHours(HAPPY_HOURS).map((restaurant, index) => {
         return (
           <div
-            className="DisplayBox w-full p-4 md:flex-row flex-col bg-gray-800 text-wrap text-white rounded-lg flex max-w-screen-md gap-5"
-            key={restaurant.name}
+            className="DisplayBox w-full p-4 md:flex-row flex-col border-b-gray-800 border-solid border-b text-wrap max-w-[1000px] text-black flex gap-5"
+            key={index}
           >
-            <div className="LeftColumn md:w-1/2 overflow-hidden">
-              <h2 className="RestaurantName">{restaurant.name}</h2>
-              <Link
-                rel="noopener noreferrer"
-                tabIndex={-1}
-                aria-label="live project"
-                href={restaurant.website ?? "www.joshuaduncan.info"}
-                target="_blank"
-                className="techItem__image-link"
-              >
-                <div className="RestaurantImage h-[250px] max-w-[500px] w-fit overflow-hidden rounded-xl">
-                  <ImageLoadingWrapper
-                    restaurant={restaurant}
-                    className="Image h-full object-contain"
-                  />
-                </div>
+            <div className="LeftColumn flex flex-col gap-4 w-fit h-full">
+              <div className="RestaurantImage relative bg-stone-300 w-52 h-52 md:h-[300px] md:w-[300px] overflow-hidden rounded-xl">
+                <ImageLoadingWrapper
+                  restaurant={restaurant}
+                  className="Image object-contain h-full w-full"
+                />
+              </div>
+              <Link className="Website" href={`${restaurant.website}`}>
+                <SiteButton
+                  colorFill={true}
+                  rounded={false}
+                  text="Visit Website"
+                  size="lg"
+                />
               </Link>
-              <p className="Area">{`Location: ${restaurant.area}`}</p>
-              <p className="Address">{`Address: ${restaurant.address}`}</p>
-              <h3 className="Notes mt-2">Notes:</h3>
+            </div>
+            <div className="RightColumn overflow-hidden">
+              <h2 className="RestaurantName font-sans">{restaurant.name}</h2>
+              <p className="Area">{restaurant.area}</p>
+              <p className="Address">{restaurant.address}</p>
+              <div className="HHTimes w-full">
+                <h3 className="TimeTitle font-semibold font-sans">
+                  Happy Hours:
+                </h3>
+                {formatHappyHours(restaurant.happyHours)}
+              </div>
+              {restaurant.notes.length > 0 && (
+                <h3 className="Notes mt-2 font-sans">Notes:</h3>
+              )}
               {restaurant.notes.map((note) => {
                 return (
                   <p className="Note" key={note}>
@@ -126,15 +136,6 @@ export default function SearchPage() {
                   </p>
                 );
               })}
-              <Link className="Website" href={`${restaurant.website}`}>
-                <button className="Button bg-primary text-white py-1 px-2 rounded-md mt-2">
-                  Visit Website
-                </button>
-              </Link>
-            </div>
-            <div className="HHTimes md:w-1/2">
-              <h3 className="TimeTitle font-semibold">Happy Hours:</h3>
-              {formatHappyHours(restaurant.happyHours)}
             </div>
           </div>
         );

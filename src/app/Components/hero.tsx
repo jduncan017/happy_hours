@@ -18,7 +18,7 @@ const HeroSection = () => {
         <div className="LogoSection flex h-fit flex-col items-center gap-4 pb-6">
           <Image
             className="Logo h-40 w-auto sm:h-full"
-            src="/h3-logo-words.png"
+            src="/h3-logo-full.png"
             alt="H3 Logo"
             width={540}
             height={250}

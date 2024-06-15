@@ -1,5 +1,5 @@
 import "./globals.css";
-// import { Analytics } from "@vercel/analytics/react";
+import { Analytics } from "@vercel/analytics/react";
 
 import NavBar from "./Components/nav";
 import Footer from "./Components/footer";
@@ -50,7 +50,7 @@ export default function RootLayout({
             <NavBar />
             {children}
             <Footer />
-            {/* <Analytics /> */}
+            <Analytics />
           </div>
         </ModalProvider>
       </body>

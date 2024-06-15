@@ -1,5 +1,6 @@
 "use client";
 import Image from "next/image";
+import logoFull from "../../../public/h3-logo-full.png";
 
 const HeroSection = () => {
   return (
@@ -18,7 +19,7 @@ const HeroSection = () => {
         <div className="LogoSection flex h-fit flex-col items-center gap-4 pb-6">
           <Image
             className="Logo h-40 w-auto sm:h-full"
-            src="/h3-logo-full.png"
+            src={logoFull}
             alt="H3 Logo"
             width={540}
             height={250}

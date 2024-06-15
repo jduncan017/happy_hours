@@ -1,22 +1,42 @@
 "use client";
 import React, { useEffect, useState, useMemo } from "react";
 import { HAPPY_HOURS, HappyHourTime, HappyHours } from "../../lib/hh_list";
-import type { Restaurant } from "../../lib/hh_list";
+import type { Restaurant, HappyHoursData } from "../../lib/hh_list";
 import Link from "next/link";
 import ImageLoadingWrapper from "../../utils/PreLoader/ImageLoadingWrapper";
 import SiteButton from "./SmallComponents/siteButton";
 import generateGoogleMapsUrl from "@/utils/generateMapsURL";
-import { sortHappyHours } from "@/utils/happyHourUtils";
+import {
+  sortHappyHours,
+  filterHappyHoursToday,
+  filterHappyHoursNow,
+} from "@/utils/happyHourUtils";
 
 export default function SearchPage() {
   const [expanded, setExpanded] = useState<Set<string>>(new Set());
   const [today, setToday] = useState("");
+  const [filterOption, setFilterOption] = useState("all");
+  const [displayedRestaurants, setDisplayedRestaurants] = useState<
+    Restaurant[]
+  >([]);
 
   useEffect(() => {
     const daysOfWeek = ["Sun", "Mon", "Tue", "Wed", "Thu", "Fri", "Sat"];
     const today = daysOfWeek[new Date().getDay()];
     setToday(today);
   }, []);
+
+  useEffect(() => {
+    let filteredRestaurants = sortHappyHours(HAPPY_HOURS);
+
+    if (filterOption === "today") {
+      filteredRestaurants = filterHappyHoursToday(filteredRestaurants, today);
+    } else if (filterOption === "now") {
+      filteredRestaurants = filterHappyHoursNow(filteredRestaurants, today);
+    }
+
+    setDisplayedRestaurants(filteredRestaurants);
+  }, [filterOption, today]);
 
   const formatHappyHours = useMemo(
     () => (times: HappyHours, isExpanded: boolean) => {
@@ -67,20 +87,42 @@ export default function SearchPage() {
 
   return (
     <div className="Search mx-auto mt-8 flex max-w-[1000px] flex-col items-center gap-2 rounded-md border border-solid border-stone-700 bg-neutralLight p-4 sm:p-8">
-      <h2 className="Title mb-2 w-full max-w-[1000px] rounded-lg bg-stone-800 p-4 text-center font-sans font-bold text-white">
-        Find Your Happy Hour In Denver!
-      </h2>
-      {sortHappyHours(HAPPY_HOURS).map(
-        (restaurant: Restaurant, index: number) => {
+      <div className="TitleBar mb-2 w-full max-w-[1000px] rounded-lg bg-stone-800 p-4 text-center font-sans text-white">
+        <h2 className="Title font-bold">Find Your Happy Hour In Denver!</h2>
+        <div className="Filters my-2 w-full">
+          <label className="HHFilterLabel mr-2">Filter:</label>
+          <select
+            value={filterOption}
+            onChange={(e) => setFilterOption(e.target.value)}
+            className="h-10 w-40 rounded-md border border-stone-400 p-2 text-black"
+            defaultValue="all"
+          >
+            <option value="all">Show All</option>
+            <option value="today">Has HH Today</option>
+            <option value="now">Has HH Now!</option>
+          </select>
+        </div>
+      </div>
+
+      <div className="RestaurantList scrollbar-hide max-h-[100vh] w-full overflow-y-scroll">
+        {/* If No Restaurants */}
+        {displayedRestaurants.length === 0 && (
+          <p className="NoRestaurants my-6 text-center text-gray-700">
+            Sadly, There are no happy hours that match these filters. 😔
+          </p>
+        )}
+
+        {/* Restaurant List */}
+        {displayedRestaurants.map((restaurant: Restaurant, index: number) => {
           const isExpanded = expanded.has(restaurant.name);
 
           return (
             <div
-              className="RestaurantDisplay xs:flex-row flex w-full max-w-[1000px] flex-col-reverse gap-5 text-wrap border-b border-solid border-b-stone-700 p-4 text-black"
+              className="RestaurantDisplay flex w-full max-w-[1000px] flex-col-reverse gap-5 text-wrap border-b border-solid border-b-stone-700 p-4 text-black xs:flex-row"
               key={index}
             >
-              <div className="LeftColumn xs:w-fit flex h-full w-full flex-col gap-4">
-                <div className="RestaurantImage xs:w-[150px] relative aspect-square w-full overflow-hidden rounded-xl bg-stone-300 sm:w-[200px] md:w-[300px]">
+              <div className="LeftColumn flex h-full w-full flex-col gap-4 xs:w-fit">
+                <div className="RestaurantImage relative aspect-square w-full overflow-hidden rounded-xl bg-stone-300 xs:w-[150px] sm:w-[200px] md:w-[300px]">
                   <ImageLoadingWrapper
                     restaurant={restaurant}
                     className="Image h-full w-full object-contain"
@@ -142,13 +184,17 @@ export default function SearchPage() {
                   <h3 className="TimeTitle font-sans font-semibold">
                     Happy Hour Today:
                   </h3>
-                  {formatHappyHours(restaurant.happyHours, isExpanded)}
+                  {restaurant.happyHours[today] || isExpanded ? (
+                    formatHappyHours(restaurant.happyHours, isExpanded)
+                  ) : (
+                    <p className="text-gray-700">{`No Happy Hour Today :(`}</p>
+                  )}
                   {!isExpanded && (
                     <button
                       onClick={() => toggleExpanded(restaurant.name)}
                       className="ShowMoreButton text-lg text-gray-700 hover:text-black"
                     >
-                      Show More
+                      Show Other Days
                     </button>
                   )}
                 </div>
@@ -167,8 +213,8 @@ export default function SearchPage() {
               </div>
             </div>
           );
-        },
-      )}
+        })}
+      </div>
     </div>
   );
 }

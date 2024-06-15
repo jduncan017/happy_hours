@@ -1,6 +1,7 @@
 "use client";
 import HeroSection from "./Components/hero";
 import SearchPage from "./Components/searchPage";
+import { useMemo } from "react";
 
 export default function Home() {
   return (

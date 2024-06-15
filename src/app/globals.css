@@ -98,13 +98,24 @@ h4 {
   font-weight: 500;
 }
 
-p {
+p,
+label {
   font-size: 18px;
   line-height: 1.5;
 }
 
 /* sm */
 @media (min-width: 640px) {
+  .scrollbar-hide::-webkit-scrollbar {
+    display: block;
+  }
+
+  /* For IE, Edge and Firefox */
+  .scrollbar-hide {
+    -ms-overflow-style: initial; /* IE and Edge */
+    scrollbar-width: thin; /* Firefox */
+  }
+
   h1 {
     font-size: 24px;
     line-height: 1.2;
@@ -125,7 +136,8 @@ p {
     line-height: 2rem;
   }
 
-  p {
+  p,
+  label {
     font-size: 20px;
     line-height: 1.5rem;
   }
@@ -146,7 +158,8 @@ p {
     text-transform: capitalize;
   }
 
-  p {
+  p,
+  label {
     font-size: 20px;
     line-height: 1.75rem;
   }

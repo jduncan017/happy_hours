@@ -9,15 +9,14 @@ const Footer = () => {
         <div className="Newsletter flex w-full flex-col items-center justify-start gap-6 md:items-start xl:w-1/2">
           <Link
             href="/"
-            className="ImageLink self-center transition-all duration-300 hover:scale-105 hover:contrast-125"
+            className="transition-all duration-300 hover:scale-105 hover:contrast-125"
           >
-            <Image
-              className="h-auto w-full max-w-[250px]"
-              src="/logo-tall-black.webp"
-              alt="LifeGuide Holistic Healing Logo"
-              width={380}
-              height={100}
-            />
+            <div className="LogoSection flex h-fit items-center gap-2 rounded-full bg-black py-1.5 pl-1 pr-6">
+              <Image src="/h3-logo4.png" alt="H3 Logo" width={75} height={75} />
+              <p className="Title font-sans text-3xl font-semibold text-orange-50 lg:text-4xl">
+                Happy Hour Hunt
+              </p>
+            </div>
           </Link>
         </div>
         <div className="Links flex h-56 w-full justify-evenly gap-12">
@@ -28,12 +27,7 @@ const Footer = () => {
             <div className="FooterLinks flex h-48 w-fit flex-col items-start justify-start">
               <div className="Link flex w-fit items-start justify-start py-2">
                 <div className="LinkOne font-normal leading-tight text-gray-600">
-                  Services
-                </div>
-              </div>
-              <div className="Link flex w-fit py-2">
-                <div className="LinkTwo font-normal leading-tight text-gray-600">
-                  Articles
+                  Home
                 </div>
               </div>
               <div className="Link flex w-fit py-2">
@@ -46,40 +40,13 @@ const Footer = () => {
                   FAQ
                 </div>
               </div>
-              <div className="Link flex w-fit py-2">
-                <div className="LinkFive font-normal leading-tight text-gray-600">
-                  Testimonials
-                </div>
-              </div>
-            </div>
-          </div>
-          <div className="Column flex flex-col gap-4">
-            <h3 className="ColumnTwo w-full font-sans text-base font-semibold uppercase leading-normal text-gray-700">
-              Services
-            </h3>
-            <div className="FooterLinks flex h-28 w-full flex-col items-start justify-start">
-              <div className="Link flex w-full py-2">
-                <div className="LinkSix font-normal leading-tight text-gray-600">
-                  Energy Medicine
-                </div>
-              </div>
-              <div className="Link flex w-full py-2">
-                <div className="LinkSeven font-normal leading-tight text-gray-600">
-                  Life Guidance
-                </div>
-              </div>
-              <div className="Link flex w-full py-2">
-                <div className="LinkEight font-normal leading-tight text-gray-600">
-                  Benefits
-                </div>
-              </div>
             </div>
           </div>
         </div>
       </div>
       <div className="Credits flex h-fit w-full flex-col items-center justify-between gap-2 border-t-2 border-gray-700 pt-4 md:items-start lg:flex-row">
         <div className="2023RelumeAllRightsReserved font-normal leading-tight text-gray-600">
-          © 2023 LifeGuide Holistic Healing. All rights reserved.
+          © 2024 Happy Hour Hunt. All rights reserved.
         </div>
         <div className="FooterLinks flex items-start justify-start gap-6">
           <Link href="/privacy">

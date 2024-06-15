@@ -43,17 +43,12 @@ const NavBar = () => {
     <nav className="NavContainer">
       <div className="NavBar fixed z-30 hidden w-full max-w-[1728px] font-sans sm:absolute sm:block">
         <div className="Container mx-auto flex h-[80px] items-center justify-between px-3 md:px-5">
-          <Link
-            href="/"
-            className="transition-all duration-300 hover:scale-105 hover:contrast-125"
-          >
-            <div className="LogoSection flex h-fit items-center gap-2 rounded-full bg-black py-1.5 pl-1 pr-6">
-              <Image src="/h3-logo4.png" alt="H3 Logo" width={50} height={50} />
-              <p className="Title text-3xl font-semibold italic text-orange-50 lg:text-4xl">
-                Happy Hour Hunt
-              </p>
-            </div>
-          </Link>
+          <div className="LogoSection flex h-fit items-center gap-2 rounded-full bg-black py-1.5 pl-1 pr-6">
+            <Image src="/h3-logo4.png" alt="H3 Logo" width={50} height={50} />
+            <p className="Title text-3xl font-semibold text-orange-50 underline lg:text-4xl">
+              Happy Hour Hunt
+            </p>
+          </div>
           {renderMenu()}
         </div>
       </div>

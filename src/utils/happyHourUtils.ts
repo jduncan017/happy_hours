@@ -12,3 +12,29 @@ export function sortHappyHours(happyHourDataList: HappyHoursData) {
     }
   });
 }
+
+// filters for happy hours on the current day of the week
+export function filterHappyHoursToday(
+  restaurants: Restaurant[],
+  today: string,
+) {
+  return restaurants.filter(
+    (restaurant: Restaurant) => restaurant.happyHours[today],
+  );
+}
+
+// filters for happy hours happening now
+export const filterHappyHoursNow = (
+  restaurants: Restaurant[],
+  today: string,
+) => {
+  const currentTime = new Date().toTimeString().slice(0, 5);
+
+  return restaurants.filter((restaurant: Restaurant) => {
+    const timesForDay = restaurant.happyHours[today];
+    if (!timesForDay) return false;
+    return timesForDay.some((time) => {
+      return currentTime >= time.Start && currentTime <= time.End;
+    });
+  });
+};

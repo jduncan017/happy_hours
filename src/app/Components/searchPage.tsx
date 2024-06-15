@@ -8,12 +8,9 @@ import {
   Restaurant,
 } from "../../lib/hh_list";
 import Link from "next/link";
-import SearchBar from "./SmallComponents/SearchBar";
-import { useSearchParams } from "next/navigation";
+import ImageLoadingWrapper from "../../utils/PreLoader/ImageLoadingWrapper";
 
 export default function SearchPage() {
-  const [searchQuery, setSearchQuery] = useState({});
-  // const searchParams = useSearchParams();
   function sortHappyHours(happyHourDataList: HappyHoursData) {
     return happyHourDataList.CO.Denver.sort((a, b) => {
       if (a.name < b.name) {
@@ -104,6 +101,21 @@ export default function SearchPage() {
           >
             <div className="LeftColumn md:w-1/2 overflow-hidden">
               <h2 className="RestaurantName">{restaurant.name}</h2>
+              <Link
+                rel="noopener noreferrer"
+                tabIndex={-1}
+                aria-label="live project"
+                href={restaurant.website ?? "www.joshuaduncan.info"}
+                target="_blank"
+                className="techItem__image-link"
+              >
+                <div className="RestaurantImage h-[250px] max-w-[500px] w-fit overflow-hidden rounded-xl">
+                  <ImageLoadingWrapper
+                    restaurant={restaurant}
+                    className="Image h-full object-contain"
+                  />
+                </div>
+              </Link>
               <p className="Area">{`Location: ${restaurant.area}`}</p>
               <p className="Address">{`Address: ${restaurant.address}`}</p>
               <h3 className="Notes mt-2">Notes:</h3>

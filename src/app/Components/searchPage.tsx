@@ -95,7 +95,6 @@ export default function SearchPage() {
             value={filterOption}
             onChange={(e) => setFilterOption(e.target.value)}
             className="h-10 w-40 rounded-md border border-stone-400 p-2 text-black"
-            defaultValue="all"
           >
             <option value="all">Show All</option>
             <option value="today">Has HH Today</option>

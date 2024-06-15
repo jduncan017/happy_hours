@@ -1,6 +1,6 @@
 "use client";
 import Image from "next/image";
-import logoFull from "../../../public/h3-logo-full.png";
+import logoFull from "../../../public/ui-elements/h3-logo-full.png";
 
 const HeroSection = () => {
   return (

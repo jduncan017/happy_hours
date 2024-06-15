@@ -2545,7 +2545,7 @@ export const HAPPY_HOURS = {
       {
         name: "Bamboo Sushi",
         address: "2715 17th St",
-        area: "Highland",
+        area: "Highlands",
         website: "https://bamboosushi.com/location/lohi/happy-hour",
         happyHours: {
           Mon: [
@@ -2596,7 +2596,7 @@ export const HAPPY_HOURS = {
       {
         name: "Bar Dough",
         address: "2227 W 32nd Ave",
-        area: "Highland",
+        area: "Highlands",
         website: "https://www.bardoughdenver.com/#menus",
         happyHours: {
           Sun: [
@@ -2647,7 +2647,7 @@ export const HAPPY_HOURS = {
       {
         name: "My Neighbor Felix",
         address: "1801 Central St",
-        area: "Highland",
+        area: "Highlands",
         website:
           "https://www.myneighborfelix.com/location-lohi#menu=happy-hour",
         happyHours: {
@@ -2688,7 +2688,7 @@ export const HAPPY_HOURS = {
       {
         name: "Root Down",
         address: "1600 W 33rd Ave",
-        area: "Highland",
+        area: "Highlands",
         website: "https://www.ediblebeats.com/all-menus/root-down",
         happyHours: {
           Mon: [
@@ -2727,7 +2727,7 @@ export const HAPPY_HOURS = {
       {
         name: "American Elm",
         address: "4132 W 38th Ave",
-        area: "West Highland",
+        area: "West Highlands",
         website: "https://www.amelm.com/happyhour",
         happyHours: {
           Sun: [
@@ -2785,7 +2785,7 @@ export const HAPPY_HOURS = {
       {
         name: "Tacos Tequila Whiskey",
         address: "3300 W 32nd Ave",
-        area: "West Highland",
+        area: "West Highlands",
         website: "https://www.tacostequilawhiskey.com/dine-in-menu/#happy_hour",
         happyHours: {
           Mon: [
@@ -2837,7 +2837,7 @@ export const HAPPY_HOURS = {
       {
         name: "Glo Noodle House",
         address: "4450 W 38th Ave. Suite #130",
-        area: "West Highland",
+        area: "West Highlands",
         website: "https://glonoodlehouse.com/menu",
         happyHours: {
           Mon: [

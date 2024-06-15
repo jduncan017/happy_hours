@@ -45,9 +45,12 @@ body {
 .path {
   stroke-dasharray: 1, 200;
   stroke-dashoffset: 0;
-  -webkit-animation: dash 1.5s ease-in-out infinite,
+  -webkit-animation:
+    dash 1.5s ease-in-out infinite,
     color 6s ease-in-out infinite;
-  animation: dash 1.5s ease-in-out infinite, color 6s ease-in-out infinite;
+  animation:
+    dash 1.5s ease-in-out infinite,
+    color 6s ease-in-out infinite;
   stroke-linecap: round;
 }
 @-webkit-keyframes rotate {
@@ -93,29 +96,29 @@ body {
 @-webkit-keyframes color {
   100%,
   0% {
-    stroke: #000;
+    stroke: #867e7e;
   }
   40% {
-    stroke: #ac8313;
+    stroke: #d6a318;
   }
   66% {
-    stroke: #b78b44;
+    stroke: #d09433;
   }
   80%,
   90% {
-    stroke: #ffd99f;
+    stroke: #ffc670;
   }
 }
 @keyframes color {
   100%,
   0% {
-    stroke: #000;
+    stroke: #434343;
   }
   40% {
-    stroke: #b05b0b;
+    stroke: #d7781f;
   }
   66% {
-    stroke: #93600d;
+    stroke: #c19246;
   }
   80%,
   90% {

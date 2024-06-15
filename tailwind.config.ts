@@ -13,7 +13,7 @@ const config: Config = {
         serif: ["Playfair", "serif"],
       },
       colors: {
-        neutral: "#FFFBF4",
+        neutral: "#fff9ee",
         neutralLight: "#FFFBF4",
         neutralDark: "#FFF1DD",
         primary: "#004e59",
@@ -21,17 +21,18 @@ const config: Config = {
         primaryLight: "#F8B999",
         secondaryBlue: "#406A91",
         tertiaryYellow: "#FCC686",
-        heroPink: "rgba(252, 145, 165, 0.4)",
-        heroOrange: "rgba(253, 186, 116, 0.65)",
-        heroStone: "rgba(250, 250, 250, 0.75)",
         blurWhite: "rgba(255, 255, 255, 0.5)",
         blurBlack: "rgba(0, 0, 0, 0.7)",
       },
       boxShadow: {
         themeShadow: "0 4px 12px rgba(0, 0, 0, 0.8)",
       },
+      screens: {
+        xs: "480px",
+      },
     },
   },
   plugins: [],
 };
+
 export default config;

@@ -2,9 +2,7 @@
 import { useState } from "react";
 import Image from "next/image";
 import Link from "next/link";
-import SiteButton from "./SmallComponents/siteButton";
 import { useModal } from "../../contexts/ModalContext";
-import ContactModal from "./modals/contactModal";
 import ConstructionModal from "./modals/constructionModal";
 import HamburgerIcon from "./hamburgerMenu/hamburgerIcon";
 
@@ -17,11 +15,11 @@ const NavBar = () => {
     setMobileActive(!mobileActive);
   }
 
-  const links = [{ text: "Happy Hour Now!" }, { text: "Search" }];
+  const links = [{ text: "Happy Hour Now!" }, { text: "Browse" }];
 
   const renderMenu = () => {
     return (
-      <div className="LinksContainer mt-6 sm:mt-0 flex flex-col gap-6 p-1 sm:flex-row sm:items-center sm:gap-3 md:gap-4 rounded-full">
+      <div className="LinksContainer mt-6 flex flex-col gap-6 rounded-full p-1 sm:mt-0 sm:flex-row sm:items-center sm:gap-3 md:gap-4">
         {links.map((link, index) => (
           <button
             key={index}
@@ -30,7 +28,7 @@ const NavBar = () => {
               setMobileActive(false);
             }}
           >
-            <div className="LinkContainer py-2.5 px-3 text-white hover:text-black bg-orange-500 rounded-full transition-all duration-200 hover:scale-105 hover:bg-slate-100">
+            <div className="LinkContainer rounded-full bg-orange-500 px-3 py-2.5 text-white transition-all duration-200 hover:scale-105 hover:bg-slate-100 hover:text-black">
               <p className="AboutText text-2xl duration-300 sm:text-base lg:text-lg">
                 {link.text}
               </p>
@@ -49,9 +47,9 @@ const NavBar = () => {
             href="/"
             className="transition-all duration-300 hover:scale-105 hover:contrast-125"
           >
-            <div className="LogoSection flex gap-2 h-fit items-center bg-black rounded-full pl-1 pr-6 py-1.5">
+            <div className="LogoSection flex h-fit items-center gap-2 rounded-full bg-black py-1.5 pl-1 pr-6">
               <Image src="/h3-logo4.png" alt="H3 Logo" width={50} height={50} />
-              <p className="Title text-orange-50 italic font-semibold text-3xl lg:text-4xl">
+              <p className="Title text-3xl font-semibold italic text-orange-50 lg:text-4xl">
                 Happy Hour Hunt
               </p>
             </div>
@@ -62,21 +60,19 @@ const NavBar = () => {
 
       {/* Mobile Menu */}
       <div
-        className={`
-          ${
-            mobileActive ? "h-[260px] rounded-xl" : "h-[74px]"
-          } ${"MobileNav fixed z-30 flex w-full flex-col overflow-hidden bg-black px-6 py-3 font-sans transition-all duration-500 sm:hidden"}
-        `}
+        className={` ${
+          mobileActive ? "h-[260px] rounded-xl" : "h-[74px]"
+        } ${"MobileNav fixed z-30 flex w-full flex-col overflow-hidden bg-black px-6 py-3 font-sans transition-all duration-500 sm:hidden"} `}
       >
         <div className="NavBar flex w-full items-center justify-between">
-          <div className="LogoSection flex gap-5 h-full items-center">
+          <div className="LogoSection flex h-full items-center gap-5">
             <Link
               href="/"
               className="transition-all duration-300 hover:scale-105 hover:contrast-125"
             >
               <Image src="/h3-logo.png" alt="H3 Logo" width={50} height={50} />
             </Link>
-            <p className="Title text-white uppercase">Happy Hour Hunt</p>
+            <p className="Title uppercase text-white">Happy Hour Hunt</p>
           </div>
           <HamburgerIcon onToggleMenu={toggleMenu} menuOpen={mobileActive} />
         </div>

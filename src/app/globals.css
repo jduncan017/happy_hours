@@ -51,6 +51,16 @@ body {
   font-family: "Playfair", sans-serif;
 }
 
+a {
+  color: rgb(232, 174, 68);
+  text-decoration: underline;
+}
+
+a:hover {
+  cursor: point;
+  color: gray;
+}
+
 /* For Webkit-based browsers (Chrome, Safari and Opera) */
 .scrollbar-hide::-webkit-scrollbar {
   display: none;
@@ -83,9 +93,9 @@ h3 {
 }
 
 h4 {
-  font-size: 20px;
+  font-size: 16px;
   line-height: 1.25;
-  font-weight: 700;
+  font-weight: 500;
 }
 
 p {
@@ -111,7 +121,7 @@ p {
   }
 
   h4 {
-    font-size: 24px;
+    font-size: 18px;
     line-height: 2rem;
   }
 
@@ -131,13 +141,13 @@ p {
 /* lg */
 @media (min-width: 1024px) {
   h4 {
-    font-size: 30px;
+    font-size: 22px;
     line-height: 2.25rem;
     text-transform: capitalize;
   }
 
   p {
-    font-size: 22px;
+    font-size: 20px;
     line-height: 1.75rem;
   }
 }

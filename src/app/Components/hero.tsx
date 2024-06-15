@@ -4,7 +4,7 @@ import logoFull from "../../../public/ui-elements/h3-logo-full.png";
 
 const HeroSection = () => {
   return (
-    <div className="HeroSection relative flex h-[620px] flex-col p-4 pt-[85px] xs:h-[560px] sm:h-[650px] sm:p-0">
+    <div className="HeroSection relative flex h-[580px] flex-col p-4 pt-[85px] sm:h-[650px] sm:p-0">
       <div className="ImageContainer absolute inset-0 z-10 h-full overflow-hidden shadow-themeShadow sm:block">
         <Image
           className="BackgroundImage h-full w-full object-cover brightness-75"
@@ -15,10 +15,10 @@ const HeroSection = () => {
           priority
         />
       </div>
-      <div className="TitleSection z-20 mx-auto mt-3 flex h-fit w-full flex-col gap-4 rounded bg-blurBlack p-10 text-white shadow-themeShadow backdrop-blur-lg backdrop-filter sm:mt-24 sm:w-[600px] sm:rounded-2xl">
+      <div className="TitleSection z-20 mx-auto mt-3 flex h-fit w-full flex-col gap-4 rounded bg-blurBlack p-6 text-white shadow-themeShadow backdrop-blur-lg backdrop-filter sm:mt-24 sm:w-[600px] sm:rounded-2xl sm:p-10">
         <div className="LogoSection flex h-fit flex-col items-center gap-4 pb-6">
           <Image
-            className="Logo h-40 w-auto sm:h-full"
+            className="Logo h-auto w-full sm:h-full sm:w-auto"
             src={logoFull}
             alt="H3 Logo"
             width={540}
@@ -26,7 +26,7 @@ const HeroSection = () => {
             priority
           />
           <div className="TextContainer flex flex-col items-center gap-4 text-center sm:text-start">
-            <div className="HeroSlogan flex w-fit gap-2">
+            <div className="HeroSlogan flex w-fit flex-wrap justify-center gap-x-2 text-center">
               <h1 className="Title text-4xl">{`It's Happy Hour`}</h1>
               <span className="text-4xl uppercase italic text-orange-300">
                 Somewhere!

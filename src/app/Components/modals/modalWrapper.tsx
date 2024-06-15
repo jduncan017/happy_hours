@@ -34,7 +34,7 @@ const ModalWrapper: FC<ModalWrapperProps> = ({ children }) => {
         animate={{ scale: 1 }}
         initial={{ scale: 0 }}
         transition={{ duration: 0.2 }}
-        className="modal__content scrollbar-hide relative mt-16 h-fit max-h-[84vh] w-fit max-w-[98vw] overflow-y-scroll rounded-2xl bg-stone-300 px-6 py-6 text-center shadow-themeShadow backdrop-blur-md sm:py-10"
+        className="modal__content relative mt-16 h-fit max-h-[84vh] w-fit max-w-[98vw] rounded-2xl bg-stone-300 px-6 py-6 text-center shadow-themeShadow backdrop-blur-md sm:py-10"
         onClick={handleModalContentClick}
       >
         <button

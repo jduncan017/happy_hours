@@ -34,6 +34,7 @@ export const metadata = {
     url: process.env.NEXT_PUBLIC_BASE_URL,
     locale: "en_US",
     type: "website",
+    logo: "",
   },
 };
 
@@ -44,7 +45,7 @@ export default function RootLayout({
 }) {
   return (
     <html lang="en">
-      <body className="Body h-fit overflow-x-hidden bg-stone-900">
+      <body className="Body h-fit overflow-x-hidden bg-black">
         <ModalProvider>
           <div className="Page -z-20 m-auto h-fit max-w-[1728px] overflow-hidden bg-stone-100">
             <NavBar />

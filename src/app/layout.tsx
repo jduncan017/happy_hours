@@ -10,7 +10,9 @@ if (!process.env.NEXT_PUBLIC_BASE_URL) {
 }
 
 export const metadata = {
-  metadataBase: new URL(process.env.NEXT_PUBLIC_BASE_URL),
+  metadataBase: new URL(
+    process.env.NEXT_PUBLIC_BASE_URL || "https://happyhourhunt.net",
+  ),
   title: "Denver Happy Hours!",
   keywords:
     "Denver happy hours, happy hour deals, Denver bars, Denver restaurants, happy hour specials, Denver nightlife, community events, local happy hours",
@@ -24,14 +26,14 @@ export const metadata = {
   },
   openGraph: {
     images: {
-      url: `${process.env.NEXT_PUBLIC_BASE_URL}/opengraph.png`,
+      url: `${process.env.NEXT_PUBLIC_BASE_URL || "https://happyhourhunt.net"}/opengraph.png`,
       width: 1903,
       height: 997,
     },
     title: "Denver Happy Hours!",
     description:
       "Discover the best happy hour deals in Denver! Join the community to suggest and confirm happy hours, and explore the top spots for drinks and fun.",
-    url: process.env.NEXT_PUBLIC_BASE_URL,
+    url: process.env.NEXT_PUBLIC_BASE_URL || "https://happyhourhunt.net",
     locale: "en_US",
     type: "website",
     logo: "",

@@ -94,16 +94,16 @@ export default function SearchPage() {
           <select
             value={filterOption}
             onChange={(e) => setFilterOption(e.target.value)}
-            className="h-10 w-40 rounded-md border border-stone-400 p-2 text-black"
+            className="h-10 w-56 rounded-md border border-stone-400 p-2 text-black"
           >
             <option value="all">Show All</option>
-            <option value="today">Has HH Today</option>
-            <option value="now">Has HH Now!</option>
+            <option value="today">Has Happy Hour Today</option>
+            <option value="now">Has Happy Hour Now!</option>
           </select>
         </div>
       </div>
 
-      <div className="RestaurantList scrollbar-hide max-h-[150vh] w-full overflow-y-scroll">
+      <div className="RestaurantList scrollbar-hide w-full lg:max-h-[150vh] lg:overflow-y-scroll">
         {/* If No Restaurants */}
         {displayedRestaurants.length === 0 && (
           <p className="NoRestaurants my-6 text-center text-gray-700">

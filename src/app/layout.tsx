@@ -25,11 +25,13 @@ export const metadata = {
     canonical: "/",
   },
   openGraph: {
-    images: {
-      url: `${process.env.NEXT_PUBLIC_BASE_URL || "https://happyhourhunt.net"}/opengraph.png`,
-      width: 1903,
-      height: 997,
-    },
+    images: [
+      {
+        url: `${process.env.NEXT_PUBLIC_BASE_URL || "https://happyhourhunt.net"}/opengraph.png`,
+        width: 1200,
+        height: 630,
+      },
+    ],
     title: "Denver Happy Hours!",
     description:
       "Discover the best happy hour deals in Denver! Join the community to suggest and confirm happy hours, and explore the top spots for drinks and fun.",

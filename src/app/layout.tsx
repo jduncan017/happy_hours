@@ -24,14 +24,14 @@ export const metadata = {
   },
   openGraph: {
     images: {
-      url: "/opengraph.png",
+      url: `${process.env.NEXT_PUBLIC_BASE_URL}/opengraph.png`,
       width: 1903,
       height: 997,
     },
     title: "Denver Happy Hours!",
     description:
       "Discover the best happy hour deals in Denver! Join the community to suggest and confirm happy hours, and explore the top spots for drinks and fun.",
-    url: "/",
+    url: process.env.NEXT_PUBLIC_BASE_URL,
     locale: "en_US",
     type: "website",
   },

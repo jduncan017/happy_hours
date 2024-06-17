@@ -45,30 +45,32 @@ export const SearchPage = forwardRef<HTMLDivElement>((props, ref) => {
       return daysToShow.map((day) => {
         const timesForDay = times[day];
         if (timesForDay) {
-          const timesFormatted = timesForDay
-            .map((time: HappyHourTime) => {
-              let startHour = parseInt(time.Start.split(":")[0], 10);
-              let startMinutes = time.Start.split(":")[1];
-              let startMeridiem = startHour >= 12 ? "PM" : "AM";
-              startHour = startHour > 12 ? startHour - 12 : startHour;
-              startHour = startHour === 0 ? 12 : startHour; // Convert 0 hour to 12 for 12AM
-              let startTimeFormatted = `${startHour}:${startMinutes} ${startMeridiem}`;
+          const timesFormatted = timesForDay.map((time: HappyHourTime) => {
+            let startHour = parseInt(time.Start.split(":")[0], 10);
+            let startMinutes = time.Start.split(":")[1];
+            let startMeridiem = startHour >= 12 ? "PM" : "AM";
+            startHour = startHour > 12 ? startHour - 12 : startHour;
+            startHour = startHour === 0 ? 12 : startHour; // Convert 0 hour to 12 for 12AM
+            let startTimeFormatted = `${startHour}:${startMinutes} ${startMeridiem}`;
 
-              let endHour = parseInt(time.End.split(":")[0], 10);
-              let endMinutes = time.End.split(":")[1];
-              let endMeridiem = endHour >= 12 ? "PM" : "AM";
-              endHour = endHour > 12 ? endHour - 12 : endHour;
-              endHour = endHour === 0 ? 12 : endHour; // Convert 0 hour to 12 for 12AM
-              let endTimeFormatted = `${endHour}:${endMinutes} ${endMeridiem}`;
+            let endHour = parseInt(time.End.split(":")[0], 10);
+            let endMinutes = time.End.split(":")[1];
+            let endMeridiem = endHour >= 12 ? "PM" : "AM";
+            endHour = endHour > 12 ? endHour - 12 : endHour;
+            endHour = endHour === 0 ? 12 : endHour; // Convert 0 hour to 12 for 12AM
+            let endTimeFormatted = `${endHour}:${endMinutes} ${endMeridiem}`;
 
-              return `${startTimeFormatted} - ${endTimeFormatted}`;
-            })
-            .join(" // ");
+            return `${startTimeFormatted} - ${endTimeFormatted}`;
+          });
 
           return (
-            <li key={day} className="HappyHourTimes my-1 flex gap-1">
+            <li key={day} className="HappyHourTimes m-1 flex gap-1">
               <p className="HappyHourDay w-12">{`${day}:`}</p>
-              <p className="HappyHourTimes">{`${timesFormatted}`}</p>
+              <div className="HappyHourTimes flex flex-col">
+                {timesFormatted.map((timeFormatted, index) => (
+                  <p key={index}>{timeFormatted}</p>
+                ))}
+              </div>
             </li>
           );
         }
@@ -98,11 +100,11 @@ export const SearchPage = forwardRef<HTMLDivElement>((props, ref) => {
       <div className="TitleBar w-full max-w-[1000px] rounded-md bg-stone-800 p-4 text-center font-sans text-white sm:mb-2">
         <div className="HeroSloganContainer flex w-full flex-wrap justify-center gap-x-2 text-center font-sans font-extrabold">
           <h2 className="HeroSlogan text-white">{`It's Happy Hour`}</h2>
-          <h2 className="HeroSlogan text-primaryYellow uppercase italic">
+          <h2 className="HeroSlogan uppercase italic text-primaryYellow">
             Somewhere!
           </h2>
         </div>
-        <p className="Title font-allerta mt-1 text-xl">
+        <p className="Title mt-1 font-allerta text-xl">
           Find Your Happy Hour In Denver!
         </p>
         <div className="Filters my-2 w-full">
@@ -137,13 +139,13 @@ export const SearchPage = forwardRef<HTMLDivElement>((props, ref) => {
               key={index}
             >
               <div className="LeftColumn flex h-full w-full flex-col gap-4 xs:w-fit">
-                <div className="RestaurantImage relative flex aspect-square w-full items-center overflow-hidden rounded-md bg-stone-300 xs:w-[150px] sm:w-[200px] md:w-[275px]">
+                <div className="RestaurantImage relative flex aspect-video w-full items-center overflow-hidden rounded-md bg-stone-300 xs:aspect-square xs:w-[150px] sm:w-[200px] md:w-[275px]">
                   <ImageLoadingWrapper
                     restaurant={restaurant}
                     className="Image h-full w-full object-contain"
                   />
                 </div>
-                <div className="Buttons flex w-full flex-col gap-2 md:flex-row">
+                <div className="Buttons flex w-full flex-row gap-2 xs:flex-col md:flex-row">
                   <Link
                     className="Website w-full"
                     href={`${restaurant.website}`}
@@ -207,14 +209,14 @@ export const SearchPage = forwardRef<HTMLDivElement>((props, ref) => {
                   {!isExpanded && (
                     <button
                       onClick={() => toggleExpanded(restaurant.name)}
-                      className="ShowMoreButton mt-1 rounded-sm bg-stone-200 px-2 text-base text-gray-700 hover:text-black"
+                      className="ShowMoreButton mt-1 rounded-sm bg-stone-200 px-2 text-base italic text-gray-700 hover:text-black"
                     >
-                      Show More Days
+                      Show More
                     </button>
                   )}
                 </div>
                 {restaurant.notes.length > 0 && (
-                  <div className="NotesSection w-full rounded-lg bg-stone-200 p-2">
+                  <div className="NotesSection mt-2 w-full rounded-lg bg-stone-200 p-2">
                     <h4 className="Notes font-sans">Notes:</h4>
                     {restaurant.notes.map((note) => {
                       return (

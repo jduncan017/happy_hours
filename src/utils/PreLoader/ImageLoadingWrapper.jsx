@@ -36,8 +36,8 @@ const ImageLoadingWrapper = ({ restaurant, className }) => {
         className="m-auto"
         src="/image-error.png"
         alt="Error loading image"
-        width={150}
-        height={150}
+        width={125}
+        height={125}
       />
     );
 

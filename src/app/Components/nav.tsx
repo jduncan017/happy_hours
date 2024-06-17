@@ -3,8 +3,8 @@ import { useState } from "react";
 import Image from "next/image";
 import Link from "next/link";
 import { useModal } from "../../contexts/ModalContext";
-import ConstructionModal from "./modals/constructionModal";
 import HamburgerIcon from "./hamburgerMenu/hamburgerIcon";
+import ContactModal from "./modals/contactModal";
 
 const NavBar = () => {
   const [mobileActive, setMobileActive] = useState(false);
@@ -15,21 +15,21 @@ const NavBar = () => {
     setMobileActive(!mobileActive);
   }
 
-  const links = [{ text: "Happy Hour Now!" }, { text: "Browse" }];
+  const links = [{ text: "Contact" }];
 
   const renderMenu = () => {
     return (
-      <div className="LinksContainer mt-6 flex flex-col gap-6 rounded-full p-1 sm:mt-0 sm:flex-row sm:items-center sm:gap-3">
+      <div className="LinksContainer mt-6 flex flex-col gap-6 p-1 sm:mt-0 sm:flex-row sm:items-center sm:gap-3">
         {links.map((link, index) => (
           <button
             key={index}
             onClick={() => {
-              showModal(<ConstructionModal />);
+              showModal(<ContactModal />);
               setMobileActive(false);
             }}
           >
-            <div className="LinkContainer bg-primaryOrange rounded-full px-3 py-2.5 text-white backdrop-blur-md transition-all duration-200 hover:scale-105 hover:bg-blurWhite hover:text-black">
-              <p className="AboutText text-2xl duration-300 sm:text-base lg:text-lg">
+            <div className="Link rounded-md bg-primaryOrange px-6 py-2.5 text-white backdrop-blur-md transition-all duration-200 hover:scale-105 hover:bg-blurWhite hover:text-black">
+              <p className="AboutText text-2xl uppercase duration-300 sm:text-base lg:text-lg">
                 {link.text}
               </p>
             </div>

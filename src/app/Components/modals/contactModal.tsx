@@ -2,17 +2,17 @@
 import { useState } from "react";
 import ModalWrapper from "./modalWrapper";
 import SiteButton from "../SmallComponents/siteButton";
-// import { useFormspark } from "@formspark/use-formspark";
+import { useFormspark } from "@formspark/use-formspark";
 import { useModal } from "../../../contexts/ModalContext";
 import SubmitConfirmModal from "./submitConfirmModal";
 
-const FORMSPARK_FORM_ID = "fmXvbcpQF";
+const FORMSPARK_FORM_ID = "TJYoTsOiJ";
 
 export default function ContactModal() {
   const { showModal } = useModal();
-  // const [submit] = useFormspark({
-  //   formId: FORMSPARK_FORM_ID,
-  // });
+  const [submit] = useFormspark({
+    formId: FORMSPARK_FORM_ID,
+  });
   const [submitConfirm, setSubmitConfirm] = useState("");
   const [buttonDisplay, setButtonDisplay] = useState("SEND MESSAGE");
   const [buttonDisabled, setButtonDisabled] = useState(false);
@@ -28,7 +28,7 @@ export default function ContactModal() {
         const formData = new FormData(form);
         const formValues = Object.fromEntries(formData.entries());
 
-        // await submit(formValues);
+        await submit(formValues);
 
         setButtonDisplay("Sent!");
         setTimeout(() => showModal(<SubmitConfirmModal />), 500);
@@ -36,7 +36,7 @@ export default function ContactModal() {
         console.error("Request failed:", error);
         setButtonDisplay("SEND MESSAGE");
         setSubmitConfirm(
-          "We're sorry, there was an error sending your message. Please try again later!"
+          "We're sorry, there was an error sending your message. Please try again later!",
         );
         setButtonDisabled(false);
       }
@@ -49,18 +49,18 @@ export default function ContactModal() {
   return (
     <ModalWrapper>
       <div className="contactModal">
-        <div className="formWrapper relative flex max-h-[100dvh] w-full max-w-[550px] flex-col px-2 font-sans sm:px-6">
-          <h1 className="font-3xl mb-2 mt-0 border-b border-dotted border-gray-500 font-serif font-bold uppercase leading-10 sm:text-4xl">
+        <div className="formWrapper relative flex max-h-[100dvh] w-full max-w-[500px] flex-col px-2 font-sans sm:px-6">
+          <h1 className="font-3xl mb-2 mt-0 border-b border-dotted border-white font-serif font-bold uppercase leading-10 text-white sm:text-4xl">
             Contact Us!
           </h1>
-          <p className="formDescription m-0 w-full">
-            Have a question or suggestion for our site?
-            <br /> Reach out below!
+          <p className="formDescription m-0 w-full text-white">
+            This is a beta site and there are lots of new features in the works.
+            If you have a question or suggestion, please reach out below!
           </p>
 
           {/* Contact Form */}
           <form
-            className="contactForm flex w-full flex-col items-center gap-2 pt-2 text-start sm:gap-4 sm:pt-5"
+            className="contactForm flex w-full flex-col items-center gap-2 pt-2 text-start text-white sm:gap-4 sm:pt-5"
             onSubmit={handleSubmit}
             noValidate
           >
@@ -72,7 +72,7 @@ export default function ContactModal() {
                   First Name:*
                 </label>
                 <input
-                  className="FirstNameInput mt-0.5 box-border h-[32px] w-full rounded-md border border-gray-400 p-1"
+                  className="FirstNameInput mt-0.5 box-border h-[32px] w-full rounded-md border border-gray-400 p-1 text-black"
                   type="text"
                   id="first-name"
                   name="first-name"
@@ -86,7 +86,7 @@ export default function ContactModal() {
                   Last Name:*
                 </label>
                 <input
-                  className="LastNameInput mt-0.5 box-border h-[32px] w-full rounded-md border border-gray-400 p-1"
+                  className="LastNameInput mt-0.5 box-border h-[32px] w-full rounded-md border border-gray-400 p-1 text-black"
                   type="text"
                   id="last-name"
                   name="last-name"
@@ -103,7 +103,7 @@ export default function ContactModal() {
                 Email:*
               </label>
               <input
-                className="EmailInput mt-0.5 box-border h-[32px] w-full rounded-md border border-gray-400 p-1"
+                className="EmailInput mt-0.5 box-border h-[32px] w-full rounded-md border border-gray-400 p-1 text-black"
                 type="email"
                 id="email"
                 name="email"
@@ -112,49 +112,12 @@ export default function ContactModal() {
               />
             </div>
 
-            {/* Phone Input */}
-            <div className="PhoneContainer w-full">
-              <label className="m-0 text-lg " htmlFor="phone">
-                Phone:
-              </label>
-              <input
-                className="PhoneInput mt-0.5 box-border h-[32px] w-full rounded-md border border-gray-400 p-1"
-                type="tel"
-                id="phone"
-                name="phone"
-                placeholder="(123) 456-7890"
-              />
-            </div>
-
-            {/* Services Input */}
-            <div className="SubjectContainer w-full">
-              <label className="m-0 text-start text-lg " htmlFor="subject">
-                What Service Are You Interested In?*
-              </label>
-              <select
-                className="SubjectInput mt-0.5 box-border h-[32px] w-full rounded-md border border-gray-400 p-1"
-                name="subject"
-                id="subject"
-                defaultValue={""}
-                required
-              >
-                <option value="" disabled>
-                  Please Select
-                </option>
-                <option value="energy_medicine">Energy Medicine</option>
-                <option value="brain_spotting">Brain Spotting</option>
-                <option value="life_guidance">Life Guidance</option>
-                <option value="life_guidance">Unsure</option>
-                <option value="general">General Inquiry</option>
-              </select>
-            </div>
-
             <div className="MessageContainer w-full">
               <label className="m-0 text-lg" htmlFor="message">
                 Message:
               </label>
               <textarea
-                className="MessageInput mt-1 box-border w-full rounded-md border border-gray-400 p-1"
+                className="MessageInput mt-1 box-border w-full rounded-md border border-gray-400 p-1 text-black"
                 id="message"
                 name="message"
                 rows={4}

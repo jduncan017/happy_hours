@@ -56,6 +56,9 @@ export default function HeroSection({ scrollToRef }: HeroSectionProps) {
           addClasses="mx-auto w-60 h-12"
           onSubmit={() => scrollToRef()}
         />
+        <p className="BetaNote m-auto text-center capitalize italic text-gray-400">
+          {`Note: This site is in beta`}
+        </p>
       </div>
     </div>
   );

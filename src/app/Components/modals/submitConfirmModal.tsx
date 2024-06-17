@@ -9,11 +9,11 @@ export default function SubmitConfirmModal() {
 
   return (
     <ModalWrapper>
-      <div className="ModalContainer flex h-fit w-[500px] flex-col items-center gap-4 rounded-2xl p-5 px-8 py-8 text-center font-serif">
-        <h2 className="Header text-2xl font-medium uppercase text-gray-800">
+      <div className="ModalContainer flex h-fit w-[500px] flex-col items-center gap-4 rounded-2xl p-5 px-8 py-3 text-center font-serif">
+        <h2 className="Header text-2xl font-medium uppercase text-white">
           Thank You!
         </h2>
-        <p className="Description text-xl text-gray-600">
+        <p className="Description text-xl text-white">
           We have received your submission and we will be in touch soon!
         </p>
         <div className="ButtonContainer flex h-fit w-fit gap-4">

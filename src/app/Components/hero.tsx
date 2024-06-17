@@ -9,7 +9,7 @@ interface HeroSectionProps {
 
 export default function HeroSection({ scrollToRef }: HeroSectionProps) {
   return (
-    <div className="HeroSection relative flex h-dvh flex-col p-4 pt-[85px] xs:p-10">
+    <div className="HeroSection relative flex h-screen flex-col p-4 pt-[85px] xs:p-10">
       <div className="ImageContainer absolute inset-0 z-10 h-full overflow-hidden shadow-themeShadow sm:block">
         <video
           className="BackgroundImage h-full w-full object-cover"
@@ -22,7 +22,7 @@ export default function HeroSection({ scrollToRef }: HeroSectionProps) {
           playsInline
         />
       </div>
-      <div className="TitleSection z-20 mx-auto mt-40 flex h-fit w-full flex-col gap-4 rounded bg-blurBlack p-6 py-16 text-white shadow-themeShadow backdrop-blur-lg backdrop-filter xs:mt-40 sm:max-w-[600px] sm:rounded-xl sm:px-12 sm:py-10">
+      <div className="TitleSection z-20 mx-auto mt-12 flex h-fit w-full flex-col gap-4 rounded bg-blurBlack p-6 py-16 text-white shadow-themeShadow backdrop-blur-lg backdrop-filter xs:mt-40 sm:max-w-[600px] sm:rounded-xl sm:px-12 sm:py-10">
         <div className="LogoSection flex h-fit flex-col items-center gap-2 pb-4">
           <Image
             className="Logo h-auto w-full sm:h-full sm:w-auto"

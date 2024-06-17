@@ -33,11 +33,11 @@ const ImageLoadingWrapper = ({ restaurant, className }) => {
   if (isError)
     return (
       <Image
-        className={`p-10 ${className}`}
+        className="m-auto"
         src="/image-error.png"
         alt="Error loading image"
-        width={275}
-        height={275}
+        width={150}
+        height={150}
       />
     );
 

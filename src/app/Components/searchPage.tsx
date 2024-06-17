@@ -1,7 +1,7 @@
 "use client";
-import React, { useEffect, useState, useMemo } from "react";
+import React, { useEffect, useState, useMemo, forwardRef } from "react";
 import { HAPPY_HOURS, HappyHourTime, HappyHours } from "../../lib/hh_list";
-import type { Restaurant, HappyHoursData } from "../../lib/hh_list";
+import type { Restaurant } from "../../lib/hh_list";
 import Link from "next/link";
 import ImageLoadingWrapper from "../../utils/PreLoader/ImageLoadingWrapper";
 import SiteButton from "./SmallComponents/siteButton";
@@ -12,7 +12,7 @@ import {
   filterHappyHoursNow,
 } from "@/utils/happyHourUtils";
 
-export default function SearchPage() {
+export const SearchPage = forwardRef<HTMLDivElement>((props, ref) => {
   const [expanded, setExpanded] = useState<Set<string>>(new Set());
   const [today, setToday] = useState("");
   const [filterOption, setFilterOption] = useState("all");
@@ -91,7 +91,10 @@ export default function SearchPage() {
   };
 
   return (
-    <div className="Search mx-auto mt-4 flex max-w-[1000px] flex-col items-center gap-2 border-r p-4 sm:mt-8 sm:p-8 lg:rounded-md lg:bg-neutralLight lg:shadow-themeShadow">
+    <div
+      ref={ref}
+      className="Search mx-auto mt-4 flex max-w-[1000px] flex-col items-center gap-2 border-r p-4 sm:mt-8 sm:p-8 lg:rounded-md lg:bg-neutralLight lg:shadow-themeShadow"
+    >
       <div className="TitleBar w-full max-w-[1000px] rounded-md bg-stone-800 p-4 text-center font-sans text-white sm:mb-2">
         <div className="HeroSloganContainer flex w-full flex-wrap justify-center gap-x-2 text-center font-sans font-extrabold">
           <h2 className="HeroSlogan text-white">{`It's Happy Hour`}</h2>
@@ -134,7 +137,7 @@ export default function SearchPage() {
               key={index}
             >
               <div className="LeftColumn flex h-full w-full flex-col gap-4 xs:w-fit">
-                <div className="RestaurantImage relative aspect-square w-full overflow-hidden rounded-md bg-stone-300 xs:w-[150px] sm:w-[200px] md:w-[275px]">
+                <div className="RestaurantImage relative flex aspect-square w-full items-center overflow-hidden rounded-md bg-stone-300 xs:w-[150px] sm:w-[200px] md:w-[275px]">
                   <ImageLoadingWrapper
                     restaurant={restaurant}
                     className="Image h-full w-full object-contain"
@@ -229,4 +232,6 @@ export default function SearchPage() {
       </div>
     </div>
   );
-}
+});
+
+SearchPage.displayName = "Search Page";

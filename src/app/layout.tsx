@@ -10,9 +10,7 @@ if (!process.env.NEXT_PUBLIC_BASE_URL) {
 }
 
 export const metadata = {
-  metadataBase: new URL(
-    process.env.NEXT_PUBLIC_BASE_URL || "https://happyhourhunt.net",
-  ),
+  metadataBase: new URL(process.env.NEXT_PUBLIC_BASE_URL),
   title: "Denver Happy Hours!",
   keywords:
     "Denver happy hours, happy hour deals, Denver bars, Denver restaurants, happy hour specials, Denver nightlife, community events, local happy hours",
@@ -20,22 +18,22 @@ export const metadata = {
   creator: "Joshua Duncan",
   publisher: "WebSavvy, LLC",
   description:
-    "Discover the best happy hour deals in Denver! Join the community to suggest and confirm happy hours, and explore the top spots for drinks and fun.",
+    "Discover the best happy hour deals in Denver! Currently in Beta.",
   alternates: {
     canonical: "/",
   },
   openGraph: {
     images: [
       {
-        url: `${process.env.NEXT_PUBLIC_BASE_URL || "https://happyhourhunt.net"}/opengraph.png`,
+        url: `${process.env.NEXT_PUBLIC_BASE_URL}/opengraph.png`,
         width: 1200,
         height: 630,
       },
     ],
     title: "Denver Happy Hours!",
     description:
-      "Discover the best happy hour deals in Denver! Join the community to suggest and confirm happy hours, and explore the top spots for drinks and fun.",
-    url: process.env.NEXT_PUBLIC_BASE_URL || "https://happyhourhunt.net",
+      "Discover the best happy hour deals in Denver! Currently in Beta.",
+    url: process.env.NEXT_PUBLIC_BASE_URL,
     locale: "en_US",
     type: "website",
     logo: "",

@@ -66,10 +66,10 @@ export default function SearchPage() {
             .join(" // ");
 
           return (
-            <p
-              className="HappyHourTimes ml-1"
-              key={day}
-            >{`${day}: ${timesFormatted}`}</p>
+            <li key={day} className="HappyHourTimes my-1 flex gap-1">
+              <p className="HappyHourDay w-12">{`${day}:`}</p>
+              <p className="HappyHourTimes">{`${timesFormatted}`}</p>
+            </li>
           );
         }
         return null;
@@ -94,12 +94,12 @@ export default function SearchPage() {
     <div className="Search mx-auto mt-4 flex max-w-[1000px] flex-col items-center gap-2 border-r p-4 sm:mt-8 sm:p-8 lg:rounded-md lg:bg-neutralLight lg:shadow-themeShadow">
       <div className="TitleBar w-full max-w-[1000px] rounded-md bg-stone-800 p-4 text-center font-sans text-white sm:mb-2">
         <div className="HeroSloganContainer flex w-full flex-wrap justify-center gap-x-2 text-center font-sans font-extrabold">
-          <h2 className="HeroSlogan">{`It's Happy Hour`}</h2>
+          <h2 className="HeroSlogan text-white">{`It's Happy Hour`}</h2>
           <h2 className="HeroSlogan text-primaryYellow uppercase italic">
             Somewhere!
           </h2>
         </div>
-        <p className="Title mt-1 font-medium">
+        <p className="Title font-allerta mt-1 text-xl">
           Find Your Happy Hour In Denver!
         </p>
         <div className="Filters my-2 w-full">

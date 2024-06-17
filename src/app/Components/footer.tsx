@@ -9,7 +9,7 @@ const Footer = () => {
         <div className="Newsletter flex w-full flex-col items-center justify-start gap-6 md:items-start xl:w-1/2">
           <div className="LogoSection flex h-fit items-center gap-2 rounded-lg py-1.5 pl-1 pr-6">
             <Image
-              src="/ui-elements/h3-logo-full.png"
+              src="/h3-logo-full.png"
               alt="H3 Logo"
               width={540}
               height={250}

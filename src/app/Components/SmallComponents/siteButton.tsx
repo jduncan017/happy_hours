@@ -52,7 +52,7 @@ const SiteButton = ({
 
   return (
     <button
-      className={`SiteButton font-sans text-sm shadow-sm transition-all duration-300 hover:scale-105 hover:border-none hover:bg-stone-400 hover:text-black disabled:bg-gray-500 disabled:hover:cursor-not-allowed disabled:hover:text-white sm:text-base ${buttonSize} ${addClasses} ${
+      className={`SiteButton font-allerta text-sm shadow-sm transition-all duration-300 hover:scale-105 hover:border-none hover:bg-stone-400 hover:text-black disabled:bg-gray-500 disabled:hover:cursor-not-allowed disabled:hover:text-white sm:text-base ${buttonSize} ${addClasses} ${
         rounded ? "rounded-full" : "rounded-sm"
       } ${buttonColor}`}
       type={type ?? "button"}

@@ -28,7 +28,7 @@ const NavBar = () => {
               setMobileActive(false);
             }}
           >
-            <div className="LinkContainer bg-primaryOrange rounded-full px-3 py-2.5 text-white transition-all duration-200 hover:scale-105 hover:bg-slate-100 hover:text-black">
+            <div className="LinkContainer bg-primaryOrange rounded-full px-3 py-2.5 text-white backdrop-blur-md transition-all duration-200 hover:scale-105 hover:bg-blurWhite hover:text-black">
               <p className="AboutText text-2xl duration-300 sm:text-base lg:text-lg">
                 {link.text}
               </p>

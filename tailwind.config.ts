@@ -11,6 +11,7 @@ const config: Config = {
       fontFamily: {
         sans: ["Montserrat", "sans-serif"],
         serif: ["Playfair", "serif"],
+        allerta: ["Allerta", "sans-serif"],
       },
       colors: {
         neutral: "#fff9ee",

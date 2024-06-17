@@ -27,7 +27,7 @@ const SearchBar = () => {
 
   // handle filters and search queries
   const handleSearchFilters = (
-    e: ChangeEvent<HTMLInputElement | HTMLSelectElement>
+    e: ChangeEvent<HTMLInputElement | HTMLSelectElement>,
   ) => {
     const newSearchParams = new URLSearchParams(searchParams);
 
@@ -65,15 +65,15 @@ const SearchBar = () => {
   return (
     <form
       id="filters"
-      className="SearchBar pr-4 rounded-full bg-gradient-to-b from-red-500 via-orange-500 to-orange-400 max-w-screen-md w-full"
+      className="SearchBar via-primaryOrange w-full max-w-screen-md rounded-full bg-gradient-to-b from-red-500 to-orange-400 pr-4"
       onSubmit={(e) => e.preventDefault()}
     >
       <div className="InnerContainer">
         <div className="MainOptions">
           {/* SEARCH BAR */}
-          <div className="SearchInput flex gap-2 items-center w-full">
+          <div className="SearchInput flex w-full items-center gap-2">
             <input
-              className="Input text-black w-full border-none rounded-full h-10 px-3 text-base capitalize"
+              className="Input h-10 w-full rounded-full border-none px-3 text-base capitalize text-black"
               type="text"
               id="search"
               name="query"

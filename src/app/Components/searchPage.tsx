@@ -65,7 +65,12 @@ export default function SearchPage() {
             })
             .join(" // ");
 
-          return <p key={day}>{`${day}: ${timesFormatted}`}</p>;
+          return (
+            <p
+              className="HappyHourTimes ml-1"
+              key={day}
+            >{`${day}: ${timesFormatted}`}</p>
+          );
         }
         return null;
       });
@@ -88,7 +93,15 @@ export default function SearchPage() {
   return (
     <div className="Search mx-auto mt-8 flex max-w-[1000px] flex-col items-center gap-2 rounded-md border border-solid border-stone-700 bg-neutralLight p-4 shadow-themeShadow sm:p-8">
       <div className="TitleBar mb-2 w-full max-w-[1000px] rounded-lg bg-stone-800 p-4 text-center font-sans text-white">
-        <h2 className="Title font-bold">Find Your Happy Hour In Denver!</h2>
+        <div className="HeroSloganContainer flex w-full flex-wrap justify-center gap-x-2 text-center font-sans font-extrabold">
+          <h2 className="HeroSlogan">{`It's Happy Hour`}</h2>
+          <h2 className="HeroSlogan text-primaryYellow uppercase italic">
+            Somewhere!
+          </h2>
+        </div>
+        <p className="Title mt-1 font-medium">
+          Find Your Happy Hour In Denver!
+        </p>
         <div className="Filters my-2 w-full">
           <label className="HHFilterLabel mr-2">Filter:</label>
           <select
@@ -121,7 +134,7 @@ export default function SearchPage() {
               key={index}
             >
               <div className="LeftColumn flex h-full w-full flex-col gap-4 xs:w-fit">
-                <div className="RestaurantImage relative aspect-square w-full overflow-hidden rounded-xl bg-stone-300 xs:w-[150px] sm:w-[200px] md:w-[300px]">
+                <div className="RestaurantImage relative aspect-square w-full overflow-hidden rounded-lg bg-stone-300 xs:w-[150px] sm:w-[200px] md:w-[300px]">
                   <ImageLoadingWrapper
                     restaurant={restaurant}
                     className="Image h-full w-full object-contain"
@@ -186,14 +199,14 @@ export default function SearchPage() {
                   {restaurant.happyHours[today] || isExpanded ? (
                     formatHappyHours(restaurant.happyHours, isExpanded)
                   ) : (
-                    <p className="text-gray-700">{`No Happy Hour Today :(`}</p>
+                    <p className="ml-1 text-gray-700">{`No Happy Hour Today :(`}</p>
                   )}
                   {!isExpanded && (
                     <button
                       onClick={() => toggleExpanded(restaurant.name)}
-                      className="ShowMoreButton text-lg text-gray-700 hover:text-black"
+                      className="ShowMoreButton mt-1 rounded-sm bg-stone-200 px-2 text-base text-gray-700 hover:text-black"
                     >
-                      Show Other Days
+                      Show More Days
                     </button>
                   )}
                 </div>
@@ -202,7 +215,7 @@ export default function SearchPage() {
                     <h4 className="Notes font-sans">Notes:</h4>
                     {restaurant.notes.map((note) => {
                       return (
-                        <p className="Note" key={note}>
+                        <p className="Note text-lg leading-6" key={note}>
                           {note}
                         </p>
                       );

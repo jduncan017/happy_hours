@@ -1,6 +1,7 @@
 import React, { useState, useEffect } from "react";
 import Loader from "./PreLoader";
 import { fetchOgImage } from "../fetchOgImage";
+import Image from "next/image";
 
 const ImageLoadingWrapper = ({ restaurant, className }) => {
   const [imageUrl, setImageUrl] = useState("");
@@ -25,18 +26,19 @@ const ImageLoadingWrapper = ({ restaurant, className }) => {
       });
   }, [restaurant.website]);
 
-  // Error Return
+  // Loading State
   if (isLoading) return <Loader />;
+
+  // Error Return
   if (isError)
     return (
-      <>
-        {/*eslint-disable-next-line @next/next/no-img-element*/}
-        <img
-          src="/image-error.png"
-          alt="Error loading image"
-          className={`p-10 ${className}`}
-        />
-      </>
+      <Image
+        className={`p-10 ${className}`}
+        src="/image-error.png"
+        alt="Error loading image"
+        width={300}
+        height={300}
+      />
     );
 
   // Image Return
@@ -44,9 +46,9 @@ const ImageLoadingWrapper = ({ restaurant, className }) => {
     <>
       {/*eslint-disable-next-line @next/next/no-img-element*/}
       <img
+        className={className}
         src={imageUrl}
         alt={`Screenshot of ${restaurant.name}`}
-        className={className}
       />
     </>
   );

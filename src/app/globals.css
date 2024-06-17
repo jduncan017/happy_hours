@@ -52,7 +52,7 @@ body {
 }
 
 a {
-  color: rgb(232, 174, 68);
+  color: #ffbe3f;
   text-decoration: underline;
 }
 
@@ -73,7 +73,7 @@ a:hover {
 }
 
 h1 {
-  font-size: 20px;
+  font-size: 18px;
   line-height: 1.2;
   text-transform: uppercase;
 }
@@ -100,8 +100,16 @@ h4 {
 
 p,
 label {
-  font-size: 18px;
-  line-height: 1.5;
+  font-size: 20px;
+  line-height: 1.2rem;
+}
+
+/* xs */
+@media (min-width: 480px) {
+  h1 {
+    font-size: 22px;
+    line-height: 1.2rem;
+  }
 }
 
 /* sm */
@@ -139,7 +147,7 @@ label {
   p,
   label {
     font-size: 20px;
-    line-height: 1.5rem;
+    line-height: 1.2rem;
   }
 }
 
@@ -161,14 +169,14 @@ label {
   p,
   label {
     font-size: 20px;
-    line-height: 1.75rem;
+    line-height: 1.2rem;
   }
 }
 
 /* xl */
 @media (min-width: 1280px) {
   h1 {
-    font-size: 30px;
+    font-size: 26rpx;
   }
 }
 

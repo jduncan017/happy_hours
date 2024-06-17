@@ -4,7 +4,7 @@ import logoFull from "../../../public/ui-elements/h3-logo-full.png";
 
 const HeroSection = () => {
   return (
-    <div className="HeroSection relative flex h-[580px] flex-col p-4 pt-[85px] sm:h-[650px] sm:p-0">
+    <div className="HeroSection relative flex h-[580px] flex-col p-4 pt-[85px] xs:p-10 sm:h-[650px]">
       <div className="ImageContainer absolute inset-0 z-10 h-full overflow-hidden shadow-themeShadow sm:block">
         <Image
           className="BackgroundImage h-full w-full object-cover brightness-75"
@@ -15,7 +15,7 @@ const HeroSection = () => {
           priority
         />
       </div>
-      <div className="TitleSection z-20 mx-auto mt-3 flex h-fit w-full flex-col gap-4 rounded bg-blurBlack p-6 text-white shadow-themeShadow backdrop-blur-lg backdrop-filter sm:mt-24 sm:w-[600px] sm:rounded-2xl sm:px-12 sm:py-10">
+      <div className="TitleSection z-20 mx-auto mt-16 flex h-fit w-full flex-col gap-4 rounded bg-blurBlack p-6 text-white shadow-themeShadow backdrop-blur-lg backdrop-filter xs:mt-24 sm:max-w-[600px] sm:rounded-2xl sm:px-12 sm:py-10">
         <div className="LogoSection flex h-fit flex-col items-center gap-5 pb-4">
           <Image
             className="Logo h-auto w-full sm:h-full sm:w-auto"

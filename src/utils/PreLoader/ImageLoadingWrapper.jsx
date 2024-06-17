@@ -36,8 +36,8 @@ const ImageLoadingWrapper = ({ restaurant, className }) => {
         className={`p-10 ${className}`}
         src="/image-error.png"
         alt="Error loading image"
-        width={300}
-        height={300}
+        width={275}
+        height={275}
       />
     );
 

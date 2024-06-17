@@ -91,8 +91,8 @@ export default function SearchPage() {
   };
 
   return (
-    <div className="Search mx-auto mt-8 flex max-w-[1000px] flex-col items-center gap-2 rounded-md border border-solid border-stone-700 bg-neutralLight p-4 shadow-themeShadow sm:p-8">
-      <div className="TitleBar mb-2 w-full max-w-[1000px] rounded-lg bg-stone-800 p-4 text-center font-sans text-white">
+    <div className="Search mx-auto mt-4 flex max-w-[1000px] flex-col items-center gap-2 border-r p-4 sm:mt-8 sm:p-8 lg:rounded-md lg:bg-neutralLight lg:shadow-themeShadow">
+      <div className="TitleBar w-full max-w-[1000px] rounded-md bg-stone-800 p-4 text-center font-sans text-white sm:mb-2">
         <div className="HeroSloganContainer flex w-full flex-wrap justify-center gap-x-2 text-center font-sans font-extrabold">
           <h2 className="HeroSlogan">{`It's Happy Hour`}</h2>
           <h2 className="HeroSlogan text-primaryYellow uppercase italic">
@@ -130,11 +130,11 @@ export default function SearchPage() {
 
           return (
             <div
-              className="RestaurantDisplay flex w-full max-w-[1000px] flex-col-reverse gap-5 text-wrap border-b border-solid border-b-stone-700 p-4 text-black xs:flex-row"
+              className="RestaurantDisplay flex w-full max-w-[1000px] flex-col-reverse gap-5 text-wrap border-b border-solid border-b-stone-400 px-2 py-4 text-black xs:flex-row sm:p-4"
               key={index}
             >
               <div className="LeftColumn flex h-full w-full flex-col gap-4 xs:w-fit">
-                <div className="RestaurantImage relative aspect-square w-full overflow-hidden rounded-lg bg-stone-300 xs:w-[150px] sm:w-[200px] md:w-[300px]">
+                <div className="RestaurantImage relative aspect-square w-full overflow-hidden rounded-md bg-stone-300 xs:w-[150px] sm:w-[200px] md:w-[275px]">
                   <ImageLoadingWrapper
                     restaurant={restaurant}
                     className="Image h-full w-full object-contain"

@@ -32,13 +32,18 @@ const ImageLoadingWrapper = ({ restaurant, className }) => {
   // Error Return
   if (isError)
     return (
-      <Image
-        className="m-auto"
-        src="/image-error.png"
-        alt="Error loading image"
-        width={125}
-        height={125}
-      />
+      <div className="PhotoMissing relative flex h-full w-full items-center justify-center">
+        <div className="MissingTextContainer absolute rounded-lg bg-black p-2">
+          <p className="MissingText font-semibold text-white">Photo Missing</p>
+        </div>
+        <Image
+          className="object-cover"
+          src="/photo-missing.webp"
+          alt="Error loading image"
+          width={400}
+          height={400}
+        />
+      </div>
     );
 
   // Image Return

@@ -81,6 +81,86 @@ export const HAPPY_HOURS = {
         ],
       },
       {
+        name: "Alma Fonda Fina",
+        address: "2556 15th St. Denver, CO 80211",
+        area: "LoHi",
+        website:
+          "https://static1.squarespace.com/static/655aca2b4dc5be7809bed8ab/t/67450f1d594da52685b62f0b/1732579101330/ALMA_HH+Menu+July+%28resized%29+%281%29.pdf",
+        happyHours: {
+          Mon: [
+            {
+              Start: "14:00",
+              End: "17:00",
+            },
+          ],
+          Tue: [
+            {
+              Start: "14:00",
+              End: "17:00",
+            },
+          ],
+          Wed: [
+            {
+              Start: "14:00",
+              End: "17:00",
+            },
+          ],
+          Thu: [
+            {
+              Start: "14:00",
+              End: "17:00",
+            },
+          ],
+          Fri: [
+            {
+              Start: "14:00",
+              End: "17:00",
+            },
+          ],
+        },
+        notes: [],
+      },
+      {
+        name: "The Patio at Sloan's",
+        address: "4032 West 17th Ave., Denver, CO, 80204",
+        area: "Sloan's Lake",
+        website:
+          "https://thepatioatsloans.com/denver-sloans-lake-the-patio-at-sloan-s-happy-hours-specials",
+        happyHours: {
+          Mon: [
+            {
+              Start: "15:00",
+              End: "18:00",
+            },
+          ],
+          Tue: [
+            {
+              Start: "15:00",
+              End: "18:00",
+            },
+          ],
+          Wed: [
+            {
+              Start: "15:00",
+              End: "18:00",
+            },
+          ],
+          Thu: [
+            {
+              Start: "15:00",
+              End: "18:00",
+            },
+          ],
+          Fri: [
+            {
+              Start: "15:00",
+              End: "18:00",
+            },
+          ],
+        },
+        notes: [],
+      },
+      {
         name: "Blue Sushi Sake Grill",
         address: "1616 16th St",
         area: "Union Station",

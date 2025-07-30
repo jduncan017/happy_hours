@@ -1,40 +1,43 @@
-import { Restaurant, HappyHoursData } from "@/lib/hh_list";
+import type { LegacyRestaurant, LegacyHappyHoursData } from "@/lib/types";
+import type { Restaurant } from "@/lib/types";
+import { getCurrentTime, isTimeInRange } from "@/lib/utils";
 
-// sorts happy hours by name
-export function sortHappyHours(happyHourDataList: HappyHoursData) {
-  return happyHourDataList.CO.Denver.sort((a: Restaurant, b: Restaurant) => {
-    if (a.name < b.name) {
-      return -1;
-    } else if (a.name > b.name) {
-      return 1;
-    } else {
-      return 0;
-    }
+// sorts happy hours by name - supports both legacy and new restaurant types
+export function sortHappyHours(happyHourDataList: LegacyHappyHoursData) {
+  return happyHourDataList.CO.Denver.sort((a: LegacyRestaurant, b: LegacyRestaurant) => {
+    return a.name.localeCompare(b.name);
+  });
+}
+
+// sorts enhanced restaurants by name
+export function sortRestaurants(restaurants: Restaurant[]) {
+  return [...restaurants].sort((a: Restaurant, b: Restaurant) => {
+    return a.name.localeCompare(b.name);
   });
 }
 
 // filters for happy hours on the current day of the week
-export function filterHappyHoursToday(
-  restaurants: Restaurant[],
+export function filterHappyHoursToday<T extends LegacyRestaurant | Restaurant>(
+  restaurants: T[],
   today: string,
-) {
+): T[] {
   return restaurants.filter(
-    (restaurant: Restaurant) => restaurant.happyHours[today],
+    (restaurant) => restaurant.happyHours[today],
   );
 }
 
 // filters for happy hours happening now
-export const filterHappyHoursNow = (
-  restaurants: Restaurant[],
+export function filterHappyHoursNow<T extends LegacyRestaurant | Restaurant>(
+  restaurants: T[],
   today: string,
-) => {
-  const currentTime = new Date().toTimeString().slice(0, 5);
+): T[] {
+  const currentTime = getCurrentTime();
 
-  return restaurants.filter((restaurant: Restaurant) => {
+  return restaurants.filter((restaurant) => {
     const timesForDay = restaurant.happyHours[today];
     if (!timesForDay) return false;
     return timesForDay.some((time) => {
-      return currentTime >= time.Start && currentTime <= time.End;
+      return isTimeInRange(currentTime, time.Start, time.End);
     });
   });
-};
+}

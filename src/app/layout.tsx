@@ -4,6 +4,7 @@ import { Analytics } from "@vercel/analytics/react";
 import NavBar from "./Components/nav";
 import Footer from "./Components/footer";
 import { ModalProvider } from "../contexts/ModalContext";
+import { QueryProvider } from "../providers/QueryProvider";
 
 if (!process.env.NEXT_PUBLIC_BASE_URL) {
   throw new Error("NEXT_PUBLIC_BASE_URL is not defined");
@@ -36,7 +37,6 @@ export const metadata = {
     url: process.env.NEXT_PUBLIC_BASE_URL,
     locale: "en_US",
     type: "website",
-    logo: "",
   },
 };
 
@@ -48,14 +48,16 @@ export default function RootLayout({
   return (
     <html lang="en">
       <body className="Body h-fit overflow-x-hidden bg-black">
-        <ModalProvider>
-          <div className="Page -z-20 m-auto h-fit max-w-[1728px] overflow-hidden bg-stone-100">
-            <NavBar />
-            {children}
-            <Footer />
-            <Analytics />
-          </div>
-        </ModalProvider>
+        <QueryProvider>
+          <ModalProvider>
+            <div className="Page -z-20 m-auto h-fit overflow-hidden bg-stone-100">
+              <NavBar />
+              {children}
+              <Footer />
+              <Analytics />
+            </div>
+          </ModalProvider>
+        </QueryProvider>
       </body>
     </html>
   );

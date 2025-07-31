@@ -17,7 +17,7 @@ const SiteButton = ({
   addClasses,
   size,
   onSubmit,
-  disabled,
+  disabled = false,
   type,
 }: ButtonProps) => {
   let buttonSize: string;
@@ -39,14 +39,14 @@ const SiteButton = ({
 
   switch (colorFill) {
     case true:
-      buttonColor = "bg-primaryOrange text-white";
+      buttonColor = "bg-po1 text-white";
       break;
     case false:
       buttonColor = "border border-gray-800 text-gray-800";
       break;
     case "variable":
       buttonColor =
-        "bg-neutralLight border-none text-gray-800 md:border md:border-solid md:border-white md:bg-transparent md:text-white";
+        "bg-n1 border-none text-gray-800 md:border md:border-solid md:border-white md:bg-transparent md:text-white";
       break;
   }
 
@@ -58,6 +58,7 @@ const SiteButton = ({
       type={type ?? "button"}
       onClick={onSubmit}
       disabled={disabled}
+      onMouseEnter={() => console.log("test")}
     >
       {text}
     </button>

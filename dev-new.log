@@ -1,0 +1,70 @@
+
+> denver_hh@0.1.0 dev
+> next dev
+
+
+✘ next.js v14.2.31 is not yet supported in the Community edition of Console Ninja.
+We are working hard on it for you https://tinyurl.com/3h9mtwra.
+
+Estimated release dates:
+  - Community users: around 16th October, 2025 (subject to team availability)
+  - PRO users:       priority access is available now
+
+
+✘ next.js v14.2.31 is not yet supported in the Community edition of Console Ninja.
+We are working hard on it for you https://tinyurl.com/3h9mtwra.
+
+Estimated release dates:
+  - Community users: around 16th October, 2025 (subject to team availability)
+  - PRO users:       priority access is available now
+
+  ▲ Next.js 14.2.31
+  - Local:        http://localhost:3000
+  - Environments: .env.local
+
+ ✓ Starting...
+ ✓ Ready in 1063ms
+ ✓ Compiled /src/middleware in 314ms (143 modules)
+ ○ Compiling / ...
+ ✓ Compiled / in 2.3s (1377 modules)
+ HEAD / 200 in 2489ms
+ ✓ Compiled in 179ms (664 modules)
+<w> [webpack.cache.PackFileCacheStrategy] Serializing big strings (108kiB) impacts deserialization performance (consider using Buffer instead and decode when needed)
+ ✓ Compiled /api/restaurants in 389ms (900 modules)
+ GET /api/restaurants?limit=5 200 in 1369ms
+ ✓ Compiled /_not-found in 179ms (1553 modules)
+ GET / 404 in 489ms
+ GET /_next/static/css/app/layout.css?v=1753931679072 404 in 47ms
+ GET /.well-known/appspecific/com.chrome.devtools.json 404 in 42ms
+ GET /_next/static/chunks/main-app.js?v=1753931679072 404 in 64ms
+ GET /_next/static/chunks/app-pages-internals.js 404 in 64ms
+ GET /_next/static/chunks/app/layout.js 404 in 64ms
+ ✓ Compiled /favicon.ico in 150ms (930 modules)
+ GET /favicon.ico 200 in 196ms
+ GET / 200 in 92ms
+ GET /_next/static/css/app/layout.css?v=1753931681449 404 in 31ms
+ GET /_next/static/css/app/page.css?v=1753931681449 404 in 31ms
+ GET /.well-known/appspecific/com.chrome.devtools.json 404 in 34ms
+ GET /_next/static/chunks/main-app.js?v=1753931681449 404 in 50ms
+ GET /_next/static/chunks/app-pages-internals.js 404 in 43ms
+ GET /_next/static/chunks/app/page.js 404 in 30ms
+ GET /_next/static/chunks/app/layout.js 404 in 21ms
+ GET /favicon.ico 200 in 7ms
+ GET / 200 in 22ms
+ GET /_next/static/css/app/layout.css?v=1753931684846 404 in 19ms
+ GET /_next/static/css/app/page.css?v=1753931684846 404 in 21ms
+ GET /.well-known/appspecific/com.chrome.devtools.json 404 in 31ms
+ GET /_next/static/chunks/main-app.js?v=1753931684846 404 in 33ms
+ GET /_next/static/chunks/app/layout.js 404 in 33ms
+ GET /_next/static/chunks/app/page.js 404 in 34ms
+ GET /_next/static/chunks/app-pages-internals.js 404 in 34ms
+ GET /favicon.ico 200 in 3ms
+ GET / 200 in 20ms
+ GET /_next/static/css/app/page.css?v=1753931692020 404 in 22ms
+ GET /_next/static/css/app/layout.css?v=1753931692020 404 in 25ms
+ GET /.well-known/appspecific/com.chrome.devtools.json 404 in 24ms
+ GET /_next/static/chunks/main-app.js?v=1753931692020 404 in 32ms
+ GET /_next/static/chunks/app-pages-internals.js 404 in 25ms
+ GET /_next/static/chunks/app/page.js 404 in 31ms
+ GET /_next/static/chunks/app/layout.js 404 in 29ms
+ GET /favicon.ico 200 in 3ms

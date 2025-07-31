@@ -1,24 +1,33 @@
 "use client";
-import React, { useEffect, useState, useMemo, forwardRef } from "react";
-import { HAPPY_HOURS, HappyHourTime, HappyHours } from "../../lib/hh_list";
-import type { Restaurant } from "../../lib/hh_list";
-import Link from "next/link";
-import ImageLoadingWrapper from "../../utils/PreLoader/ImageLoadingWrapper";
-import SiteButton from "./SmallComponents/siteButton";
-import generateGoogleMapsUrl from "@/utils/generateMapsURL";
+import React, { useEffect, useState, forwardRef } from "react";
+import type { Restaurant } from "@/lib/types";
 import {
-  sortHappyHours,
+  sortRestaurants,
   filterHappyHoursToday,
   filterHappyHoursNow,
 } from "@/utils/happyHourUtils";
+import { useAllRestaurants } from "@/hooks/useRestaurants";
+import SearchFilters from "./SearchFilters";
+import RestaurantList from "./RestaurantList";
+import GoogleMap from "./GoogleMap";
+import ViewToggle from "./ViewToggle";
+import LocationSearch from "./LocationSearch";
 
 export const SearchPage = forwardRef<HTMLDivElement>((props, ref) => {
-  const [expanded, setExpanded] = useState<Set<string>>(new Set());
   const [today, setToday] = useState("");
   const [filterOption, setFilterOption] = useState("all");
   const [displayedRestaurants, setDisplayedRestaurants] = useState<
     Restaurant[]
   >([]);
+  const [view, setView] = useState<"list" | "map">("list");
+  const [userLocation, setUserLocation] = useState<{
+    lat: number;
+    lng: number;
+  } | null>(null);
+  const [isLocationBased, setIsLocationBased] = useState(false);
+
+  // Use React Query to fetch restaurants
+  const { data: allRestaurants = [], isLoading, error } = useAllRestaurants();
 
   useEffect(() => {
     const daysOfWeek = ["Sun", "Mon", "Tue", "Wed", "Thu", "Fri", "Sat"];
@@ -27,210 +36,137 @@ export const SearchPage = forwardRef<HTMLDivElement>((props, ref) => {
   }, []);
 
   useEffect(() => {
-    let filteredRestaurants = sortHappyHours(HAPPY_HOURS);
+    if (allRestaurants.length === 0 || isLocationBased) return;
+
+    const sortedRestaurants = sortRestaurants(allRestaurants);
+    let filteredRestaurants = sortedRestaurants;
 
     if (filterOption === "today") {
-      filteredRestaurants = filterHappyHoursToday(filteredRestaurants, today);
+      filteredRestaurants = filterHappyHoursToday(sortedRestaurants, today);
     } else if (filterOption === "now") {
-      filteredRestaurants = filterHappyHoursNow(filteredRestaurants, today);
+      filteredRestaurants = filterHappyHoursNow(sortedRestaurants, today);
     }
 
     setDisplayedRestaurants(filteredRestaurants);
-  }, [filterOption, today]);
+  }, [filterOption, today, allRestaurants, isLocationBased]);
 
-  const formatHappyHours = useMemo(
-    () => (times: HappyHours, isExpanded: boolean) => {
-      const daysToShow = isExpanded ? Object.keys(times) : [today];
-
-      return daysToShow.map((day) => {
-        const timesForDay = times[day];
-        if (timesForDay) {
-          const timesFormatted = timesForDay.map((time: HappyHourTime) => {
-            let startHour = parseInt(time.Start.split(":")[0], 10);
-            let startMinutes = time.Start.split(":")[1];
-            let startMeridiem = startHour >= 12 ? "PM" : "AM";
-            startHour = startHour > 12 ? startHour - 12 : startHour;
-            startHour = startHour === 0 ? 12 : startHour; // Convert 0 hour to 12 for 12AM
-            let startTimeFormatted = `${startHour}:${startMinutes} ${startMeridiem}`;
-
-            let endHour = parseInt(time.End.split(":")[0], 10);
-            let endMinutes = time.End.split(":")[1];
-            let endMeridiem = endHour >= 12 ? "PM" : "AM";
-            endHour = endHour > 12 ? endHour - 12 : endHour;
-            endHour = endHour === 0 ? 12 : endHour; // Convert 0 hour to 12 for 12AM
-            let endTimeFormatted = `${endHour}:${endMinutes} ${endMeridiem}`;
-
-            return `${startTimeFormatted} - ${endTimeFormatted}`;
-          });
-
-          return (
-            <li key={day} className="HappyHourTimes m-1 flex gap-1">
-              <p className="HappyHourDay w-12">{`${day}:`}</p>
-              <div className="HappyHourTimes flex flex-col">
-                {timesFormatted.map((timeFormatted, index) => (
-                  <p key={index}>{timeFormatted}</p>
-                ))}
-              </div>
-            </li>
-          );
-        }
-        return null;
-      });
-    },
-    [today],
-  );
-
-  const toggleExpanded = (restaurantName: string) => {
-    setExpanded((prev) => {
-      const newSet = new Set(prev);
-      if (newSet.has(restaurantName)) {
-        newSet.delete(restaurantName);
-      } else {
-        newSet.add(restaurantName);
-      }
-      return newSet;
-    });
+  const handleLocationSearch = (
+    restaurants: Restaurant[],
+    location: { lat: number; lng: number },
+  ) => {
+    setDisplayedRestaurants(restaurants);
+    setUserLocation(location);
+    setIsLocationBased(true);
+    setView("map"); // Switch to map view to show results
   };
+
+  const handleBackToAll = () => {
+    setIsLocationBased(false);
+    setUserLocation(null);
+    // This will trigger the normal filtering useEffect
+  };
+
+  // Loading state
+  if (isLoading) {
+    return (
+      <div
+        id="search-section"
+        className="Search lg:bg-n1 mx-auto mt-4 flex flex-col items-center gap-2 border-r p-4 sm:mt-8 sm:p-8 lg:rounded-md lg:shadow-themeShadow"
+      >
+        <SearchFilters
+          filterOption="all"
+          onFilterChange={() => {}}
+          view={view}
+          onViewChange={setView}
+        />
+        <div className="flex items-center justify-center py-8">
+          <div className="h-8 w-8 animate-spin rounded-full border-b-2 border-stone-800"></div>
+        </div>
+      </div>
+    );
+  }
+
+  // Error state
+  if (error) {
+    return (
+      <div
+        id="search-section"
+        className="Search lg:bg-n1 mx-auto mt-4 flex flex-col items-center gap-2 border-r p-4 sm:mt-8 sm:p-8 lg:rounded-md lg:shadow-themeShadow"
+      >
+        <SearchFilters
+          filterOption={filterOption}
+          onFilterChange={setFilterOption}
+          view={view}
+          onViewChange={setView}
+        />
+        <div className="py-8 text-center">
+          <p className="mb-4 text-red-600">
+            {error instanceof Error ? error.message : String(error)}
+          </p>
+          <button
+            onClick={() => window.location.reload()}
+            className="rounded bg-stone-800 px-4 py-2 text-white hover:bg-stone-700"
+          >
+            Try Again
+          </button>
+        </div>
+      </div>
+    );
+  }
 
   return (
     <div
       ref={ref}
-      className="Search mx-auto mt-4 flex max-w-[1000px] flex-col items-center gap-2 border-r p-4 sm:mt-8 sm:p-8 lg:rounded-md lg:bg-neutralLight lg:shadow-themeShadow"
+      id="search-section"
+      className="Search lg:bg-n1 mx-auto mt-4 flex flex-col gap-4 border-r p-4 sm:mt-8 sm:p-8 lg:flex-row lg:rounded-md lg:shadow-themeShadow"
     >
-      <div className="TitleBar w-full max-w-[1000px] rounded-md bg-stone-800 p-4 text-center font-sans text-white sm:mb-2">
-        <div className="HeroSloganContainer flex w-full flex-wrap justify-center gap-x-2 text-center font-sans font-extrabold">
-          <h2 className="HeroSlogan text-white">{`It's Happy Hour`}</h2>
-          <h2 className="HeroSlogan uppercase italic text-primaryYellow">
-            Somewhere!
-          </h2>
-        </div>
-        <p className="Title mt-1 font-allerta text-xl">
-          Find Your Happy Hour In Denver!
-        </p>
-        <div className="Filters my-2 w-full">
-          <label className="HHFilterLabel mr-2">Filter:</label>
-          <select
-            value={filterOption}
-            onChange={(e) => setFilterOption(e.target.value)}
-            className="h-10 w-56 rounded-md border border-stone-400 p-2 text-black"
+      {/* Left Sidebar - Location Search */}
+      <div className="Sidebar w-full flex-shrink-0 lg:w-80">
+        <LocationSearch
+          restaurants={allRestaurants}
+          onLocationSearch={handleLocationSearch}
+          onError={(error) => console.error("Location error:", error)}
+        />
+
+        {isLocationBased && (
+          <button
+            onClick={handleBackToAll}
+            className="BackButton mt-4 w-full rounded-lg px-4 py-3 bg-stone-100 text-stone-700 hover:bg-stone-200 transition-all duration-200 border border-stone-200 font-medium"
           >
-            <option value="all">Show All</option>
-            <option value="today">Has Happy Hour Today</option>
-            <option value="now">Has Happy Hour Now!</option>
-          </select>
-        </div>
+            ← Back to All Restaurants
+          </button>
+        )}
       </div>
 
-      <div className="RestaurantList scrollbar-hide w-full lg:max-h-[150vh] lg:overflow-y-scroll">
-        {/* If No Restaurants */}
-        {displayedRestaurants.length === 0 && (
-          <p className="NoRestaurants my-6 text-center text-gray-700">
-            Sadly, There are no happy hours that match these filters. 😔
-          </p>
+      {/* Main Content */}
+      <div className="MainContent flex flex-1 flex-col gap-2">
+        <SearchFilters
+          filterOption={filterOption}
+          onFilterChange={setFilterOption}
+          view={view}
+          onViewChange={setView}
+        />
+
+        {isLocationBased && displayedRestaurants.length === 0 && (
+          <div className="NoResults py-8 text-center bg-stone-50 rounded-lg border border-stone-200">
+            <p className="mb-2 text-stone-900 font-medium">
+              No restaurants found within your selected radius.
+            </p>
+            <p className="text-sm text-stone-600">
+              Try increasing the search distance or selecting a different filter.
+            </p>
+          </div>
         )}
 
-        {/* Restaurant List */}
-        {displayedRestaurants.map((restaurant: Restaurant, index: number) => {
-          const isExpanded = expanded.has(restaurant.name);
-
-          return (
-            <div
-              className="RestaurantDisplay flex w-full max-w-[1000px] flex-col-reverse gap-5 text-wrap border-b border-solid border-b-stone-400 px-2 py-4 text-black xs:flex-row sm:p-4"
-              key={index}
-            >
-              <div className="LeftColumn flex h-full w-full flex-col gap-4 xs:w-fit">
-                <div className="RestaurantImage relative flex aspect-video w-full items-center overflow-hidden rounded-md bg-stone-300 xs:aspect-square xs:w-[150px] sm:w-[200px] md:w-[275px]">
-                  <ImageLoadingWrapper
-                    restaurant={restaurant}
-                    className="Image h-full w-full object-contain"
-                  />
-                </div>
-                <div className="Buttons flex w-full flex-row gap-2 xs:flex-col md:flex-row">
-                  <Link
-                    className="Website w-full"
-                    href={`${restaurant.website}`}
-                  >
-                    <SiteButton
-                      colorFill={true}
-                      rounded={false}
-                      text="Visit Website"
-                      size="lg"
-                    />
-                  </Link>
-                  <Link
-                    className="Directions w-full"
-                    href={generateGoogleMapsUrl(
-                      restaurant.name,
-                      restaurant.address,
-                    )}
-                  >
-                    <SiteButton
-                      colorFill={false}
-                      rounded={false}
-                      text="Get Directions"
-                      size="lg"
-                    />
-                  </Link>
-                </div>
-              </div>
-              <div className="RightColumn flex w-full flex-col gap-2 overflow-hidden">
-                <div className="Name&Address">
-                  <h2 className="RestaurantName font-sans">
-                    {restaurant.name}
-                  </h2>
-                  <div className="LocationContainer flex flex-wrap gap-x-2">
-                    {restaurant.area && (
-                      <p className="Area text-gray-600">{`${restaurant.area} -`}</p>
-                    )}
-                    <Link
-                      className="AddressLink w-fit"
-                      href={generateGoogleMapsUrl(
-                        restaurant.name,
-                        restaurant.address,
-                      )}
-                      target="_blank"
-                      rel="noopener noreferrer"
-                    >
-                      <p className="Address w-fit underline">
-                        {restaurant.address}
-                      </p>
-                    </Link>
-                  </div>
-                </div>
-                <div className="HHTimes w-full flex-grow">
-                  <h3 className="TimeTitle font-sans font-semibold">
-                    Happy Hour Today:
-                  </h3>
-                  {restaurant.happyHours[today] || isExpanded ? (
-                    formatHappyHours(restaurant.happyHours, isExpanded)
-                  ) : (
-                    <p className="ml-1 text-gray-700">{`No Happy Hour Today :(`}</p>
-                  )}
-                  {!isExpanded && (
-                    <button
-                      onClick={() => toggleExpanded(restaurant.name)}
-                      className="ShowMoreButton mt-1 rounded-sm bg-stone-200 px-2 text-base italic text-gray-700 hover:text-black"
-                    >
-                      Show More
-                    </button>
-                  )}
-                </div>
-                {restaurant.notes.length > 0 && (
-                  <div className="NotesSection mt-2 w-full rounded-lg bg-stone-200 p-2">
-                    <h4 className="Notes font-sans">Notes:</h4>
-                    {restaurant.notes.map((note) => {
-                      return (
-                        <p className="Note text-lg leading-6" key={note}>
-                          {note}
-                        </p>
-                      );
-                    })}
-                  </div>
-                )}
-              </div>
-            </div>
-          );
-        })}
+        {view === "list" ? (
+          <RestaurantList restaurants={displayedRestaurants} today={today} />
+        ) : (
+          <GoogleMap
+            restaurants={displayedRestaurants}
+            center={userLocation || undefined}
+            className="h-[600px] w-full rounded-lg"
+          />
+        )}
       </div>
     </div>
   );

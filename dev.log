@@ -1,0 +1,16 @@
+
+> denver_hh@0.1.0 dev
+> next dev
+
+[32m✔[0m [33mConsole Ninja[0m extension is connected to [33mNext.js[0m, see [36mhttps://tinyurl.com/2vt8jxzw[0m
+ ⚠ Port 3000 is in use, trying 3001 instead.
+   ▲ Next.js 14.1.4
+   - Local:        http://localhost:3001
+   - Environments: .env.local
+
+ ✓ Ready in 1425ms
+ ✓ Compiled /src/middleware in 105ms (141 modules)
+ ○ Compiling /api/restaurants ...
+ ✓ Compiled /api/restaurants in 628ms (235 modules)
+ ✓ Compiled in 54ms
+[?25h

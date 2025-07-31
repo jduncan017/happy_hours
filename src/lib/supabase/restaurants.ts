@@ -42,9 +42,13 @@ function transformDatabaseRowToRestaurant(row: Database['public']['Tables']['res
   };
 }
 
-// Get all restaurants
-export async function getAllRestaurants(supabase: SupabaseClient): Promise<Restaurant[]> {
-  const { data, error } = await supabase
+// Get all restaurants with optional pagination
+export async function getAllRestaurants(
+  supabase: SupabaseClient, 
+  limit?: number, 
+  offset?: number
+): Promise<Restaurant[]> {
+  let query = supabase
     .from('restaurants')
     .select(`
       *,
@@ -52,6 +56,16 @@ export async function getAllRestaurants(supabase: SupabaseClient): Promise<Resta
       restaurant_ratings (*)
     `)
     .order('name');
+
+  if (limit !== undefined) {
+    query = query.limit(limit);
+  }
+  
+  if (offset !== undefined) {
+    query = query.range(offset, offset + (limit || 50) - 1);
+  }
+
+  const { data, error } = await query;
 
   if (error) {
     console.error('Error fetching restaurants:', error);

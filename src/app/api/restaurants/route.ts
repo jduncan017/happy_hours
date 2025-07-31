@@ -4,16 +4,37 @@ import { getAllRestaurants, createRestaurant } from '@/lib/supabase/restaurants'
 import { NextResponse } from 'next/server';
 import { RestaurantSchema } from '@/lib/schemas';
 
-// GET /api/restaurants - Get all restaurants
-export async function GET() {
+// GET /api/restaurants - Get all restaurants with pagination support
+export async function GET(request: Request) {
   try {
+    const { searchParams } = new URL(request.url);
+    const page = parseInt(searchParams.get('page') || '1');
+    const limit = parseInt(searchParams.get('limit') || '50');
+    const offset = (page - 1) * limit;
+
     const supabase = await createClient();
-    const restaurants = await getAllRestaurants(supabase);
+    
+    // Get total count
+    const { count } = await supabase
+      .from('restaurants')
+      .select('*', { count: 'exact', head: true });
+    
+    // Get paginated restaurants
+    const restaurants = await getAllRestaurants(supabase, limit, offset);
+    
+    const totalPages = Math.ceil((count || 0) / limit);
     
     return NextResponse.json({
       success: true,
       data: restaurants,
-      count: restaurants.length
+      pagination: {
+        page,
+        limit,
+        total: count || 0,
+        totalPages,
+        hasNext: page < totalPages,
+        hasPrev: page > 1
+      }
     });
   } catch (error) {
     console.error('Error fetching restaurants:', error);
@@ -41,12 +62,12 @@ export async function POST(request: Request) {
     }).safeParse(body);
     
     if (!validationResult.success) {
-      console.log('Validation failed:', validationResult.error.errors);
+      console.log('Validation failed:', validationResult.error.issues);
       return NextResponse.json(
         { 
           success: false, 
           error: 'Invalid restaurant data',
-          details: validationResult.error.errors
+          details: validationResult.error.issues
         },
         { status: 400 }
       );

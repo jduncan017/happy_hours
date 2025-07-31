@@ -29,7 +29,7 @@ const SearchBar = () => {
   const handleSearchFilters = (
     e: ChangeEvent<HTMLInputElement | HTMLSelectElement>,
   ) => {
-    const newSearchParams = new URLSearchParams(searchParams);
+    const newSearchParams = new URLSearchParams(searchParams.toString());
 
     if (e.target.type === "checkbox") {
       const target = e.target as HTMLInputElement;
@@ -65,7 +65,7 @@ const SearchBar = () => {
   return (
     <form
       id="filters"
-      className="SearchBar via-primaryOrange w-full max-w-screen-md rounded-full bg-gradient-to-b from-red-500 to-orange-400 pr-4"
+      className="SearchBar via-po1 w-full max-w-screen-md rounded-full bg-gradient-to-b from-red-500 to-orange-400 pr-4"
       onSubmit={(e) => e.preventDefault()}
     >
       <div className="InnerContainer">

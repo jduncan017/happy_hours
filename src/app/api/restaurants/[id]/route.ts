@@ -64,7 +64,7 @@ export async function PUT(
         { 
           success: false, 
           error: 'Invalid restaurant data',
-          details: validationResult.error.errors
+          details: validationResult.error.issues
         },
         { status: 400 }
       );

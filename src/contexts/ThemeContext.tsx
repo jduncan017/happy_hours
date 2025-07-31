@@ -4,15 +4,15 @@ import type { ReactNode, FC } from "react";
 
 interface ThemeContextType {
   colors: {
-    neutral: string;
-    neutralLight: string;
-    neutralDark: string;
+    n2: string;
+    n1: string;
+    n3: string;
     primary: string;
     primaryDark: string;
     primaryLight: string;
     primaryRed: string;
-    primaryOrange: string;
-    primaryYellow: string;
+    po1: string;
+    py1: string;
     secondaryBlue: string;
     tertiaryYellow: string;
     blurWhite: string;
@@ -33,15 +33,15 @@ interface ThemeContextType {
 
 const themeValues: ThemeContextType = {
   colors: {
-    neutral: "#fff9ee",
-    neutralLight: "#FFFBF4",
-    neutralDark: "#FFF1DD",
+    n2: "#fff9ee",
+    n1: "#FFFBF4",
+    n3: "#FFF1DD",
     primary: "#004e59",
     primaryDark: "#5E0712",
     primaryLight: "#F8B999",
     primaryRed: "#F86800",
-    primaryOrange: "#FF8F28",
-    primaryYellow: "#FFBE3F",
+    po1: "#FF8F28",
+    py1: "#FFBE3F",
     secondaryBlue: "#406A91",
     tertiaryYellow: "#FCC686",
     blurWhite: "rgba(255, 255, 255, 0.5)",

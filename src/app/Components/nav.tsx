@@ -28,8 +28,8 @@ const NavBar = () => {
               setMobileActive(false);
             }}
           >
-            <div className="Link rounded-md bg-primaryOrange px-6 py-2.5 text-white backdrop-blur-md transition-all duration-200 hover:scale-105 hover:bg-blurWhite hover:text-black">
-              <p className="AboutText text-2xl uppercase duration-300 sm:text-base lg:text-lg">
+            <div className="Link bg-po1 rounded-full px-8 py-2 text-white backdrop-blur-md transition-all duration-200 hover:scale-105 hover:bg-white/50 hover:text-black">
+              <p className="AboutText text-xl font-medium uppercase tracking-wider duration-300 sm:text-base lg:text-lg">
                 {link.text}
               </p>
             </div>
@@ -40,10 +40,10 @@ const NavBar = () => {
   };
 
   return (
-    <nav className="NavContainer">
-      <div className="NavBar fixed z-30 hidden w-full max-w-[1728px] font-sans sm:absolute sm:block">
-        <div className="Container mx-auto flex h-[80px] items-center justify-between px-3">
-          <div className="LogoSection flex h-fit items-center gap-2 rounded-full bg-blurBlack py-1.5 pl-1 pr-2 backdrop-blur-lg backdrop-filter">
+    <nav className="NavContainer w-fuull flex justify-center">
+      <div className="NavBar fixed z-30 hidden w-full max-w-[2400px] bg-black/40 font-sans backdrop-blur-lg sm:absolute sm:block">
+        <div className="Container mx-auto flex items-center justify-between px-8 py-2">
+          <div className="LogoSection flex h-fit items-center gap-2">
             <Image
               src="/h3-logo-wide.png"
               alt="H3 Logo"

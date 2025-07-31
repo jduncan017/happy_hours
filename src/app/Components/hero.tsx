@@ -3,14 +3,23 @@ import Image from "next/image";
 import SearchBar from "./SmallComponents/SearchBar";
 import SiteButton from "./SmallComponents/siteButton";
 
-interface HeroSectionProps {
-  scrollToRef: () => void;
-}
+export default function HeroSection() {
+  function scrollToSearch() {
+    // Add a small delay to ensure the search section is rendered
+    setTimeout(() => {
+      const searchSection = document.getElementById("search-section");
+      if (searchSection) {
+        console.log("scrolling!");
+        searchSection.scrollIntoView({ behavior: "smooth" });
+      } else {
+        console.log("Search section not found");
+      }
+    }, 100);
+  }
 
-export default function HeroSection({ scrollToRef }: HeroSectionProps) {
   return (
-    <div className="HeroSection relative flex h-svh flex-col px-4 pt-[70px] xs:px-10">
-      <div className="ImageContainer absolute inset-0 z-10 h-full overflow-hidden shadow-themeShadow sm:block">
+    <div className="HeroSection relative flex h-svh max-h-[960px] flex-col items-center justify-center bg-black px-4 pt-[70px] xs:px-10">
+      <div className="ImageContainer absolute inset-0 z-10 flex h-full items-center justify-center overflow-hidden shadow-themeShadow">
         {/* mobile video */}
         <video
           className="BackgroundImage block h-full w-full object-cover lg:hidden"
@@ -34,7 +43,7 @@ export default function HeroSection({ scrollToRef }: HeroSectionProps) {
           playsInline
         />
       </div>
-      <div className="TitleSection z-20 mx-auto mt-12 flex h-fit w-full flex-col gap-4 rounded-2xl bg-blurBlack p-6 py-12 text-white shadow-themeShadow backdrop-blur-lg backdrop-filter sm:max-w-[600px] sm:rounded-xl sm:px-12 sm:py-10">
+      <div className="TitleSection z-20 mx-auto mt-12 flex h-fit w-full flex-col gap-4 rounded-2xl bg-black/70 p-6 py-12 text-white shadow-themeShadow backdrop-blur-lg backdrop-filter sm:max-w-[600px] sm:rounded-xl sm:px-12 sm:py-10">
         <div className="LogoSection flex h-fit flex-col items-center gap-2 pb-4">
           <Image
             className="Logo h-auto w-full sm:h-full sm:w-auto"
@@ -53,8 +62,10 @@ export default function HeroSection({ scrollToRef }: HeroSectionProps) {
           colorFill={true}
           text="Find Your Happy Hour"
           rounded={true}
-          addClasses="mx-auto w-60 h-12"
-          onSubmit={() => scrollToRef()}
+          addClasses="mx-auto w-60 h-12 z-10"
+          onSubmit={() => {
+            scrollToSearch();
+          }}
         />
         <p className="BetaNote m-auto text-center capitalize italic text-gray-400">
           {`Note: This site is in beta`}

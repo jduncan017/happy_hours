@@ -6,12 +6,17 @@ import {
   filterHappyHoursToday,
   filterHappyHoursNow,
 } from "@/utils/happyHourUtils";
+import {
+  applyAdvancedFilters,
+  hasActiveAdvancedFilters,
+} from "@/utils/advancedFilterUtils";
 import { useAllRestaurants } from "@/hooks/useRestaurants";
 import SearchFilters from "./SearchFilters";
 import RestaurantList from "./RestaurantList";
 import GoogleMap from "./GoogleMap";
 import ViewToggle from "./ViewToggle";
 import LocationSearch from "./LocationSearch";
+import AdvancedFilters, { type AdvancedFilterOptions } from "./AdvancedFilters";
 
 export const SearchPage = forwardRef<HTMLDivElement>((props, ref) => {
   const [today, setToday] = useState("");
@@ -25,6 +30,19 @@ export const SearchPage = forwardRef<HTMLDivElement>((props, ref) => {
     lng: number;
   } | null>(null);
   const [isLocationBased, setIsLocationBased] = useState(false);
+  const [advancedFilters, setAdvancedFilters] = useState<AdvancedFilterOptions>(
+    {
+      areas: [],
+      cuisineTypes: [],
+      priceRange: [],
+      hasSpecialFeatures: {
+        hasWebsite: false,
+        hasNotes: false,
+        hasMultipleHappyHours: false,
+      },
+    },
+  );
+  const [showAdvancedFilters, setShowAdvancedFilters] = useState(false);
 
   // Use React Query to fetch restaurants
   const { data: allRestaurants = [], isLoading, error } = useAllRestaurants();
@@ -41,14 +59,23 @@ export const SearchPage = forwardRef<HTMLDivElement>((props, ref) => {
     const sortedRestaurants = sortRestaurants(allRestaurants);
     let filteredRestaurants = sortedRestaurants;
 
+    // Apply basic time-based filters
     if (filterOption === "today") {
       filteredRestaurants = filterHappyHoursToday(sortedRestaurants, today);
     } else if (filterOption === "now") {
       filteredRestaurants = filterHappyHoursNow(sortedRestaurants, today);
     }
 
+    // Apply advanced filters
+    if (hasActiveAdvancedFilters(advancedFilters)) {
+      filteredRestaurants = applyAdvancedFilters(
+        filteredRestaurants,
+        advancedFilters,
+      );
+    }
+
     setDisplayedRestaurants(filteredRestaurants);
-  }, [filterOption, today, allRestaurants, isLocationBased]);
+  }, [filterOption, today, allRestaurants, advancedFilters, isLocationBased]);
 
   const handleLocationSearch = (
     restaurants: Restaurant[],
@@ -66,12 +93,16 @@ export const SearchPage = forwardRef<HTMLDivElement>((props, ref) => {
     // This will trigger the normal filtering useEffect
   };
 
+  const handleAdvancedFiltersChange = (newFilters: AdvancedFilterOptions) => {
+    setAdvancedFilters(newFilters);
+  };
+
   // Loading state
   if (isLoading) {
     return (
       <div
         id="search-section"
-        className="Search lg:bg-n1 mx-auto mt-4 flex flex-col items-center gap-2 border-r p-4 sm:mt-8 sm:p-8 lg:rounded-md lg:shadow-themeShadow"
+        className="Search mx-auto mt-4 flex flex-col items-center gap-2 border-r p-4 sm:mt-8 sm:p-8 lg:rounded-md lg:bg-n1 lg:shadow-themeShadow"
       >
         <SearchFilters
           filterOption="all"
@@ -91,7 +122,7 @@ export const SearchPage = forwardRef<HTMLDivElement>((props, ref) => {
     return (
       <div
         id="search-section"
-        className="Search lg:bg-n1 mx-auto mt-4 flex flex-col items-center gap-2 border-r p-4 sm:mt-8 sm:p-8 lg:rounded-md lg:shadow-themeShadow"
+        className="Search mx-auto mt-4 flex flex-col items-center gap-2 border-r p-4 sm:mt-8 sm:p-8 lg:rounded-md lg:bg-n1 lg:shadow-themeShadow"
       >
         <SearchFilters
           filterOption={filterOption}
@@ -118,7 +149,7 @@ export const SearchPage = forwardRef<HTMLDivElement>((props, ref) => {
     <div
       ref={ref}
       id="search-section"
-      className="Search lg:bg-n1 mx-auto mt-4 flex flex-col gap-4 border-r p-4 sm:mt-8 sm:p-8 lg:flex-row lg:rounded-md lg:shadow-themeShadow"
+      className="Search mx-auto mt-4 flex w-full flex-col justify-center gap-4 border-r p-4 px-4 sm:mt-8 sm:p-8 md:px-10 lg:flex-row lg:rounded-md lg:bg-n1 lg:shadow-themeShadow"
     >
       {/* Left Sidebar - Location Search */}
       <div className="Sidebar w-full flex-shrink-0 lg:w-80">
@@ -131,7 +162,7 @@ export const SearchPage = forwardRef<HTMLDivElement>((props, ref) => {
         {isLocationBased && (
           <button
             onClick={handleBackToAll}
-            className="BackButton mt-4 w-full rounded-lg px-4 py-3 bg-stone-100 text-stone-700 hover:bg-stone-200 transition-all duration-200 border border-stone-200 font-medium"
+            className="BackButton mt-4 w-full rounded-lg border border-stone-200 bg-stone-100 px-4 py-3 font-medium text-stone-700 transition-all duration-200 hover:bg-stone-200"
           >
             ← Back to All Restaurants
           </button>
@@ -139,7 +170,7 @@ export const SearchPage = forwardRef<HTMLDivElement>((props, ref) => {
       </div>
 
       {/* Main Content */}
-      <div className="MainContent flex flex-1 flex-col gap-2">
+      <div className="MainContent flex w-full flex-col gap-4">
         <SearchFilters
           filterOption={filterOption}
           onFilterChange={setFilterOption}
@@ -147,16 +178,38 @@ export const SearchPage = forwardRef<HTMLDivElement>((props, ref) => {
           onViewChange={setView}
         />
 
+        <AdvancedFilters
+          restaurants={allRestaurants}
+          filters={advancedFilters}
+          onFiltersChange={handleAdvancedFiltersChange}
+          isOpen={showAdvancedFilters}
+          onToggle={() => setShowAdvancedFilters(!showAdvancedFilters)}
+        />
+
         {isLocationBased && displayedRestaurants.length === 0 && (
-          <div className="NoResults py-8 text-center bg-stone-50 rounded-lg border border-stone-200">
-            <p className="mb-2 text-stone-900 font-medium">
+          <div className="NoResults rounded-lg border border-stone-200 bg-stone-50 py-8 text-center">
+            <p className="mb-2 font-medium text-stone-900">
               No restaurants found within your selected radius.
             </p>
             <p className="text-sm text-stone-600">
-              Try increasing the search distance or selecting a different filter.
+              Try increasing the search distance or selecting a different
+              filter.
             </p>
           </div>
         )}
+
+        {!isLocationBased &&
+          hasActiveAdvancedFilters(advancedFilters) &&
+          displayedRestaurants.length === 0 && (
+            <div className="NoResults rounded-lg border border-stone-200 bg-stone-50 py-8 text-center">
+              <p className="mb-2 font-medium text-stone-900">
+                No restaurants match your current filters.
+              </p>
+              <p className="text-sm text-stone-600">
+                Try adjusting your filter criteria or clearing some filters.
+              </p>
+            </div>
+          )}
 
         {view === "list" ? (
           <RestaurantList restaurants={displayedRestaurants} today={today} />

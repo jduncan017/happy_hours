@@ -18,7 +18,7 @@ export default function HeroSection() {
   }
 
   return (
-    <div className="HeroSection relative flex h-svh max-h-[960px] flex-col items-center justify-center bg-black px-4 pt-[70px] xs:px-10">
+    <div className="HeroSection relative flex h-svh max-h-[960px] min-h-fit flex-col items-center justify-center bg-black px-4 py-[70px] xs:px-10">
       <div className="ImageContainer absolute inset-0 z-10 flex h-full items-center justify-center overflow-hidden shadow-themeShadow">
         {/* mobile video */}
         <video

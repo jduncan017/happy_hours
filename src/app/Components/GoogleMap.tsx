@@ -2,6 +2,7 @@
 
 import { useEffect, useRef, useState } from 'react';
 import { Loader } from '@googlemaps/js-api-loader';
+import { MarkerClusterer } from '@googlemaps/markerclusterer';
 import type { Restaurant } from '@/lib/types';
 
 interface GoogleMapProps {
@@ -22,6 +23,7 @@ export default function GoogleMap({
   const mapRef = useRef<HTMLDivElement>(null);
   const mapInstanceRef = useRef<google.maps.Map | null>(null);
   const markersRef = useRef<google.maps.Marker[]>([]);
+  const markerClustererRef = useRef<MarkerClusterer | null>(null);
   const infoWindowRef = useRef<google.maps.InfoWindow | null>(null);
   const [isLoaded, setIsLoaded] = useState(false);
   const [error, setError] = useState<string | null>(null);
@@ -54,6 +56,7 @@ export default function GoogleMap({
     mapInstanceRef.current = new google.maps.Map(mapRef.current, {
       center,
       zoom,
+      maxZoom: 18, // Prevent over-zooming
       styles: [
         {
           featureType: "poi",
@@ -74,7 +77,11 @@ export default function GoogleMap({
   useEffect(() => {
     if (!mapInstanceRef.current || !isLoaded) return;
 
-    // Clear existing markers
+    // Clear existing clusterer and markers
+    if (markerClustererRef.current) {
+      markerClustererRef.current.clearMarkers();
+      markerClustererRef.current = null;
+    }
     markersRef.current.forEach(marker => marker.setMap(null));
     markersRef.current = [];
 
@@ -87,7 +94,6 @@ export default function GoogleMap({
             lat: restaurant.coordinates!.lat,
             lng: restaurant.coordinates!.lng
           },
-          map: mapInstanceRef.current,
           title: restaurant.name,
           icon: {
             url: '/marker-icon.svg',
@@ -139,8 +145,54 @@ export default function GoogleMap({
 
     markersRef.current = newMarkers;
 
-    // Adjust map bounds to fit all markers
+    // Create marker clusterer with less aggressive clustering
     if (newMarkers.length > 0) {
+      markerClustererRef.current = new MarkerClusterer({
+        map: mapInstanceRef.current,
+        markers: newMarkers,
+        // Disable clustering at higher zoom levels so individual markers become clickable
+        algorithmOptions: {
+          maxZoom: 15, // Stop clustering at zoom level 15
+          radius: 60,  // Cluster radius in pixels
+          minimumClusterSize: 4, // Need at least 4 markers to form a cluster
+        },
+        renderer: {
+          render: ({ count, position }) => {
+            const color = count > 10 ? "#dc2626" : count > 5 ? "#ea580c" : "#ea580c";
+            const size = count > 10 ? 50 : count > 5 ? 45 : 40;
+            
+            const clusterMarker = new google.maps.Marker({
+              position,
+              icon: {
+                url: `data:image/svg+xml;charset=UTF-8,${encodeURIComponent(`
+                  <svg width="${size}" height="${size}" viewBox="0 0 ${size} ${size}" xmlns="http://www.w3.org/2000/svg">
+                    <circle cx="${size/2}" cy="${size/2}" r="${size/2-2}" fill="${color}" stroke="white" stroke-width="2"/>
+                    <text x="${size/2}" y="${size/2}" text-anchor="middle" dy="0.35em" font-family="Arial, sans-serif" font-size="${size/3}" font-weight="bold" fill="white">
+                      ${count}
+                    </text>
+                  </svg>
+                `)}`,
+                scaledSize: new google.maps.Size(size, size),
+                anchor: new google.maps.Point(size/2, size/2)
+              },
+              zIndex: 1000 + count
+            });
+
+            // Add custom click behavior to prevent over-zooming
+            clusterMarker.addListener('click', () => {
+              const currentZoom = mapInstanceRef.current?.getZoom() || 12;
+              const targetZoom = Math.min(currentZoom + 2, 15); // Don't zoom past level 15
+              
+              mapInstanceRef.current?.setCenter(position);
+              mapInstanceRef.current?.setZoom(targetZoom);
+            });
+
+            return clusterMarker;
+          }
+        }
+      });
+
+      // Adjust map bounds to fit all markers
       const bounds = new google.maps.LatLngBounds();
       newMarkers.forEach(marker => {
         const position = marker.getPosition();

@@ -13,6 +13,13 @@ HappyHourHunt is a Next.js web application for discovering happy hour deals in D
 - `npm start` - Start production server
 - `npm run lint` - Run ESLint for code quality checks
 
+## Claude Development Server Rules
+
+**IMPORTANT**: When starting the development server for testing:
+- Always use port 3001: `PORT=3001 npm run dev`
+- Always kill the server when done: `kill $(lsof -t -i:3001)`
+- Never leave development servers running after debugging
+
 ## Architecture
 
 ### Core Data Structure

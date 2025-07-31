@@ -26,6 +26,7 @@
   "dependencies": {
     "@formspark/use-formspark": "^0.1.39",
     "@googlemaps/js-api-loader": "^1.16.10",
+    "@googlemaps/markerclusterer": "^2.6.2",
     "@supabase/ssr": "^0.6.1",
     "@supabase/supabase-js": "^2.53.0",
     "@tanstack/react-query": "^5.83.0",

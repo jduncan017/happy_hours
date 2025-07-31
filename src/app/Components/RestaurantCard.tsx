@@ -25,7 +25,7 @@ export default function RestaurantCard({
   onToggleExpanded,
 }: RestaurantCardProps) {
   return (
-    <div className="RestaurantCard bg-white rounded-lg shadow-themeShadow px-10 py-6 flex w-full max-w-[1000px] flex-col-reverse gap-5 text-wrap text-black xs:flex-row">
+    <div className="RestaurantCard flex w-full max-w-[1000px] flex-col-reverse gap-5 text-wrap rounded-lg bg-white px-10 py-6 text-black shadow-themeShadow xs:flex-row">
       <div className="LeftColumn flex h-full w-full flex-col gap-4 xs:w-fit">
         <div className="RestaurantImage relative flex aspect-video w-full items-center overflow-hidden rounded-md bg-stone-300 xs:aspect-square xs:w-[150px] sm:w-[200px] md:w-[275px]">
           <ImageLoadingWrapper
@@ -34,10 +34,7 @@ export default function RestaurantCard({
           />
         </div>
         <div className="Buttons w-full">
-          <Link
-            className="Website w-full"
-            href={`${restaurant.website}`}
-          >
+          <Link className="Website w-full" href={`${restaurant.website}`}>
             <SiteButton
               colorFill={true}
               rounded={false}
@@ -49,28 +46,23 @@ export default function RestaurantCard({
       </div>
       <div className="RightColumn flex w-full flex-col gap-2 overflow-hidden">
         <div className="Name&Address">
-          <h2 className="RestaurantName font-sans">
-            {restaurant.name}
-          </h2>
+          <h2 className="RestaurantName font-sans">{restaurant.name}</h2>
           <div className="LocationContainer flex flex-wrap gap-x-2">
             {restaurant.area && (
               <p className="Area text-gray-600">{`${restaurant.area} -`}</p>
             )}
             <Link
-              className="AddressLink w-fit group"
-              href={generateGoogleMapsUrl(
-                restaurant.name,
-                restaurant.address,
-              )}
+              className="AddressLink group w-fit"
+              href={generateGoogleMapsUrl(restaurant.name, restaurant.address)}
               target="_blank"
               rel="noopener noreferrer"
             >
-              <p className="Address w-fit underline text-stone-700 group-hover:text-po1 transition-colors duration-200 flex items-center gap-1">
+              <p className="Address flex w-fit items-center gap-1 text-stone-700 underline transition-colors duration-200 group-hover:text-po1">
                 📍 {restaurant.address}
               </p>
             </Link>
             {restaurant.distance && (
-              <span className="Distance inline-flex items-center gap-1 px-2 py-1 bg-po1/10 text-po1 text-xs font-medium rounded-full">
+              <span className="Distance inline-flex items-center gap-1 rounded-full bg-po1/10 px-2 py-1 text-xs font-medium text-po1">
                 🚶 {restaurant.distance.toFixed(1)} miles
               </span>
             )}

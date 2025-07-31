@@ -153,29 +153,35 @@ export default function GoogleMap({
         // Disable clustering at higher zoom levels so individual markers become clickable
         algorithmOptions: {
           maxZoom: 15, // Stop clustering at zoom level 15
-          radius: 60,  // Cluster radius in pixels
-          minimumClusterSize: 4, // Need at least 4 markers to form a cluster
         },
         renderer: {
           render: ({ count, position }) => {
             const color = count > 10 ? "#dc2626" : count > 5 ? "#ea580c" : "#ea580c";
             const size = count > 10 ? 50 : count > 5 ? 45 : 40;
             
-            const clusterMarker = new google.maps.Marker({
+            // Create a DOM element for the cluster marker
+            const clusterDiv = document.createElement('div');
+            clusterDiv.style.cssText = `
+              width: ${size}px;
+              height: ${size}px;
+              background-color: ${color};
+              border: 2px solid white;
+              border-radius: 50%;
+              display: flex;
+              align-items: center;
+              justify-content: center;
+              color: white;
+              font-weight: bold;
+              font-size: ${size/3}px;
+              font-family: Arial, sans-serif;
+              cursor: pointer;
+              z-index: ${1000 + count};
+            `;
+            clusterDiv.textContent = count.toString();
+
+            const clusterMarker = new google.maps.marker.AdvancedMarkerElement({
               position,
-              icon: {
-                url: `data:image/svg+xml;charset=UTF-8,${encodeURIComponent(`
-                  <svg width="${size}" height="${size}" viewBox="0 0 ${size} ${size}" xmlns="http://www.w3.org/2000/svg">
-                    <circle cx="${size/2}" cy="${size/2}" r="${size/2-2}" fill="${color}" stroke="white" stroke-width="2"/>
-                    <text x="${size/2}" y="${size/2}" text-anchor="middle" dy="0.35em" font-family="Arial, sans-serif" font-size="${size/3}" font-weight="bold" fill="white">
-                      ${count}
-                    </text>
-                  </svg>
-                `)}`,
-                scaledSize: new google.maps.Size(size, size),
-                anchor: new google.maps.Point(size/2, size/2)
-              },
-              zIndex: 1000 + count
+              content: clusterDiv,
             });
 
             // Add custom click behavior to prevent over-zooming

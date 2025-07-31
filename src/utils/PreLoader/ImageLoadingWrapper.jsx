@@ -16,7 +16,7 @@ const ImageLoadingWrapper = ({ restaurant, className }) => {
     queryKey: ['ogImage', restaurant.website],
     queryFn: () => fetchOgImage(restaurant.website),
     staleTime: 1000 * 60 * 60, // 1 hour
-    cacheTime: 1000 * 60 * 60 * 24, // 24 hours
+    gcTime: 1000 * 60 * 60 * 24, // 24 hours
     retry: 1,
     refetchOnWindowFocus: false,
     enabled: !hasValidImage && !!restaurant.website, // Only fetch if no valid image and has website

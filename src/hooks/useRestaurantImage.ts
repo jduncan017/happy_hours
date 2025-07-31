@@ -25,7 +25,7 @@ export const useRestaurantImage = (restaurantId: string) => {
     queryKey: ['restaurantImage', restaurantId],
     queryFn: () => fetchRestaurantImage(restaurantId),
     staleTime: 1000 * 60 * 60 * 24, // 24 hours - images don't change often
-    cacheTime: 1000 * 60 * 60 * 24 * 7, // 7 days
+    gcTime: 1000 * 60 * 60 * 24 * 7, // 7 days
     retry: 1,
     refetchOnWindowFocus: false,
   });

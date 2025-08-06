@@ -47,8 +47,8 @@ const NavBar = () => {
             <Image
               src="/h3-logo-wide.png"
               alt="H3 Logo"
-              width={320}
-              height={38}
+              width={337}
+              height={40}
             />
           </div>
           {renderMenu()}
@@ -70,8 +70,8 @@ const NavBar = () => {
               <Image
                 src="/h3-logo-wide.png"
                 alt="H3 Logo"
-                width={320}
-                height={38}
+                width={337}
+                height={40}
               />
             </Link>
           </div>

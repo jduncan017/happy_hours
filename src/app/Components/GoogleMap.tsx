@@ -58,15 +58,15 @@ export default function GoogleMap({
   useEffect(() => {
     if (!isLoaded || !mapRef.current || mapInstanceRef.current) return;
 
-    const mapStyleId =
-      process.env.NEXT_PUBLIC_GOOGLE_MAPS_STYLE_ID || "denver-happy-hour-map";
-    console.log("Map Style ID:", mapStyleId);
+    const mapID =
+      process.env.NEXT_PUBLIC_GOOGLE_MAPS_ID || "denver-happy-hour-map";
+    console.log("Map Style ID:", mapID);
 
     mapInstanceRef.current = new google.maps.Map(mapRef.current, {
       center,
       zoom,
       maxZoom: 18, // Prevent over-zooming
-      mapId: mapStyleId, // Required for AdvancedMarkerElement
+      mapId: mapID, // Required for AdvancedMarkerElement
       // Cloud-styled map with hidden POIs - POI hiding must be configured in Google Cloud Console
       // See CLAUDE.md for setup instructions
       mapTypeControl: false,

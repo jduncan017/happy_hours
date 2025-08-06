@@ -23,7 +23,7 @@ export default function RestaurantCard({
   onToggleExpanded,
 }: RestaurantCardProps) {
   return (
-    <div className="RestaurantCard flex w-full max-w-[1000px] flex-col gap-5 text-wrap rounded-lg bg-white p-4 sm:p-6 text-black shadow-themeShadow xs:flex-row">
+    <div className="RestaurantCard flex w-full max-w-[1000px border border-gray-200 flex-col gap-5 text-wrap rounded-lg bg-white p-4 sm:p-6 text-black shadow-themeShadow xs:flex-row">
       <div className="LeftColumn flex h-full w-full flex-col gap-2 xs:w-fit">
         <div className="RestaurantImage relative flex aspect-video w-full items-center overflow-hidden rounded-sm border border-gray-200 xs:aspect-square xs:w-[200px]">
           <ImageLoadingWrapper

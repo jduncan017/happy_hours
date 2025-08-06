@@ -32,7 +32,6 @@ interface SearchFiltersProps {
   onSearchQuery?: (query: string) => void;
 }
 
-
 export default function SearchFilters({
   filterOption,
   onFilterChange,
@@ -175,20 +174,28 @@ export default function SearchFilters({
 
   return (
     <div className="SearchFilters w-full bg-stone-800">
-      <div className="NavbarSection bg-black/80 sm:px-8 px-4 py-2 w-full flex items-center gap-2 justify-start mb-4">
+      <div className="NavbarSection bg-black/80 sm:px-8 px-4 py-3 w-full flex flex-col xs:flex-row xs:items-center gap-3 xs:gap-2 justify-start mb-4">
         <Link href={"/"}>
           <Image
             src="/h3-logo5.png"
             alt="Happy Hour Hunt"
             width={40}
             height={40}
+            className="xs:block hidden"
+          />
+          <Image
+            src="/h3-logo-wide.png"
+            alt="Happy Hour Hunt"
+            width={337}
+            height={40}
+            className="block xs:hidden w-full"
           />
         </Link>
-        <div className="HeroSloganContainer flex flex-wrap gap-2 font-sans font-bold">
-          <h2 className="HeroSlogan text-white xs:text-lg">{`It's Happy Hour`}</h2>
-          <h2 className="HeroSlogan text-py1 uppercase italic xs:text-lg">
+        <div className="HeroSloganContainer flex-wrap gap-1.5 w-full xs:flex hidden justify-center font-sans font-bold">
+          <h1 className="HeroSlogan text-white text-base">{`It's Happy Hour`}</h1>
+          <h1 className="HeroSlogan text-py1 uppercase italic text-base">
             Somewhere!
-          </h2>
+          </h1>
         </div>
       </div>
 

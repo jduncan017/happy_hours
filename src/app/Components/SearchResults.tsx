@@ -28,15 +28,11 @@ export const SearchResults = forwardRef<HTMLDivElement, SearchResultsProps>(
     ref,
   ) => {
     // Mobile tab state
-    const [activeTab, setActiveTab] = useState<'list' | 'map'>('list');
+    const [activeTab, setActiveTab] = useState<"list" | "map">("list");
     // Loading state
     if (isLoading) {
       return (
-        <div
-          ref={ref}
-          id="search-section"
-          className="Search w-full relative"
-        >
+        <div ref={ref} id="search-section" className="Search w-full relative">
           {/* Desktop Loading */}
           <div className="hidden lg:flex h-screen w-full">
             <div className="LeftPanel flex w-2/3 flex-col">
@@ -50,7 +46,7 @@ export const SearchResults = forwardRef<HTMLDivElement, SearchResultsProps>(
               </div>
             </div>
           </div>
-          
+
           {/* Mobile Loading */}
           <div className="lg:hidden h-screen flex items-center justify-center">
             <div className="h-8 w-8 animate-spin rounded-full border-b-2 border-stone-800"></div>
@@ -62,11 +58,7 @@ export const SearchResults = forwardRef<HTMLDivElement, SearchResultsProps>(
     // Error state
     if (error) {
       return (
-        <div
-          ref={ref}
-          id="search-section"
-          className="Search w-full relative"
-        >
+        <div ref={ref} id="search-section" className="Search w-full relative">
           {/* Desktop Error */}
           <div className="hidden lg:flex h-screen w-full">
             <div className="LeftPanel flex w-2/3 flex-col">
@@ -90,7 +82,7 @@ export const SearchResults = forwardRef<HTMLDivElement, SearchResultsProps>(
               </div>
             </div>
           </div>
-          
+
           {/* Mobile Error */}
           <div className="lg:hidden h-screen flex items-center justify-center p-8">
             <div className="text-center">
@@ -110,11 +102,7 @@ export const SearchResults = forwardRef<HTMLDivElement, SearchResultsProps>(
     }
 
     return (
-      <div
-        ref={ref}
-        id="search-section"
-        className="Search w-full relative"
-      >
+      <div ref={ref} id="search-section" className="Search w-full relative">
         {/* Desktop Layout - Hidden on Mobile */}
         <div className="hidden lg:flex h-screen w-full">
           {/* Left Side - Search Results */}
@@ -148,26 +136,26 @@ export const SearchResults = forwardRef<HTMLDivElement, SearchResultsProps>(
         </div>
 
         {/* Mobile Layout - Hidden on Desktop */}
-        <div className="lg:hidden w-full">
+        <div className="MobileResults overflow-scroll lg:hidden w-full">
           {/* Mobile Tab Navigation */}
           <div className="MobileTabNav bg-white border-b border-gray-200 sticky top-0 z-10">
             <div className="flex">
               <button
-                onClick={() => setActiveTab('list')}
-                className={`flex-1 py-3 px-4 text-center font-medium transition-colors ${
-                  activeTab === 'list'
-                    ? 'text-po1 border-b-2 border-po1 bg-white'
-                    : 'text-gray-500 bg-gray-50 hover:text-gray-700'
+                onClick={() => setActiveTab("list")}
+                className={`flex-1 py-2 px-4 text-center font-medium transition-colors ${
+                  activeTab === "list"
+                    ? "text-po1 border-b-1 border-po1 bg-white"
+                    : "text-gray-500 bg-gray-100 hover:text-gray-700"
                 }`}
               >
                 List ({restaurants.length})
               </button>
               <button
-                onClick={() => setActiveTab('map')}
-                className={`flex-1 py-3 px-4 text-center font-medium transition-colors ${
-                  activeTab === 'map'
-                    ? 'text-po1 border-b-2 border-po1 bg-white'
-                    : 'text-gray-500 bg-gray-50 hover:text-gray-700'
+                onClick={() => setActiveTab("map")}
+                className={`flex-1 py-2 px-4 text-center font-medium transition-colors ${
+                  activeTab === "map"
+                    ? "text-po1 border-b-1 border-po1 bg-white"
+                    : "text-gray-500 bg-gray-100 hover:text-gray-700"
                 }`}
               >
                 Map
@@ -177,7 +165,7 @@ export const SearchResults = forwardRef<HTMLDivElement, SearchResultsProps>(
 
           {/* Mobile Tab Content */}
           <div className="MobileTabContent">
-            {activeTab === 'list' ? (
+            {activeTab === "list" ? (
               <div className="MobileListView">
                 {/* Back to All Button */}
                 {isLocationBased && (
@@ -192,12 +180,12 @@ export const SearchResults = forwardRef<HTMLDivElement, SearchResultsProps>(
                 )}
 
                 {/* Search Results */}
-                <div className="ResultsSection p-4 pb-20">
+                <div className="ResultsSection p-4 pb-20 h-[calc(100svh-240px)]">
                   <RestaurantList restaurants={restaurants} today={today} />
                 </div>
               </div>
             ) : (
-              <div className="MobileMapView h-screen">
+              <div className="MobileMapView h-[calc(100svh-240px)]">
                 <GoogleMap
                   restaurants={restaurants}
                   center={userLocation || undefined}

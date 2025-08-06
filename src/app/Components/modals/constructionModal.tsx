@@ -20,19 +20,19 @@ const ConstructionModal = () => {
           <SiteButton
             text="Contact Us"
             onSubmit={() => showModal(<ContactModal />)}
-            colorFill={true}
+            variant="orange"
             rounded={false}
             size="md"
             addClasses="w-1/2"
-          ></SiteButton>
+          />
           <SiteButton
             text="Close"
             onSubmit={() => hideModal()}
-            colorFill={true}
+            variant="orange"
             rounded={false}
             size="md"
             addClasses="w-1/2"
-          ></SiteButton>
+          />
         </div>
       </div>
     </ModalWrapper>

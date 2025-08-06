@@ -1,5 +1,3 @@
-"use client";
-
 import { useMemo } from "react";
 import type { HappyHours, HappyHourTime } from "@/lib/types";
 
@@ -42,7 +40,10 @@ export default function HappyHourDisplay({
           });
 
           return (
-            <li key={day} className="HappyHourTimes m-1 flex gap-1">
+            <li
+              key={day}
+              className="HappyHourTime tracking-wide text-gray-700 flex gap-1"
+            >
               <p className="HappyHourDay w-12">{`${day}:`}</p>
               <div className="HappyHourTimes flex flex-col">
                 {timesFormatted.map((timeFormatted, index) => (
@@ -60,20 +61,18 @@ export default function HappyHourDisplay({
 
   return (
     <div className="HHTimes w-full flex-grow">
-      <h3 className="TimeTitle font-sans font-semibold">
-        Happy Hour Today:
-      </h3>
+      <h3 className="TimeTitle font-sans font-semibold">Happy Hour Times:</h3>
       {happyHours[today] || isExpanded ? (
         formatHappyHours(happyHours, isExpanded)
       ) : (
-        <p className="ml-1 text-gray-700">{`No Happy Hour Today :(`}</p>
+        <p className="text-gray-700">{`No Happy Hour Today :(`}</p>
       )}
       {!isExpanded && (
         <button
           onClick={onToggleExpanded}
-          className="ShowMoreButton mt-1 rounded-sm bg-stone-200 px-2 text-base italic text-gray-700 hover:text-black"
+          className="ShowMoreButton mt-2 rounded-sm cursor-pointer bg-stone-200 px-2 py-1 text-xs italic text-gray-700 hover:text-black"
         >
-          Show More
+          Show More Times
         </button>
       )}
     </div>

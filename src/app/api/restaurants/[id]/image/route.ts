@@ -1,20 +1,22 @@
 import { createClient } from '@/lib/supabase/server';
+import { createAdminClient } from '@/lib/supabase/admin';
 import { NextResponse } from 'next/server';
 import { fetchOgImage } from '@/utils/fetchOgImage';
 
 // GET /api/restaurants/[id]/image - Fetch and store restaurant OG image
 export async function GET(
   request: Request,
-  { params }: { params: { id: string } }
+  { params }: { params: Promise<{ id: string }> }
 ) {
+  const { id } = await params;
   try {
     const supabase = await createClient();
     
-    // First get the restaurant to check if it already has a heroImage and get the website
+    // First get the restaurant to check if it already has a hero_image and get the website
     const { data: restaurant, error: fetchError } = await supabase
       .from('restaurants')
-      .select('id, website, heroImage')
-      .eq('id', params.id)
+      .select('id, website, hero_image')
+      .eq('id', id)
       .single();
 
     if (fetchError || !restaurant) {
@@ -27,11 +29,11 @@ export async function GET(
       );
     }
 
-    // If restaurant already has a heroImage, return it
-    if (restaurant.heroImage && restaurant.heroImage.trim() !== '') {
+    // If restaurant already has a hero_image and it's not empty, return it (including fallback)
+    if (restaurant.hero_image && restaurant.hero_image.trim() !== '') {
       return NextResponse.json({
         success: true,
-        data: { imageUrl: restaurant.heroImage, cached: true }
+        data: { imageUrl: restaurant.hero_image, cached: true }
       });
     }
 
@@ -48,41 +50,32 @@ export async function GET(
 
     // Fetch OG image from website
     let ogImageUrl: string;
+    let shouldStoreFallback = false;
+    
     try {
       ogImageUrl = await fetchOgImage(restaurant.website);
     } catch (error) {
       console.error('Error fetching OG image:', error);
-      return NextResponse.json(
-        { 
-          success: false, 
-          error: 'Failed to fetch image from website',
-          details: (error as Error).message
-        },
-        { status: 400 }
-      );
+      // Store fallback image to prevent future attempts
+      ogImageUrl = '/photo-missing.webp';
+      shouldStoreFallback = true;
     }
 
-    // If fetchOgImage returned "Image Not Found", don't store it
+    // If fetchOgImage returned "Image Not Found", store fallback
     if (ogImageUrl === "Image Not Found") {
-      return NextResponse.json(
-        { 
-          success: false, 
-          error: 'No image found on website' 
-        },
-        { status: 404 }
-      );
+      ogImageUrl = '/photo-missing.webp';
+      shouldStoreFallback = true;
     }
 
-    // Update restaurant with the fetched image URL
-    const { data: updatedRestaurant, error: updateError } = await supabase
+    // Update restaurant with the fetched image URL using admin client
+    const adminClient = createAdminClient();
+    const { data: updatedRestaurant, error: updateError } = await adminClient
       .from('restaurants')
       .update({ 
-        heroImage: ogImageUrl,
-        lastUpdated: new Date().toISOString()
+        hero_image: ogImageUrl
       })
-      .eq('id', params.id)
-      .select('heroImage')
-      .single();
+      .eq('id', id)
+      .select('hero_image');
 
     if (updateError) {
       console.error('Error updating restaurant heroImage:', updateError);
@@ -98,7 +91,7 @@ export async function GET(
 
     return NextResponse.json({
       success: true,
-      data: { imageUrl: updatedRestaurant.heroImage, cached: false }
+      data: { imageUrl: updatedRestaurant[0]?.hero_image || ogImageUrl, cached: false }
     });
     
   } catch (error) {

@@ -51,7 +51,6 @@ export default function RootLayout({
         <QueryProvider>
           <ModalProvider>
             <div className="Page -z-20 m-auto h-fit overflow-hidden bg-stone-100">
-              <NavBar />
               {children}
               <Footer />
               <Analytics />

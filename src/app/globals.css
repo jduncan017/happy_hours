@@ -1,6 +1,25 @@
-@tailwind base;
-@tailwind components;
-@tailwind utilities;
+@import "tailwindcss";
+
+/* Tailwind CSS v4 Theme Configuration */
+@theme {
+  --default-font-family: Montserrat, ui-sans-serif, system-ui, sans-serif;
+
+  --color-n1: #fffbf4;
+  --color-n2: #fff9ee;
+  --color-n3: #fff1dd;
+  --color-py1: #ffbe3f;
+  --color-po1: #ff8f28;
+  --color-pr1: #db3702;
+  --color-blur-white: rgba(255, 255, 255, 0.5);
+
+  --font-family-sans: Montserrat, ui-sans-serif, system-ui, sans-serif;
+  --font-family-serif: Playfair, ui-serif, Georgia, serif;
+  --font-family-allerta: Allerta, ui-sans-serif, system-ui, sans-serif;
+
+  --shadow-themeShadow: 2px 2px 4px rgba(0, 0, 0, 0.2);
+
+  --breakpoint-xs: 460px;
+}
 
 @layer utilities {
   .backdrop-filter {
@@ -90,7 +109,6 @@ h2 {
   line-height: 1.25;
   text-transform: uppercase;
   font-weight: 800;
-  color: rgb(26, 26, 26);
 }
 
 h3 {
@@ -98,14 +116,12 @@ h3 {
   line-height: 1.75;
   text-transform: uppercase;
   font-weight: 600;
-  color: rgb(52, 52, 52);
 }
 
 h4 {
   font-size: 16px;
   line-height: 1.25;
   font-weight: 500;
-  color: rgb(52, 52, 52);
 }
 
 p,

@@ -6,8 +6,9 @@ import { RestaurantSchema } from '@/lib/schemas';
 // GET /api/restaurants/[id] - Get single restaurant
 export async function GET(
   request: Request,
-  { params }: { params: { id: string } }
+  { params }: { params: Promise<{ id: string }> }
 ) {
+  const { id } = await params;
   try {
     const supabase = await createClient();
     
@@ -18,7 +19,7 @@ export async function GET(
         deals (*),
         restaurant_ratings (*)
       `)
-      .eq('id', params.id)
+      .eq('id', id)
       .single();
 
     if (error) {
@@ -51,8 +52,9 @@ export async function GET(
 // PUT /api/restaurants/[id] - Update restaurant
 export async function PUT(
   request: Request,
-  { params }: { params: { id: string } }
+  { params }: { params: Promise<{ id: string }> }
 ) {
+  const { id } = await params;
   try {
     const body = await request.json();
     
@@ -71,7 +73,7 @@ export async function PUT(
     }
     
     const supabase = await createClient();
-    const restaurant = await updateRestaurant(supabase, params.id, validationResult.data);
+    const restaurant = await updateRestaurant(supabase, id, validationResult.data);
     
     if (!restaurant) {
       return NextResponse.json(
@@ -104,15 +106,16 @@ export async function PUT(
 // DELETE /api/restaurants/[id] - Delete restaurant
 export async function DELETE(
   request: Request,
-  { params }: { params: { id: string } }
+  { params }: { params: Promise<{ id: string }> }
 ) {
+  const { id } = await params;
   try {
     const supabase = await createClient();
     
     const { error } = await supabase
       .from('restaurants')
       .delete()
-      .eq('id', params.id);
+      .eq('id', id);
 
     if (error) {
       return NextResponse.json(

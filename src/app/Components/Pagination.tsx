@@ -1,5 +1,3 @@
-"use client";
-
 interface PaginationInfo {
   page: number;
   limit: number;

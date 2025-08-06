@@ -11,20 +11,58 @@ import {
   hasActiveAdvancedFilters,
 } from "@/utils/advancedFilterUtils";
 import { useAllRestaurants } from "@/hooks/useRestaurants";
-import SearchFilters from "./SearchFilters";
-import RestaurantList from "./RestaurantList";
-import GoogleMap from "./GoogleMap";
-import ViewToggle from "./ViewToggle";
-import LocationSearch from "./LocationSearch";
-import AdvancedFilters, { type AdvancedFilterOptions } from "./AdvancedFilters";
+import SearchFilters, { type AdvancedFilterOptions } from "./SearchFilters";
+import { type TimeFilter } from "./modals/TimeFilterModal";
+import { SearchResults } from "./SearchResults";
 
-export const SearchPage = forwardRef<HTMLDivElement>((props, ref) => {
+// Helper function to convert time string to minutes since restaurant day start (8am)
+// Restaurant day runs 8am-2am, so we need to handle the overnight period
+const timeToMinutes = (timeString: string): number => {
+  const [hours, minutes] = timeString.split(':').map(Number);
+  const totalMinutes = hours * 60 + minutes;
+  
+  // If it's 8am or later (8:00-23:59), return as-is
+  if (hours >= 8) {
+    return totalMinutes;
+  }
+  // If it's early hours (0:00-2:59), add 24 hours to put it at end of restaurant day
+  else if (hours <= 2) {
+    return totalMinutes + (24 * 60);
+  }
+  // Hours 3-7 are not valid for restaurant operations, but handle gracefully
+  else {
+    return totalMinutes;
+  }
+};
+
+// Function to filter restaurants by time range
+const filterRestaurantsByTimeRange = (restaurants: Restaurant[], timeFilter: TimeFilter): Restaurant[] => {
+  return restaurants.filter(restaurant => {
+    const dayHours = restaurant.happyHours[timeFilter.dayOfWeek];
+    if (!dayHours || dayHours.length === 0) return false;
+
+    const filterStartMinutes = timeToMinutes(timeFilter.startTime);
+    const filterEndMinutes = timeToMinutes(timeFilter.endTime);
+
+    return dayHours.some(timeRange => {
+      const happyHourStartMinutes = timeToMinutes(timeRange.Start);
+      const happyHourEndMinutes = timeToMinutes(timeRange.End);
+
+      // Check if there's any overlap between the filter time range and happy hour time range
+      return (
+        (happyHourStartMinutes <= filterEndMinutes && happyHourEndMinutes >= filterStartMinutes) ||
+        (filterStartMinutes <= happyHourEndMinutes && filterEndMinutes >= happyHourStartMinutes)
+      );
+    });
+  });
+};
+
+export const SearchPage = forwardRef<HTMLDivElement>((_, ref) => {
   const [today, setToday] = useState("");
   const [filterOption, setFilterOption] = useState("all");
   const [displayedRestaurants, setDisplayedRestaurants] = useState<
     Restaurant[]
   >([]);
-  const [view, setView] = useState<"list" | "map">("list");
   const [userLocation, setUserLocation] = useState<{
     lat: number;
     lng: number;
@@ -42,7 +80,8 @@ export const SearchPage = forwardRef<HTMLDivElement>((props, ref) => {
       },
     },
   );
-  const [showAdvancedFilters, setShowAdvancedFilters] = useState(false);
+  const [timeFilter, setTimeFilter] = useState<TimeFilter | null>(null);
+  const [searchQuery, setSearchQuery] = useState("");
 
   // Use React Query to fetch restaurants
   const { data: allRestaurants = [], isLoading, error } = useAllRestaurants();
@@ -53,17 +92,44 @@ export const SearchPage = forwardRef<HTMLDivElement>((props, ref) => {
     setToday(today);
   }, []);
 
+  // Function to filter restaurants by search query
+  const filterRestaurantsBySearch = (restaurants: Restaurant[], query: string): Restaurant[] => {
+    if (!query.trim()) return restaurants;
+    
+    const searchTerms = query.toLowerCase().split(' ').filter(term => term.length > 0);
+    
+    return restaurants.filter(restaurant => {
+      const searchableText = [
+        restaurant.name,
+        restaurant.area,
+        restaurant.address,
+        restaurant.cuisineType,
+        restaurant.notes || ''
+      ].join(' ').toLowerCase();
+      
+      return searchTerms.every(term => searchableText.includes(term));
+    });
+  };
+
   useEffect(() => {
     if (allRestaurants.length === 0 || isLocationBased) return;
 
     const sortedRestaurants = sortRestaurants(allRestaurants);
     let filteredRestaurants = sortedRestaurants;
 
+    // Apply search filter first
+    filteredRestaurants = filterRestaurantsBySearch(filteredRestaurants, searchQuery);
+
     // Apply basic time-based filters
     if (filterOption === "today") {
-      filteredRestaurants = filterHappyHoursToday(sortedRestaurants, today);
+      filteredRestaurants = filterHappyHoursToday(filteredRestaurants, today);
     } else if (filterOption === "now") {
-      filteredRestaurants = filterHappyHoursNow(sortedRestaurants, today);
+      filteredRestaurants = filterHappyHoursNow(filteredRestaurants, today);
+    }
+
+    // Apply time filter if active
+    if (timeFilter) {
+      filteredRestaurants = filterRestaurantsByTimeRange(filteredRestaurants, timeFilter);
     }
 
     // Apply advanced filters
@@ -75,17 +141,7 @@ export const SearchPage = forwardRef<HTMLDivElement>((props, ref) => {
     }
 
     setDisplayedRestaurants(filteredRestaurants);
-  }, [filterOption, today, allRestaurants, advancedFilters, isLocationBased]);
-
-  const handleLocationSearch = (
-    restaurants: Restaurant[],
-    location: { lat: number; lng: number },
-  ) => {
-    setDisplayedRestaurants(restaurants);
-    setUserLocation(location);
-    setIsLocationBased(true);
-    setView("map"); // Switch to map view to show results
-  };
+  }, [filterOption, today, allRestaurants, advancedFilters, isLocationBased, timeFilter, searchQuery]);
 
   const handleBackToAll = () => {
     setIsLocationBased(false);
@@ -97,130 +153,46 @@ export const SearchPage = forwardRef<HTMLDivElement>((props, ref) => {
     setAdvancedFilters(newFilters);
   };
 
-  // Loading state
-  if (isLoading) {
-    return (
-      <div
-        id="search-section"
-        className="Search mx-auto mt-4 flex flex-col items-center gap-2 border-r p-4 sm:mt-8 sm:p-8 lg:rounded-md lg:bg-n1 lg:shadow-themeShadow"
-      >
-        <SearchFilters
-          filterOption="all"
-          onFilterChange={() => {}}
-          view={view}
-          onViewChange={setView}
-        />
-        <div className="flex items-center justify-center py-8">
-          <div className="h-8 w-8 animate-spin rounded-full border-b-2 border-stone-800"></div>
-        </div>
-      </div>
-    );
-  }
+  const handleTimeFilter = (filter: TimeFilter | null) => {
+    setTimeFilter(filter);
+  };
 
-  // Error state
-  if (error) {
-    return (
-      <div
-        id="search-section"
-        className="Search mx-auto mt-4 flex flex-col items-center gap-2 border-r p-4 sm:mt-8 sm:p-8 lg:rounded-md lg:bg-n1 lg:shadow-themeShadow"
-      >
-        <SearchFilters
-          filterOption={filterOption}
-          onFilterChange={setFilterOption}
-          view={view}
-          onViewChange={setView}
-        />
-        <div className="py-8 text-center">
-          <p className="mb-4 text-red-600">
-            {error instanceof Error ? error.message : String(error)}
-          </p>
-          <button
-            onClick={() => window.location.reload()}
-            className="rounded bg-stone-800 px-4 py-2 text-white hover:bg-stone-700"
-          >
-            Try Again
-          </button>
-        </div>
-      </div>
-    );
-  }
+  const handleClearAllFilters = () => {
+    setTimeFilter(null);
+    setIsLocationBased(false);
+    setUserLocation(null);
+    setSearchQuery("");
+  };
+
+  const handleSearchQuery = (query: string) => {
+    setSearchQuery(query);
+  };
 
   return (
-    <div
-      ref={ref}
-      id="search-section"
-      className="Search mx-auto mt-4 flex w-full flex-col justify-center gap-4 border-r p-4 px-4 sm:mt-8 sm:p-8 md:px-10 lg:flex-row lg:rounded-md lg:bg-n1 lg:shadow-themeShadow"
-    >
-      {/* Left Sidebar - Location Search */}
-      <div className="Sidebar w-full flex-shrink-0 lg:w-80">
-        <LocationSearch
-          restaurants={allRestaurants}
-          onLocationSearch={handleLocationSearch}
-          onError={(error) => console.error("Location error:", error)}
-        />
+    <div ref={ref} className="SearchContainer w-full">
+      {/* Full Width Search Filters */}
+      <SearchFilters
+        filterOption={filterOption}
+        onFilterChange={setFilterOption}
+        restaurants={allRestaurants}
+        advancedFilters={advancedFilters}
+        onAdvancedFiltersChange={handleAdvancedFiltersChange}
+        onTimeFilter={handleTimeFilter}
+        onClearAllFilters={handleClearAllFilters}
+        onSearchQuery={handleSearchQuery}
+        onError={(error) => console.error("Search filter error:", error)}
+      />
 
-        {isLocationBased && (
-          <button
-            onClick={handleBackToAll}
-            className="BackButton mt-4 w-full rounded-lg border border-stone-200 bg-stone-100 px-4 py-3 font-medium text-stone-700 transition-all duration-200 hover:bg-stone-200"
-          >
-            ← Back to All Restaurants
-          </button>
-        )}
-      </div>
-
-      {/* Main Content */}
-      <div className="MainContent flex w-full flex-col gap-4">
-        <SearchFilters
-          filterOption={filterOption}
-          onFilterChange={setFilterOption}
-          view={view}
-          onViewChange={setView}
-        />
-
-        <AdvancedFilters
-          restaurants={allRestaurants}
-          filters={advancedFilters}
-          onFiltersChange={handleAdvancedFiltersChange}
-          isOpen={showAdvancedFilters}
-          onToggle={() => setShowAdvancedFilters(!showAdvancedFilters)}
-        />
-
-        {isLocationBased && displayedRestaurants.length === 0 && (
-          <div className="NoResults rounded-lg border border-stone-200 bg-stone-50 py-8 text-center">
-            <p className="mb-2 font-medium text-stone-900">
-              No restaurants found within your selected radius.
-            </p>
-            <p className="text-sm text-stone-600">
-              Try increasing the search distance or selecting a different
-              filter.
-            </p>
-          </div>
-        )}
-
-        {!isLocationBased &&
-          hasActiveAdvancedFilters(advancedFilters) &&
-          displayedRestaurants.length === 0 && (
-            <div className="NoResults rounded-lg border border-stone-200 bg-stone-50 py-8 text-center">
-              <p className="mb-2 font-medium text-stone-900">
-                No restaurants match your current filters.
-              </p>
-              <p className="text-sm text-stone-600">
-                Try adjusting your filter criteria or clearing some filters.
-              </p>
-            </div>
-          )}
-
-        {view === "list" ? (
-          <RestaurantList restaurants={displayedRestaurants} today={today} />
-        ) : (
-          <GoogleMap
-            restaurants={displayedRestaurants}
-            center={userLocation || undefined}
-            className="h-[600px] w-full rounded-lg"
-          />
-        )}
-      </div>
+      {/* Search Results with Map */}
+      <SearchResults
+        restaurants={displayedRestaurants}
+        today={timeFilter ? timeFilter.dayOfWeek : today}
+        userLocation={userLocation || undefined}
+        isLocationBased={isLocationBased}
+        isLoading={isLoading}
+        error={error}
+        onBackToAll={handleBackToAll}
+      />
     </div>
   );
 });

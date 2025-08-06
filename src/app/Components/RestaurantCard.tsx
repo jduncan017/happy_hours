@@ -1,5 +1,3 @@
-"use client";
-
 import Link from "next/link";
 import type { Restaurant } from "@/lib/types";
 import ImageLoadingWrapper from "../../utils/PreLoader/ImageLoadingWrapper";
@@ -25,24 +23,22 @@ export default function RestaurantCard({
   onToggleExpanded,
 }: RestaurantCardProps) {
   return (
-    <div className="RestaurantCard flex w-full max-w-[1000px] flex-col-reverse gap-5 text-wrap rounded-lg bg-white px-10 py-6 text-black shadow-themeShadow xs:flex-row">
-      <div className="LeftColumn flex h-full w-full flex-col gap-4 xs:w-fit">
-        <div className="RestaurantImage relative flex aspect-video w-full items-center overflow-hidden rounded-md bg-stone-300 xs:aspect-square xs:w-[150px] sm:w-[200px] md:w-[275px]">
+    <div className="RestaurantCard flex w-full max-w-[1000px] flex-col gap-5 text-wrap rounded-lg bg-white p-4 sm:p-6 text-black shadow-themeShadow xs:flex-row">
+      <div className="LeftColumn flex h-full w-full flex-col gap-2 xs:w-fit">
+        <div className="RestaurantImage relative flex aspect-video w-full items-center overflow-hidden rounded-sm border border-gray-200 xs:aspect-square xs:w-[200px]">
           <ImageLoadingWrapper
             restaurant={restaurant}
             className="Image h-full w-full object-contain"
           />
         </div>
-        <div className="Buttons w-full">
-          <Link className="Website w-full" href={`${restaurant.website}`}>
-            <SiteButton
-              colorFill={true}
-              rounded={false}
-              text="Visit Website"
-              size="lg"
-            />
-          </Link>
-        </div>
+        <Link className="Website w-full" href={`${restaurant.website}`}>
+          <SiteButton
+            variant="orange"
+            rounded={false}
+            text="Visit Website"
+            size="lg"
+          />
+        </Link>
       </div>
       <div className="RightColumn flex w-full flex-col gap-2 overflow-hidden">
         <div className="Name&Address">
@@ -75,15 +71,17 @@ export default function RestaurantCard({
           onToggleExpanded={onToggleExpanded}
         />
         {restaurant.notes.length > 0 && (
-          <div className="NotesSection mt-2 w-full rounded-lg bg-stone-200 p-2">
-            <h4 className="Notes font-sans">Notes:</h4>
-            {restaurant.notes.map((note) => {
-              return (
-                <p className="Note text-lg leading-6" key={note}>
-                  {note}
-                </p>
-              );
-            })}
+          <div className="NotesSection mt-2 w-full flex gap-2 rounded-lg bg-stone-200 px-4 py-2">
+            <p className="NoteTitle font-sans">Notes:</p>
+            <div className="Notes flex flex-col gap-1">
+              {restaurant.notes.map((note) => {
+                return (
+                  <p className="Note text-lg font-sans" key={note}>
+                    {note}
+                  </p>
+                );
+              })}
+            </div>
           </div>
         )}
       </div>

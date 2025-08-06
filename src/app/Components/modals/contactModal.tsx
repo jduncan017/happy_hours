@@ -132,7 +132,7 @@ export default function ContactModal() {
             <SiteButton
               text={buttonDisplay}
               type="submit"
-              colorFill={true}
+              variant="orange"
               rounded={true}
               size="md"
               addClasses="mb-4"

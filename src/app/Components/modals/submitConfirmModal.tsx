@@ -20,11 +20,11 @@ export default function SubmitConfirmModal() {
           <SiteButton
             text="Close"
             onSubmit={() => hideModal()}
-            colorFill={true}
+            variant="orange"
             rounded={true}
             size="md"
             addClasses="mt-4"
-          ></SiteButton>
+          />
         </div>
       </div>
     </ModalWrapper>

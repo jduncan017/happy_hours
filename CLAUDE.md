@@ -20,6 +20,13 @@ HappyHourHunt is a Next.js web application for discovering happy hour deals in D
 - Always kill the server when done: `kill $(lsof -t -i:3001)`
 - Never leave development servers running after debugging
 
+## Console Log Debugging
+
+**IMPORTANT**: When debugging with console.log statements:
+- Never start the development server to check console output
+- Always ask the user to check the browser console and report what they see
+- Add console.log statements as needed, then ask user for the output
+
 ## Architecture
 
 ### Core Data Structure
@@ -107,14 +114,19 @@ Components are organized in `src/app/Components/` with:
 - `NEXT_PUBLIC_SUPABASE_ANON_KEY` - Public API key for client operations
 - `SUPABASE_SERVICE_ROLE_KEY` - Admin key for server operations (keep secure!)
 - `SUPABASE_DB_PASSWORD` - Database password for CLI operations
+- `NEXT_PUBLIC_GOOGLE_MAPS_API_KEY` - Google Maps JavaScript API key
+- `NEXT_PUBLIC_GOOGLE_MAPS_STYLE_ID` - Cloud-based map style ID with POIs hidden (optional)
 
 ## Development Guardrails
 
 ### Styling Standards
 
 1. **Always use Tailwind CSS** - Never use inline styles unless absolutely necessary
-2. **ThemeContext for inline styles** - When inline styles are required, reference theme values from ThemeContext instead of hex codes
-3. **PascalCase className prefixes** - Start every Tailwind className with a PascalCase descriptor (e.g., `"CTAButton"`, `"RestaurantCard"`)
+2. **Use custom theme colors first** - Always use custom color classes (po1=orange, py1=yellow, pr1=red, n1/n2/n3=neutrals) defined in globals.css before standard Tailwind colors
+3. **Fallback to Tailwind colors** - Only use standard Tailwind colors (gray-400, blue-500, etc.) when custom theme colors don't exist for that color family
+4. **Never use hex codes** - Always use named color classes, never raw hex values
+5. **ThemeContext for inline styles** - When inline styles are required, reference theme values from ThemeContext instead of hex codes
+6. **PascalCase className prefixes** - Start every Tailwind className with a PascalCase descriptor (e.g., `"CTAButton"`, `"RestaurantCard"`)
 
 ### Code Standards
 
@@ -216,3 +228,109 @@ Components are organized in `src/app/Components/` with:
 
 ### Ready for Phase 2
 The architecture is now scalable and modern, with proper separation of concerns and data fetching patterns that will support the upcoming Google Maps integration and location-based features.
+
+## Component Serialization Guidelines
+
+### Next.js Client/Server Component Rules
+
+**CRITICAL**: When working with Next.js Server and Client Components, follow these serialization rules:
+
+#### "use client" Directive Usage
+- **Root-level only**: Only use `"use client"` at the top-level entry points (pages, layout components)
+- **Child components**: Remove `"use client"` from child components that are already within a client boundary
+- **Function props**: Components marked with `"use client"` cannot receive function props from Server Components
+
+#### Acceptable Patterns
+✅ **Good**: Root page component with "use client", child components without it
+```typescript
+// pages/search/page.tsx
+"use client";
+export default function SearchPage() {
+  return <SearchFilters onFilterChange={handleChange} />; // ✅ OK - within client boundary
+}
+
+// components/SearchFilters.tsx (no "use client" directive)
+interface Props {
+  onFilterChange: (value: string) => void; // ✅ OK - function prop within client boundary
+}
+```
+
+✅ **Good**: Components that only receive serializable props
+```typescript
+// components/RestaurantCard.tsx
+interface Props {
+  restaurant: Restaurant; // ✅ OK - plain object
+  isExpanded: boolean; // ✅ OK - primitive
+}
+```
+
+#### Patterns to Avoid
+❌ **Bad**: Child components with "use client" receiving functions
+```typescript
+// components/FilterButton.tsx
+"use client"; // ❌ BAD - unnecessary and causes warnings
+interface Props {
+  onClick: () => void; // ❌ BAD - function prop with "use client"
+}
+```
+
+❌ **Bad**: Passing non-serializable props from Server to Client
+```typescript
+// Server Component
+export default function ServerPage() {
+  const handler = () => {}; // ❌ BAD - function cannot be serialized
+  return <ClientComponent onSubmit={handler} />;
+}
+```
+
+#### Implementation Rules
+1. **Minimal "use client"**: Only use at entry points that need client-side interactivity
+2. **Remove redundant directives**: Child components inherit client boundary from parent
+3. **Serialize complex data**: Transform Dates, functions, and complex objects before passing to client components
+4. **Use client-side state**: Handle interactive logic within client components rather than passing functions down
+
+## Google Maps Integration Notes
+
+### Map Styling Limitations
+**CRITICAL**: Google Maps styling behavior depends on map configuration:
+
+- **With `mapId`**: Traditional `styles` array doesn't work. Must use cloud-based map styling
+- **Without `mapId`**: Traditional `styles` array works normally for hiding POIs and customizing appearance
+- **AdvancedMarkerElement**: Requires a `mapId` but prevents traditional styling
+
+### Cloud-Based Map Styling Setup
+
+**Current Implementation**: Uses environment variable `NEXT_PUBLIC_GOOGLE_MAPS_STYLE_ID` for cloud-styled map with hidden POIs.
+
+**Setup Instructions**:
+
+1. **Create Map Style in Google Cloud Console**:
+   - Go to [Google Cloud Console](https://console.cloud.google.com/)
+   - Navigate to "Map Styles" under Maps API
+   - Create new map style with these POI hiding rules:
+     ```json
+     [
+       {
+         "featureType": "poi",
+         "stylers": [{ "visibility": "off" }]
+       },
+       {
+         "featureType": "transit",
+         "stylers": [{ "visibility": "off" }]
+       },
+       {
+         "featureType": "poi.business",
+         "stylers": [{ "visibility": "off" }]
+       }
+     ]
+     ```
+
+2. **Get Map ID**:
+   - Copy the generated Map ID from the style
+   - Add to environment variables: `NEXT_PUBLIC_GOOGLE_MAPS_STYLE_ID=your-map-id-here`
+
+3. **Fallback**: 
+   - Code falls back to `"denver-happy-hour-map"` if env var not set
+   - `clickableIcons: false` provides minimal POI interaction disable
+
+**Alternative**: Remove `mapId` entirely to use traditional styling, but lose AdvancedMarkerElement benefits.

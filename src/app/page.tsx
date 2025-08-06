@@ -1,12 +1,13 @@
 "use client";
 import HeroSection from "./Components/hero";
-import { SearchPage } from "./Components/searchPage";
+import NavBar from "./Components/nav";
 
 export default function Home() {
   return (
     <div className="Page mb-12">
+              <NavBar />
+
       <HeroSection />
-      <SearchPage />
     </div>
   );
 }

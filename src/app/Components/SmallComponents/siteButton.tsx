@@ -1,10 +1,9 @@
-"use client";
 type ButtonProps = {
   text: string;
   rounded: boolean;
-  colorFill: true | false | "variable";
+  variant: "orange" | "yellow" | "red" | "white" | "gradient";
   addClasses?: string;
-  size?: "sm" | "md" | "lg";
+  size?: "xs" | "sm" | "md" | "lg";
   onSubmit?: (event: React.MouseEvent<HTMLButtonElement>) => void;
   disabled?: boolean;
   type?: "submit" | "reset" | "button";
@@ -13,7 +12,7 @@ type ButtonProps = {
 const SiteButton = ({
   text,
   rounded,
-  colorFill,
+  variant,
   addClasses,
   size,
   onSubmit,
@@ -24,41 +23,49 @@ const SiteButton = ({
   let buttonColor: string;
 
   switch (size) {
+    case "xs":
+      buttonSize = "px-2 py-1 text-xs";
+      break;
     case "sm":
-      buttonSize = "sm:px-6 sm:py-3 px-4 py-3";
+      buttonSize = "sm:px-4 sm:py-2 px-3 py-1";
       break;
     case "md":
       buttonSize = "w-40 sm:py-3 py-3";
       break;
     case "lg":
-      buttonSize = "w-full h-[52px]";
+      buttonSize = "w-full h-[48px]";
       break;
     default:
       buttonSize = "w-20 h-10";
   }
 
-  switch (colorFill) {
-    case true:
+  switch (variant) {
+    case "orange":
       buttonColor = "bg-po1 text-white";
       break;
-    case false:
-      buttonColor = "border border-gray-800 text-gray-800";
+    case "yellow":
+      buttonColor = "bg-py1 text-white";
       break;
-    case "variable":
+    case "red":
+      buttonColor = "bg-pr1 text-white";
+      break;
+    case "white":
+      buttonColor = "bg-white border border-gray-300 text-black";
+      break;
+    case "gradient":
       buttonColor =
-        "bg-n1 border-none text-gray-800 md:border md:border-solid md:border-white md:bg-transparent md:text-white";
+        "bg-gradient-to-tr from-pr1 via-po1 to-py1 text-white font-medium text-shadow-xs";
       break;
   }
 
   return (
     <button
-      className={`SiteButton font-allerta text-sm shadow-sm transition-all duration-300 hover:scale-105 hover:border-none hover:bg-stone-400 hover:text-black disabled:bg-gray-500 disabled:hover:cursor-not-allowed disabled:hover:text-white sm:text-base ${buttonSize} ${addClasses} ${
+      className={`SiteButton text-nowrap cursor-pointer text-sm shadow-themeShadow transition-all duration-200 hover:scale-102 hover:border-none hover:bg-stone-200 hover:text-black disabled:bg-gray-500 disabled:hover:cursor-not-allowed disabled:hover:text-white sm:text-base ${buttonSize} ${addClasses} ${
         rounded ? "rounded-full" : "rounded-sm"
       } ${buttonColor}`}
       type={type ?? "button"}
       onClick={onSubmit}
       disabled={disabled}
-      onMouseEnter={() => console.log("test")}
     >
       {text}
     </button>

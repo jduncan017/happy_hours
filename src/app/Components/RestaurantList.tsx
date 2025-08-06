@@ -1,5 +1,3 @@
-"use client";
-
 import { useState } from "react";
 import type { Restaurant } from "@/lib/types";
 import RestaurantCard from "./RestaurantCard";
@@ -40,7 +38,7 @@ export default function RestaurantList({
   }
 
   return (
-    <div className="RestaurantList w-full space-y-6">
+    <div className="RestaurantList w-full flex flex-col gap-2">
       {restaurants.map((restaurant: Restaurant, index: number) => {
         const isExpanded = expanded.has(restaurant.name);
 

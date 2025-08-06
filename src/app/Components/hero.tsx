@@ -1,21 +1,10 @@
 "use client";
 import Image from "next/image";
-import SearchBar from "./SmallComponents/SearchBar";
 import SiteButton from "./SmallComponents/siteButton";
+import { useRouter } from "next/navigation";
 
 export default function HeroSection() {
-  function scrollToSearch() {
-    // Add a small delay to ensure the search section is rendered
-    setTimeout(() => {
-      const searchSection = document.getElementById("search-section");
-      if (searchSection) {
-        console.log("scrolling!");
-        searchSection.scrollIntoView({ behavior: "smooth" });
-      } else {
-        console.log("Search section not found");
-      }
-    }, 100);
-  }
+  const router = useRouter();
 
   return (
     <div className="HeroSection relative flex h-svh max-h-[960px] min-h-fit flex-col items-center justify-center bg-black px-4 py-[70px] xs:px-10">
@@ -59,13 +48,11 @@ export default function HeroSection() {
         </div>
         {/* <SearchBar /> */}
         <SiteButton
-          colorFill={true}
+          variant="gradient"
           text="Find Your Happy Hour"
           rounded={true}
-          addClasses="mx-auto w-60 h-12 z-10"
-          onSubmit={() => {
-            scrollToSearch();
-          }}
+          addClasses="mx-auto w-60 h-12 z-10 cursor-pointer"
+          onSubmit={() => router.push("/search")}
         />
         <p className="BetaNote m-auto text-center capitalize italic text-gray-400">
           {`Note: This site is in beta`}

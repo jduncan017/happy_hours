@@ -1,5 +1,3 @@
-"use client";
-
 interface ViewToggleProps {
   view: 'list' | 'map';
   onViewChange: (view: 'list' | 'map') => void;

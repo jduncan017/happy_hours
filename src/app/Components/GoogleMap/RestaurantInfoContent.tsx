@@ -10,8 +10,8 @@ export function generateRestaurantInfoContent({
   imageUrl = "/photo-missing.webp",
 }: RestaurantInfoContentProps): string {
   return `
-    <div style="max-width: 240px; min-width: 280px; padding: 0 0 0 4px; font-family: Montserrat, sans-serif;">
-      <div style="width: 100%; height: 200px; background: #AFAFAF; border-radius: 8px; overflow: hidden; margin-bottom: 12px;">
+    <div style="width: 240px; height: fit-content; padding: 0 0 0 4px; font-family: Montserrat, sans-serif;">
+      <div style="width: 100%; height: 160px; background: #AFAFAF; border-radius: 8px; overflow: hidden; margin-bottom: 12px;">
         <img 
           src="${imageUrl}" 
           alt="${restaurant.name}"
@@ -24,10 +24,7 @@ export function generateRestaurantInfoContent({
       <div style="padding: 0 0 12px;">
         <!-- Restaurant name -->
         <h3 style="margin: 0 0 4px 0; font-size: 18px; font-weight: bold; color: #111827; line-height: 1.2;">${restaurant.name}</h3>
-        
-        <!-- Address -->
-        <p style="margin: 0 0 4px 0; font-size: 16px; font-weight: 500; color: #6b7280; line-height: 1.4;">${restaurant.address}</p>
-        
+       
         <!-- Cuisine Type -->
         <p style="margin: 0 0 12px 0; font-size: 16px; font-weight: 500; color: #9ca3af;">${restaurant.cuisineType}</p>
         

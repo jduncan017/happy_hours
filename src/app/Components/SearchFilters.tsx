@@ -199,7 +199,7 @@ export default function SearchFilters({
         </div>
       </div>
 
-      <div className="FilterRow w-full flex flex-wrap gap-2 text-sm px-4 sm:px-8 pb-4">
+      <div className="FilterRow w-full flex flex-wrap gap-2 px-4 sm:px-8 pb-4">
         <FilterSearchBar
           placeholder="Search restaurants, cuisine, area..."
           onSearch={handleSearch}
@@ -234,7 +234,7 @@ export default function SearchFilters({
             value={advancedFilters.areas}
             options={uniqueAreas}
             onChange={handleAreaChange}
-            multiple={true}
+            multiple={false}
           />
         )}
 

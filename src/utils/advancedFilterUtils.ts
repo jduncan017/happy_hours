@@ -1,11 +1,11 @@
-import type { Restaurant } from '@/lib/types';
-import type { AdvancedFilterOptions } from '@/app/Components/AdvancedFilters';
+import type { Restaurant } from "@/lib/types";
+import type { AdvancedFilterOptions } from "@/app/Components/AdvancedFilters";
 
 export function applyAdvancedFilters(
   restaurants: Restaurant[],
-  filters: AdvancedFilterOptions
+  filters: AdvancedFilterOptions,
 ): Restaurant[] {
-  return restaurants.filter(restaurant => {
+  return restaurants.filter((restaurant) => {
     // Area filter
     if (filters.areas.length > 0) {
       if (!restaurant.area || !filters.areas.includes(restaurant.area)) {
@@ -16,8 +16,8 @@ export function applyAdvancedFilters(
     // Cuisine type filter (basic heuristic based on name)
     if (filters.cuisineTypes.length > 0) {
       const restaurantName = restaurant.name.toLowerCase();
-      const matchesCuisine = filters.cuisineTypes.some(cuisine =>
-        restaurantName.includes(cuisine.toLowerCase())
+      const matchesCuisine = filters.cuisineTypes.some((cuisine) =>
+        restaurantName.includes(cuisine.toLowerCase()),
       );
       if (!matchesCuisine) {
         return false;
@@ -26,7 +26,7 @@ export function applyAdvancedFilters(
 
     // Special features filters
     if (filters.hasSpecialFeatures.hasWebsite) {
-      if (!restaurant.website || restaurant.website.trim() === '') {
+      if (!restaurant.website || restaurant.website.trim() === "") {
         return false;
       }
     }
@@ -38,8 +38,10 @@ export function applyAdvancedFilters(
     }
 
     if (filters.hasSpecialFeatures.hasMultipleHappyHours) {
-      const totalHappyHourSlots = Object.values(restaurant.happyHours)
-        .reduce((total, dayHours) => total + (dayHours?.length || 0), 0);
+      const totalHappyHourSlots = Object.values(restaurant.happyHours).reduce(
+        (total, dayHours) => total + (dayHours?.length || 0),
+        0,
+      );
       if (totalHappyHourSlots <= 1) {
         return false;
       }
@@ -49,7 +51,9 @@ export function applyAdvancedFilters(
   });
 }
 
-export function hasActiveAdvancedFilters(filters: AdvancedFilterOptions): boolean {
+export function hasActiveAdvancedFilters(
+  filters: AdvancedFilterOptions,
+): boolean {
   return (
     filters.areas.length > 0 ||
     filters.cuisineTypes.length > 0 ||

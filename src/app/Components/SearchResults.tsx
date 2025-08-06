@@ -185,7 +185,7 @@ export const SearchResults = forwardRef<HTMLDivElement, SearchResultsProps>(
                 </div>
               </div>
             ) : (
-              <div className="MobileMapView h-[calc(100svh-240px)]">
+              <div className="MobileMapView h-[calc(100vh-240px)]">
                 <GoogleMap
                   restaurants={restaurants}
                   center={userLocation || undefined}

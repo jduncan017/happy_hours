@@ -7,6 +7,7 @@ import type { Restaurant } from "@/lib/types";
 import { createRestaurantMarker } from "./GoogleMap/MarkerUtils";
 import { generateRestaurantInfoContent } from "./GoogleMap/RestaurantInfoContent";
 import { createClusterRenderer } from "./GoogleMap/ClusterRenderer";
+import LoadingSpinner from "./SmallComponents/LoadingSpinner";
 
 interface GoogleMapProps {
   restaurants: Restaurant[];
@@ -198,10 +199,7 @@ function GoogleMap({
       <div
         className={`${className} flex items-center justify-center rounded-lg border border-gray-300 bg-gray-100`}
       >
-        <div className="text-center">
-          <div className="mx-auto mb-2 h-8 w-8 animate-spin rounded-full border-b-2 border-stone-800"></div>
-          <p className="text-sm text-gray-600">Loading map...</p>
-        </div>
+        <LoadingSpinner message="Loading map..." />
       </div>
     );
   }

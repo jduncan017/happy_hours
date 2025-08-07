@@ -18,139 +18,136 @@ interface RestaurantCardProps {
   onToggleExpanded: () => void;
 }
 
-const RestaurantCard = React.memo<RestaurantCardProps>(({
-  restaurant,
-  today,
-  isExpanded,
-  onToggleExpanded,
-}) => {
-  return (
-    <div className="RestaurantCard flex w-full max-w-[1000px] border-b border-gray-300 flex-col gap-5 text-wrap bg-white p-4 sm:p-6 text-black xs:flex-row">
-      <div className="LeftColumn flex h-full w-full flex-col gap-2 xs:w-fit">
-        <div className="RestaurantImage relative flex aspect-video w-full items-center overflow-hidden rounded-sm border border-gray-200 xs:aspect-square xs:w-[200px]">
-          <ErrorBoundary fallback={ImageErrorFallback}>
-            <ImageLoadingWrapper
-              restaurant={restaurant}
-              className="Image h-full w-full object-contain"
-            />
-          </ErrorBoundary>
+const RestaurantCard = React.memo<RestaurantCardProps>(
+  ({ restaurant, today, isExpanded, onToggleExpanded }) => {
+    return (
+      <div className="RestaurantCard flex w-full max-w-[1000px] border-b border-gray-300 flex-col gap-5 text-wrap bg-white p-4 sm:p-6 text-black xs:flex-row">
+        <div className="LeftColumn flex h-full w-full flex-col gap-2 xs:w-fit">
+          <div className="RestaurantImage relative flex aspect-video w-full items-center overflow-hidden rounded-sm border border-gray-200 xs:aspect-square xs:w-[200px]">
+            <ErrorBoundary fallback={ImageErrorFallback}>
+              <ImageLoadingWrapper
+                restaurant={restaurant}
+                className="Image h-full w-full object-contain"
+              />
+            </ErrorBoundary>
+          </div>
         </div>
-      </div>
-      <div className="RightColumn flex w-full flex-col gap-2 overflow-hidden">
-        <div className="Name&Address">
-          <h2
-            className="RestaurantName font-sans truncate text-xl font-semibold"
-            title={restaurant.name}
-          >
-            <span className="Name align-baseline">{restaurant.name}</span>
-            {restaurant.area && (
-              <span className="Area ml-2 align-baseline text-sm text-gray-600">
-                {restaurant.area}
-              </span>
-            )}
-          </h2>
-          <p
-            className="AddressText flex w-fit items-center gap-1 italic text-stone-600"
-            title={restaurant.address}
-          >
-            {restaurant.address}
-          </p>
-        </div>
-        <div className="HHAndNotes flex flex-col gap-3 md:flex-row md:items-start md:justify-between">
-          <div className="HappyHourWrapper flex-1 min-w-0">
-            <div className="ActionButtons mb-2 flex flex-wrap items-center gap-2">
-              <a
-                className="GetDirectionsButton"
-                href={generateGoogleMapsUrl(
-                  restaurant.name,
-                  restaurant.address,
-                )}
-                target="_blank"
-                rel="noopener noreferrer"
-              >
-                <SiteButton
-                  text="Get Directions"
-                  rounded={false}
-                  variant="orange"
-                  size="xs"
-                />
-              </a>
-              {restaurant.website && (
+        <div className="RightColumn flex w-full flex-col gap-2 overflow-hidden">
+          <div className="Name&Address">
+            <h2
+              className="RestaurantName font-sans truncate text-xl font-semibold"
+              title={restaurant.name}
+            >
+              <span className="Name align-baseline">{restaurant.name}</span>
+              {restaurant.area && (
+                <span className="Area ml-2 align-baseline text-sm text-gray-600">
+                  {restaurant.area}
+                </span>
+              )}
+            </h2>
+            <p
+              className="AddressText flex w-fit items-center gap-1 italic text-stone-600"
+              title={restaurant.address}
+            >
+              {restaurant.address}
+            </p>
+          </div>
+          <div className="HHAndNotes flex flex-col gap-3 md:flex-row md:items-start md:justify-between">
+            <div className="HappyHourWrapper flex-1 min-w-0">
+              <div className="ActionButtons mb-2 flex flex-wrap items-center gap-2">
                 <a
-                  className="VisitWebsiteButton"
-                  href={restaurant.website}
+                  className="GetDirectionsButton"
+                  href={generateGoogleMapsUrl(
+                    restaurant.name,
+                    restaurant.address,
+                  )}
                   target="_blank"
-                  rel="noopener"
+                  rel="noopener noreferrer"
                 >
                   <SiteButton
-                    text="Visit Website"
+                    text="Get Directions"
                     rounded={false}
-                    variant="white"
+                    variant="orange"
                     size="xs"
                   />
                 </a>
-              )}
-              {restaurant.distance && (
-                <span className="Distance inline-flex items-center gap-1 rounded-full bg-po1/10 px-2 py-1 text-xs font-medium text-po1">
-                  🚶 {restaurant.distance.toFixed(1)} miles
-                </span>
-              )}
-            </div>
-            <HappyHourDisplay
-              happyHours={restaurant.happyHours}
-              today={today}
-              isExpanded={isExpanded}
-              onToggleExpanded={onToggleExpanded}
-            />
-          </div>
-          {restaurant.notes.length > 0 && (
-            <div className="NotesSection flex flex-col flex-wrap items-start gap-2">
-              <p className="NoteTitle font-sans text-sm text-stone-700">
-                Notes:
-              </p>
-              <div className="Notes flex flex-col flex-wrap gap-2">
-                {restaurant.notes.map((note, idx) => {
-                  const isUrl = /^https?:\/\//i.test(note);
-                  if (isUrl) {
-                    try {
-                      const url = new URL(note);
-                      const slug =
-                        url.pathname.split("/").filter(Boolean).pop() ||
-                        url.hostname;
-                      const label = slug.replace(/[-_]+/g, " ");
-                      return (
-                        <a
-                          className="NoteChip inline-flex capitalize items-center rounded-full bg-stone-200 px-3 py-1 text-xs text-stone-800 underline hover:bg-stone-300"
-                          key={`${note}-${idx}`}
-                          href={note}
-                          target="_blank"
-                          rel="noopener noreferrer"
-                          title={note}
-                        >
-                          {label}
-                        </a>
-                      );
-                    } catch {
-                      // fallthrough to plain chip
-                    }
-                  }
-                  return (
-                    <span
-                      className="NoteChip inline-flex items-center rounded-full bg-stone-200 px-3 py-1 text-xs text-stone-800"
-                      key={`${note}-${idx}`}
-                    >
-                      {note}
-                    </span>
-                  );
-                })}
+                {restaurant.website && (
+                  <a
+                    className="VisitWebsiteButton"
+                    href={restaurant.website}
+                    target="_blank"
+                    rel="noopener"
+                  >
+                    <SiteButton
+                      text="Visit Website"
+                      rounded={false}
+                      variant="white"
+                      size="xs"
+                    />
+                  </a>
+                )}
+                {restaurant.distance && (
+                  <span className="Distance inline-flex items-center gap-1 rounded-full bg-po1/10 px-2 py-1 text-xs font-medium text-po1">
+                    🚶 {restaurant.distance.toFixed(1)} miles
+                  </span>
+                )}
               </div>
+              <HappyHourDisplay
+                happyHours={restaurant.happyHours}
+                today={today}
+                isExpanded={isExpanded}
+                onToggleExpanded={onToggleExpanded}
+              />
             </div>
-          )}
+            {restaurant.notes.length > 0 && (
+              <div className="NotesSection flex flex-col flex-wrap items-start gap-2">
+                <p className="NoteTitle font-sans text-sm text-stone-700">
+                  Notes:
+                </p>
+                <div className="Notes flex flex-col flex-wrap gap-2">
+                  {restaurant.notes.map((note, idx) => {
+                    const isUrl = /^https?:\/\//i.test(note);
+                    if (isUrl) {
+                      try {
+                        const url = new URL(note);
+                        const slug =
+                          url.pathname.split("/").filter(Boolean).pop() ||
+                          url.hostname;
+                        const label = slug.replace(/[-_]+/g, " ");
+                        return (
+                          <a
+                            className="NoteChip inline-flex capitalize items-center rounded-full bg-stone-200 px-3 py-1 text-xs text-stone-800 underline hover:bg-stone-300"
+                            key={`${note}-${idx}`}
+                            href={note}
+                            target="_blank"
+                            rel="noopener noreferrer"
+                            title={note}
+                          >
+                            {label}
+                          </a>
+                        );
+                      } catch {
+                        // fallthrough to plain chip
+                      }
+                    }
+                    return (
+                      <span
+                        className="NoteChip inline-flex items-center rounded-full bg-stone-200 px-3 py-1 text-xs text-stone-800"
+                        key={`${note}-${idx}`}
+                      >
+                        {note}
+                      </span>
+                    );
+                  })}
+                </div>
+              </div>
+            )}
+          </div>
         </div>
       </div>
-    </div>
-  );
-});
+    );
+  },
+);
 
 RestaurantCard.displayName = "RestaurantCard";
 

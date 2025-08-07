@@ -34,19 +34,24 @@ export const SearchResults = forwardRef<HTMLDivElement, SearchResultsProps>(
     ref,
   ) => {
     // Pre-load restaurant images for efficient sharing between list and map
-    const { restaurantImages, isLoading: imagesLoading } = useRestaurantImages(restaurants);
-    
+    const { restaurantImages, isLoading: imagesLoading } =
+      useRestaurantImages(restaurants);
+
     // Only update map when all images are loaded to prevent constant flashing
     const stableRestaurantImages = useMemo(() => {
       // Don't update the map while images are still loading to prevent flashing
       if (imagesLoading) {
         return EMPTY_IMAGES; // Use singleton to prevent re-renders
       }
-      
+
       // Return a stable copy once all images are loaded
       return { ...restaurantImages };
-    }, [imagesLoading, Object.keys(restaurantImages).length, restaurants.length]);
-    
+    }, [
+      imagesLoading,
+      Object.keys(restaurantImages).length,
+      restaurants.length,
+    ]);
+
     // Mobile tab state
     const [activeTab, setActiveTab] = useState<"list" | "map">("list");
     // Loading state
@@ -140,7 +145,7 @@ export const SearchResults = forwardRef<HTMLDivElement, SearchResultsProps>(
             )}
 
             {/* Search Results - Scrollable */}
-            <div className="ResultsSection flex-1 overflow-y-auto p-4">
+            <div className="ResultsSection flex-1 overflow-y-auto">
               <RestaurantList restaurants={restaurants} today={today} />
             </div>
           </div>

@@ -26,7 +26,7 @@ function RestaurantCard({
   onToggleExpanded,
 }: RestaurantCardProps) {
   return (
-    <div className="RestaurantCard flex w-full max-w-[1000px border border-gray-200 flex-col gap-5 text-wrap rounded-lg bg-white p-4 sm:p-6 text-black shadow-themeShadow xs:flex-row">
+    <div className="RestaurantCard flex w-full max-w-[1000px] border-b border-gray-300 flex-col gap-5 text-wrap bg-white p-4 sm:p-6 text-black xs:flex-row">
       <div className="LeftColumn flex h-full w-full flex-col gap-2 xs:w-fit">
         <div className="RestaurantImage relative flex aspect-video w-full items-center overflow-hidden rounded-sm border border-gray-200 xs:aspect-square xs:w-[200px]">
           <ErrorBoundary fallback={ImageErrorFallback}>
@@ -36,14 +36,19 @@ function RestaurantCard({
             />
           </ErrorBoundary>
         </div>
-        <Link className="Website w-full" href={`${restaurant.website}`}>
+        <a
+          className="Website w-full"
+          href={restaurant.website}
+          target="_blank"
+          rel="noopener"
+        >
           <SiteButton
             variant="orange"
             rounded={false}
             text="Visit Website"
             size="lg"
           />
-        </Link>
+        </a>
       </div>
       <div className="RightColumn flex w-full flex-col gap-2 overflow-hidden">
         <div className="Name&Address">
@@ -59,7 +64,7 @@ function RestaurantCard({
               rel="noopener noreferrer"
             >
               <p className="Address flex w-fit items-center gap-1 text-stone-700 underline transition-colors duration-200 group-hover:text-po1">
-                📍 {restaurant.address}
+                {restaurant.address}
               </p>
             </Link>
             {restaurant.distance && (

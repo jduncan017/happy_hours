@@ -44,7 +44,7 @@ function HappyHourDisplay({
               key={day}
               className="HappyHourTime tracking-wide text-gray-700 flex gap-1"
             >
-              <p className="HappyHourDay w-12">{`${day}:`}</p>
+              {isExpanded && <p className="HappyHourDay w-12">{`${day}:`}</p>}
               <div className="HappyHourTimes flex flex-col">
                 {timesFormatted.map((timeFormatted, index) => (
                   <p key={index}>{timeFormatted}</p>
@@ -61,20 +61,20 @@ function HappyHourDisplay({
 
   return (
     <div className="HHTimes w-full flex-grow">
-      <h3 className="TimeTitle font-sans font-semibold">Happy Hour Times:</h3>
+      <h3 className="TimeTitle font-sans font-semibold">
+        {isExpanded ? "All Happy Hours:" : `${today} Happy Hour:`}
+      </h3>
       {happyHours[today] || isExpanded ? (
         formatHappyHours(happyHours, isExpanded)
       ) : (
         <p className="text-gray-700">{`No Happy Hour Today :(`}</p>
       )}
-      {!isExpanded && (
-        <button
-          onClick={onToggleExpanded}
-          className="ShowMoreButton mt-2 rounded-sm cursor-pointer bg-stone-200 px-2 py-1 text-xs italic text-gray-700 hover:text-black"
-        >
-          Show More Times
-        </button>
-      )}
+      <p
+        onClick={onToggleExpanded}
+        className="ShowMoreButton mt-1 cursor-pointer italic text-po1/80 hover:text-black"
+      >
+        {isExpanded ? "Hide All" : "Show All"}
+      </p>
     </div>
   );
 }

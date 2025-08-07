@@ -38,7 +38,7 @@ export default function RestaurantList({
   }
 
   return (
-    <div className="RestaurantList w-full flex flex-col gap-2">
+    <div className="RestaurantList w-full flex flex-col">
       {restaurants.map((restaurant: Restaurant, index: number) => {
         const isExpanded = expanded.has(restaurant.name);
 

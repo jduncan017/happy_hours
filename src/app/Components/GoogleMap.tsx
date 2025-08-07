@@ -10,6 +10,7 @@ import { createClusterRenderer } from "./GoogleMap/ClusterRenderer";
 
 interface GoogleMapProps {
   restaurants: Restaurant[];
+  restaurantImages?: Record<string, string>; // Pre-loaded image URLs by restaurant ID
   onRestaurantSelect?: (restaurant: Restaurant) => void;
   center?: { lat: number; lng: number };
   zoom?: number;
@@ -18,6 +19,7 @@ interface GoogleMapProps {
 
 export default function GoogleMap({
   restaurants,
+  restaurantImages = {},
   onRestaurantSelect,
   center = { lat: 39.7392, lng: -104.9903 }, // Denver center
   zoom = 12,
@@ -103,23 +105,10 @@ export default function GoogleMap({
     const newMarkers = restaurants
       .filter((restaurant) => restaurant.coordinates)
       .map((restaurant) => {
-        const handleMarkerClick = async () => {
+        const handleMarkerClick = () => {
           if (infoWindowRef.current && mapInstanceRef.current) {
-            // Get restaurant image
-            let imageUrl = "/photo-missing.webp";
-            try {
-              const response = await fetch(
-                `/api/restaurants/${restaurant.id}/image`,
-              );
-              if (response.ok) {
-                const data = await response.json();
-                if (data.success && data.data?.imageUrl) {
-                  imageUrl = data.data.imageUrl;
-                }
-              }
-            } catch (error) {
-              // Use fallback image
-            }
+            // Use pre-loaded image data instead of making API call
+            const imageUrl = restaurantImages[restaurant.id] || "/photo-missing.webp";
 
             const content = generateRestaurantInfoContent({
               restaurant,
@@ -189,7 +178,7 @@ export default function GoogleMap({
         },
       );
     }
-  }, [restaurants, isLoaded, onRestaurantSelect]);
+  }, [restaurants, restaurantImages, isLoaded, onRestaurantSelect]);
 
   if (error) {
     return (

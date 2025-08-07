@@ -3,6 +3,7 @@ import React, { forwardRef, useState } from "react";
 import type { Restaurant } from "@/lib/types";
 import RestaurantList from "./RestaurantList";
 import GoogleMap from "./GoogleMap";
+import { useRestaurantImages } from "@/hooks/useRestaurantImages";
 
 interface SearchResultsProps {
   restaurants: Restaurant[];
@@ -27,6 +28,9 @@ export const SearchResults = forwardRef<HTMLDivElement, SearchResultsProps>(
     },
     ref,
   ) => {
+    // Pre-load restaurant images for efficient sharing between list and map
+    const { restaurantImages } = useRestaurantImages(restaurants);
+    
     // Mobile tab state
     const [activeTab, setActiveTab] = useState<"list" | "map">("list");
     // Loading state
@@ -129,6 +133,7 @@ export const SearchResults = forwardRef<HTMLDivElement, SearchResultsProps>(
           <div className="RightPanel h-full flex-1 border-l border-gray-300">
             <GoogleMap
               restaurants={restaurants}
+              restaurantImages={restaurantImages}
               center={userLocation || undefined}
               className="h-full w-full"
             />
@@ -188,6 +193,7 @@ export const SearchResults = forwardRef<HTMLDivElement, SearchResultsProps>(
               <div className="MobileMapView h-[calc(100vh-240px)]">
                 <GoogleMap
                   restaurants={restaurants}
+                  restaurantImages={restaurantImages}
                   center={userLocation || undefined}
                   className="h-full w-full"
                 />

@@ -1,6 +1,6 @@
 "use client";
 
-import { useEffect, useRef, useState } from "react";
+import React, { useEffect, useRef, useState } from "react";
 import { Loader } from "@googlemaps/js-api-loader";
 import { MarkerClusterer } from "@googlemaps/markerclusterer";
 import type { Restaurant } from "@/lib/types";
@@ -17,7 +17,7 @@ interface GoogleMapProps {
   className?: string;
 }
 
-export default function GoogleMap({
+function GoogleMap({
   restaurants,
   restaurantImages = {},
   onRestaurantSelect,
@@ -62,7 +62,6 @@ export default function GoogleMap({
 
     const mapID =
       process.env.NEXT_PUBLIC_GOOGLE_MAPS_ID || "denver-happy-hour-map";
-    console.log("Map Style ID:", mapID);
 
     mapInstanceRef.current = new google.maps.Map(mapRef.current, {
       center,
@@ -108,7 +107,8 @@ export default function GoogleMap({
         const handleMarkerClick = () => {
           if (infoWindowRef.current && mapInstanceRef.current) {
             // Use pre-loaded image data instead of making API call
-            const imageUrl = restaurantImages[restaurant.id] || "/photo-missing.webp";
+            const imageUrl =
+              restaurantImages[restaurant.id] || "/photo-missing.webp";
 
             const content = generateRestaurantInfoContent({
               restaurant,
@@ -178,7 +178,7 @@ export default function GoogleMap({
         },
       );
     }
-  }, [restaurants, restaurantImages, isLoaded, onRestaurantSelect]);
+  }, [restaurants, isLoaded, restaurantImages, onRestaurantSelect]);
 
   if (error) {
     return (
@@ -212,3 +212,5 @@ export default function GoogleMap({
     </div>
   );
 }
+
+export default React.memo(GoogleMap);

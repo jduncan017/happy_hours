@@ -1,9 +1,12 @@
+import React from "react";
 import Link from "next/link";
 import type { Restaurant } from "@/lib/types";
 import ImageLoadingWrapper from "../../utils/PreLoader/ImageLoadingWrapper";
 import SiteButton from "./SmallComponents/siteButton";
 import generateGoogleMapsUrl from "@/utils/generateMapsURL";
 import HappyHourDisplay from "./HappyHourDisplay";
+import ErrorBoundary from "./ErrorBoundary/ErrorBoundary";
+import ImageErrorFallback from "./ErrorBoundary/ImageErrorFallback";
 
 interface RestaurantWithDistance extends Restaurant {
   distance?: number;
@@ -16,7 +19,7 @@ interface RestaurantCardProps {
   onToggleExpanded: () => void;
 }
 
-export default function RestaurantCard({
+function RestaurantCard({
   restaurant,
   today,
   isExpanded,
@@ -26,10 +29,12 @@ export default function RestaurantCard({
     <div className="RestaurantCard flex w-full max-w-[1000px border border-gray-200 flex-col gap-5 text-wrap rounded-lg bg-white p-4 sm:p-6 text-black shadow-themeShadow xs:flex-row">
       <div className="LeftColumn flex h-full w-full flex-col gap-2 xs:w-fit">
         <div className="RestaurantImage relative flex aspect-video w-full items-center overflow-hidden rounded-sm border border-gray-200 xs:aspect-square xs:w-[200px]">
-          <ImageLoadingWrapper
-            restaurant={restaurant}
-            className="Image h-full w-full object-contain"
-          />
+          <ErrorBoundary fallback={ImageErrorFallback}>
+            <ImageLoadingWrapper
+              restaurant={restaurant}
+              className="Image h-full w-full object-contain"
+            />
+          </ErrorBoundary>
         </div>
         <Link className="Website w-full" href={`${restaurant.website}`}>
           <SiteButton
@@ -88,3 +93,5 @@ export default function RestaurantCard({
     </div>
   );
 }
+
+export default React.memo(RestaurantCard);

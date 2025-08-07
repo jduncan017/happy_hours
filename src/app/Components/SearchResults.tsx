@@ -1,9 +1,11 @@
 "use client";
-import React, { forwardRef, useState } from "react";
+import React, { forwardRef, useState, useMemo } from "react";
 import type { Restaurant } from "@/lib/types";
 import RestaurantList from "./RestaurantList";
 import GoogleMap from "./GoogleMap";
 import { useRestaurantImages } from "@/hooks/useRestaurantImages";
+import ErrorBoundary from "./ErrorBoundary/ErrorBoundary";
+import MapErrorFallback from "./ErrorBoundary/MapErrorFallback";
 
 interface SearchResultsProps {
   restaurants: Restaurant[];
@@ -14,6 +16,9 @@ interface SearchResultsProps {
   error: Error | null;
   onBackToAll: () => void;
 }
+
+// Singleton empty object to prevent re-renders
+const EMPTY_IMAGES = {};
 
 export const SearchResults = forwardRef<HTMLDivElement, SearchResultsProps>(
   (
@@ -29,7 +34,18 @@ export const SearchResults = forwardRef<HTMLDivElement, SearchResultsProps>(
     ref,
   ) => {
     // Pre-load restaurant images for efficient sharing between list and map
-    const { restaurantImages } = useRestaurantImages(restaurants);
+    const { restaurantImages, isLoading: imagesLoading } = useRestaurantImages(restaurants);
+    
+    // Only update map when all images are loaded to prevent constant flashing
+    const stableRestaurantImages = useMemo(() => {
+      // Don't update the map while images are still loading to prevent flashing
+      if (imagesLoading) {
+        return EMPTY_IMAGES; // Use singleton to prevent re-renders
+      }
+      
+      // Return a stable copy once all images are loaded
+      return { ...restaurantImages };
+    }, [imagesLoading, Object.keys(restaurantImages).length, restaurants.length]);
     
     // Mobile tab state
     const [activeTab, setActiveTab] = useState<"list" | "map">("list");
@@ -131,12 +147,14 @@ export const SearchResults = forwardRef<HTMLDivElement, SearchResultsProps>(
 
           {/* Right Side - Map */}
           <div className="RightPanel h-full flex-1 border-l border-gray-300">
-            <GoogleMap
-              restaurants={restaurants}
-              restaurantImages={restaurantImages}
-              center={userLocation || undefined}
-              className="h-full w-full"
-            />
+            <ErrorBoundary fallback={MapErrorFallback}>
+              <GoogleMap
+                restaurants={restaurants}
+                restaurantImages={stableRestaurantImages}
+                center={userLocation || undefined}
+                className="h-full w-full"
+              />
+            </ErrorBoundary>
           </div>
         </div>
 
@@ -191,12 +209,14 @@ export const SearchResults = forwardRef<HTMLDivElement, SearchResultsProps>(
               </div>
             ) : (
               <div className="MobileMapView h-[calc(100vh-240px)]">
-                <GoogleMap
-                  restaurants={restaurants}
-                  restaurantImages={restaurantImages}
-                  center={userLocation || undefined}
-                  className="h-full w-full"
-                />
+                <ErrorBoundary fallback={MapErrorFallback}>
+                  <GoogleMap
+                    restaurants={restaurants}
+                    restaurantImages={stableRestaurantImages}
+                    center={userLocation || undefined}
+                    className="h-full w-full"
+                  />
+                </ErrorBoundary>
               </div>
             )}
           </div>

@@ -1,4 +1,4 @@
-import { useMemo } from "react";
+import React, { useMemo } from "react";
 import type { HappyHours, HappyHourTime } from "@/lib/types";
 
 interface HappyHourDisplayProps {
@@ -8,7 +8,7 @@ interface HappyHourDisplayProps {
   onToggleExpanded: () => void;
 }
 
-export default function HappyHourDisplay({
+function HappyHourDisplay({
   happyHours,
   today,
   isExpanded,
@@ -78,3 +78,5 @@ export default function HappyHourDisplay({
     </div>
   );
 }
+
+export default React.memo(HappyHourDisplay);

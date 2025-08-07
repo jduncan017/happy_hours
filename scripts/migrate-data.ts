@@ -81,18 +81,34 @@ async function migrateRestaurantData() {
       });
       
       // Insert into database using raw SQL for PostGIS
-      let insertData: any = {
+      interface RestaurantInsertData {
+        name: string;
+        address: string;
+        area: string | null;
+        cuisine_type: string | null;
+        price_category: string | null;
+        website: string | null;
+        hero_image: string;
+        images: string[];
+        happy_hours: unknown;
+        notes: string[];
+        verified: boolean;
+        created_by: string | null;
+      }
+
+      let insertData: RestaurantInsertData = {
         name: enhancedRestaurant.name,
         address: enhancedRestaurant.address,
         area: enhancedRestaurant.area,
         cuisine_type: enhancedRestaurant.cuisineType,
         price_category: enhancedRestaurant.priceCategory,
-        website: enhancedRestaurant.website,
+        website: enhancedRestaurant.website || null,
         hero_image: enhancedRestaurant.heroImage,
         images: enhancedRestaurant.images,
         happy_hours: enhancedRestaurant.happyHours,
         notes: enhancedRestaurant.notes,
-        verified: enhancedRestaurant.verified
+        verified: enhancedRestaurant.verified,
+        created_by: null
       };
 
       let data, error;

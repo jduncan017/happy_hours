@@ -1,10 +1,28 @@
 import { createClient as createServerClient } from "./server";
 import { createClient as createBrowserClient } from "./client";
 import type { Database } from "./database.types";
-import type { Restaurant } from "../types";
+import type { Restaurant, HappyHours } from "../types";
 import type { SupabaseClient as BaseSupabaseClient } from '@supabase/supabase-js';
 
 type SupabaseClient = BaseSupabaseClient | Awaited<ReturnType<typeof createServerClient>>;
+
+// PostGIS returns coordinates in GeoJSON Point format
+interface PostGISPoint {
+  coordinates: [number, number]; // [lng, lat]
+}
+
+// Type guard to check if coordinates are in PostGIS format
+function isPostGISPoint(coords: unknown): coords is PostGISPoint {
+  return (
+    typeof coords === 'object' && 
+    coords !== null && 
+    'coordinates' in coords &&
+    Array.isArray((coords as PostGISPoint).coordinates) &&
+    (coords as PostGISPoint).coordinates.length === 2 &&
+    typeof (coords as PostGISPoint).coordinates[0] === 'number' &&
+    typeof (coords as PostGISPoint).coordinates[1] === 'number'
+  );
+}
 
 // Transform database row to our Restaurant type
 function transformDatabaseRowToRestaurant(row: Database['public']['Tables']['restaurants']['Row']): Restaurant {
@@ -12,10 +30,22 @@ function transformDatabaseRowToRestaurant(row: Database['public']['Tables']['res
     id: row.id,
     name: row.name,
     address: row.address,
-    coordinates: row.coordinates ? {
-      lat: (row.coordinates as any).coordinates[1],  // GeoJSON format: [lng, lat]
-      lng: (row.coordinates as any).coordinates[0]
-    } : undefined,
+    coordinates: row.coordinates ? (() => {
+      // Handle both PostGIS GeoJSON format and direct coordinate arrays
+      if (isPostGISPoint(row.coordinates)) {
+        return {
+          lat: row.coordinates.coordinates[1], // GeoJSON format: [lng, lat]
+          lng: row.coordinates.coordinates[0]
+        };
+      } else if (Array.isArray(row.coordinates) && row.coordinates.length === 2) {
+        // Direct coordinate array format: [lng, lat]
+        return {
+          lat: row.coordinates[1],
+          lng: row.coordinates[0]
+        };
+      }
+      return undefined;
+    })() : undefined,
     area: row.area || "",
     cuisineType: row.cuisine_type || "Unknown",
     priceCategory: row.price_category || "2",
@@ -23,7 +53,7 @@ function transformDatabaseRowToRestaurant(row: Database['public']['Tables']['res
     menuUrl: row.menu_url || undefined,
     heroImage: row.hero_image,
     images: row.images,
-    happyHours: row.happy_hours as any, // Will validate with Zod later
+    happyHours: row.happy_hours as HappyHours, // Type assertion - data validated by database constraints
     deals: [], // Will be populated from separate query
     notes: row.notes,
     ratings: {

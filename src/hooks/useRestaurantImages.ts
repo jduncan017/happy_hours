@@ -1,5 +1,6 @@
-import { useQueries } from '@tanstack/react-query';
-import type { Restaurant } from '@/lib/types';
+import { useQueries } from "@tanstack/react-query";
+import { useMemo } from "react";
+import type { Restaurant } from "@/lib/types";
 
 interface RestaurantImageResponse {
   success: boolean;
@@ -11,14 +12,14 @@ interface RestaurantImageResponse {
 }
 
 const fetchRestaurantImage = async (restaurantId: string): Promise<string> => {
-  const response = await fetch(`/api/restaurants/${restaurantId}/image`);
-  const data: RestaurantImageResponse = await response.json();
-  
-  if (!response.ok || !data.success) {
-    throw new Error(data.error || 'Failed to fetch restaurant image');
+  try {
+    const response = await fetch(`/api/restaurants/${restaurantId}/image`);
+    const data: RestaurantImageResponse = await response.json();
+
+    return data.data!.imageUrl;
+  } catch (error) {
+    return "/photo-missing.webp";
   }
-  
-  return data.data!.imageUrl;
 };
 
 /**
@@ -28,29 +29,34 @@ const fetchRestaurantImage = async (restaurantId: string): Promise<string> => {
 export const useRestaurantImages = (restaurants: Restaurant[]) => {
   const queries = useQueries({
     queries: restaurants.map((restaurant) => ({
-      queryKey: ['restaurantImage', restaurant.id],
+      queryKey: ["restaurantImage", restaurant.id],
       queryFn: () => fetchRestaurantImage(restaurant.id),
       staleTime: 1000 * 60 * 60 * 24, // 24 hours - images don't change often
       gcTime: 1000 * 60 * 60 * 24 * 7, // 7 days
-      retry: 1,
+      retry: 1, // Simple retry once since we handle all errors gracefully
       refetchOnWindowFocus: false,
     })),
   });
 
   // Transform results into a record of restaurantId -> imageUrl
-  const restaurantImages: Record<string, string> = {};
-  const isLoading = queries.some(query => query.isLoading);
-  const hasErrors = queries.some(query => query.isError);
+  // Use useMemo to prevent object recreation on every render
+  const restaurantImages = useMemo(() => {
+    const images: Record<string, string> = {};
+    queries.forEach((query, index) => {
+      const restaurant = restaurants[index];
+      if (query.data) {
+        images[restaurant.id] = query.data;
+      } else if (query.isError) {
+        // Provide fallback for failed images
+        images[restaurant.id] = "/photo-missing.webp";
+      }
+      // If still loading, don't add to the object yet
+    });
+    return images;
+  }, [queries, restaurants]);
 
-  queries.forEach((query, index) => {
-    const restaurant = restaurants[index];
-    if (query.data) {
-      restaurantImages[restaurant.id] = query.data;
-    } else if (query.isError) {
-      // Provide fallback for failed images
-      restaurantImages[restaurant.id] = "/photo-missing.webp";
-    }
-  });
+  const isLoading = queries.some((query) => query.isLoading);
+  const hasErrors = queries.some((query) => query.isError);
 
   return {
     restaurantImages,

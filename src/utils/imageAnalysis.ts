@@ -16,7 +16,14 @@ export interface ImageAnalysisResult {
 export const analyzeImageBrightness = (imageUrl: string): Promise<ImageAnalysisResult> => {
   return new Promise((resolve, reject) => {
     const img = new Image();
-    img.crossOrigin = 'anonymous';
+    
+    // Only try crossOrigin for same-origin images or known CORS-enabled domains
+    const imageUrl_obj = new URL(imageUrl, window.location.href);
+    const isSameOrigin = imageUrl_obj.origin === window.location.origin;
+    
+    if (isSameOrigin) {
+      img.crossOrigin = 'anonymous';
+    }
     
     img.onload = () => {
       try {
@@ -37,8 +44,20 @@ export const analyzeImageBrightness = (imageUrl: string): Promise<ImageAnalysisR
         // Draw the image on canvas
         ctx.drawImage(img, 0, 0, canvas.width, canvas.height);
         
-        // Get image data
-        const imageData = ctx.getImageData(0, 0, canvas.width, canvas.height);
+        // Get image data - this will fail for cross-origin images without CORS
+        let imageData;
+        try {
+          imageData = ctx.getImageData(0, 0, canvas.width, canvas.height);
+        } catch (error) {
+          // Canvas is tainted by cross-origin image, fall back to default
+          resolve({
+            averageBrightness: 128,
+            isLight: true,
+            recommendedBackground: 'dark',
+            backgroundClass: 'bg-stone-400'
+          });
+          return;
+        }
         const data = imageData.data;
         
         let totalBrightness = 0;

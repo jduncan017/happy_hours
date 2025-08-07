@@ -1,3 +1,5 @@
+import React from "react";
+
 interface FilterButtonProps {
   children: React.ReactNode;
   active?: boolean;
@@ -5,7 +7,7 @@ interface FilterButtonProps {
   disabled?: boolean;
 }
 
-export default function FilterButton({
+function FilterButton({
   children,
   active = false,
   onClick,
@@ -27,3 +29,5 @@ export default function FilterButton({
     </button>
   );
 }
+
+export default React.memo(FilterButton);

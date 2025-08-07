@@ -1,5 +1,5 @@
 "use client";
-import React, { useEffect, useState, forwardRef } from "react";
+import React, { useEffect, useState, forwardRef, useMemo } from "react";
 import type { Restaurant } from "@/lib/types";
 import {
   sortRestaurants,
@@ -111,37 +111,52 @@ export const SearchPage = forwardRef<HTMLDivElement>((_, ref) => {
     });
   };
 
-  useEffect(() => {
-    if (allRestaurants.length === 0 || isLocationBased) return;
+  // Memoized filtering calculation to prevent unnecessary re-computation
+  const filteredRestaurants = useMemo(() => {
+    // Don't filter when location-based
+    if (isLocationBased) {
+      return [];
+    }
+
+    // Don't filter until we have data
+    if (allRestaurants.length === 0) {
+      return [];
+    }
 
     const sortedRestaurants = sortRestaurants(allRestaurants);
-    let filteredRestaurants = sortedRestaurants;
+    let result = sortedRestaurants;
 
     // Apply search filter first
-    filteredRestaurants = filterRestaurantsBySearch(filteredRestaurants, searchQuery);
+    result = filterRestaurantsBySearch(result, searchQuery);
 
     // Apply basic time-based filters
     if (filterOption === "today") {
-      filteredRestaurants = filterHappyHoursToday(filteredRestaurants, today);
+      result = filterHappyHoursToday(result, today);
     } else if (filterOption === "now") {
-      filteredRestaurants = filterHappyHoursNow(filteredRestaurants, today);
+      result = filterHappyHoursNow(result, today);
     }
 
     // Apply time filter if active
     if (timeFilter) {
-      filteredRestaurants = filterRestaurantsByTimeRange(filteredRestaurants, timeFilter);
+      result = filterRestaurantsByTimeRange(result, timeFilter);
     }
 
     // Apply advanced filters
     if (hasActiveAdvancedFilters(advancedFilters)) {
-      filteredRestaurants = applyAdvancedFilters(
-        filteredRestaurants,
-        advancedFilters,
-      );
+      result = applyAdvancedFilters(result, advancedFilters);
     }
 
-    setDisplayedRestaurants(filteredRestaurants);
+    return result;
   }, [filterOption, today, allRestaurants, advancedFilters, isLocationBased, timeFilter, searchQuery]);
+
+  // Update displayed restaurants when filtered results change, but prevent updates during loading
+  useEffect(() => {
+    if (isLoading) return; // Skip updates while loading
+    
+    if (!isLocationBased) {
+      setDisplayedRestaurants(filteredRestaurants);
+    }
+  }, [filteredRestaurants, isLocationBased, isLoading]);
 
   const handleBackToAll = () => {
     setIsLocationBased(false);

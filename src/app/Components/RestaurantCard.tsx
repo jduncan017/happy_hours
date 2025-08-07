@@ -1,5 +1,4 @@
 import React from "react";
-import Link from "next/link";
 import type { Restaurant } from "@/lib/types";
 import ImageLoadingWrapper from "../../utils/PreLoader/ImageLoadingWrapper";
 import SiteButton from "./SmallComponents/siteButton";
@@ -36,64 +35,118 @@ function RestaurantCard({
             />
           </ErrorBoundary>
         </div>
-        <a
-          className="Website w-full"
-          href={restaurant.website}
-          target="_blank"
-          rel="noopener"
-        >
-          <SiteButton
-            variant="orange"
-            rounded={false}
-            text="Visit Website"
-            size="lg"
-          />
-        </a>
       </div>
       <div className="RightColumn flex w-full flex-col gap-2 overflow-hidden">
         <div className="Name&Address">
-          <h2 className="RestaurantName font-sans">{restaurant.name}</h2>
-          <div className="LocationContainer flex flex-wrap gap-x-2">
+          <h2
+            className="RestaurantName font-sans truncate text-xl font-semibold"
+            title={restaurant.name}
+          >
+            <span className="Name align-baseline">{restaurant.name}</span>
             {restaurant.area && (
-              <p className="Area text-gray-600">{`${restaurant.area} -`}</p>
-            )}
-            <Link
-              className="AddressLink group w-fit"
-              href={generateGoogleMapsUrl(restaurant.name, restaurant.address)}
-              target="_blank"
-              rel="noopener noreferrer"
-            >
-              <p className="Address flex w-fit items-center gap-1 text-stone-700 underline transition-colors duration-200 group-hover:text-po1">
-                {restaurant.address}
-              </p>
-            </Link>
-            {restaurant.distance && (
-              <span className="Distance inline-flex items-center gap-1 rounded-full bg-po1/10 px-2 py-1 text-xs font-medium text-po1">
-                🚶 {restaurant.distance.toFixed(1)} miles
+              <span className="Area ml-2 align-baseline text-sm text-gray-600">
+                {restaurant.area}
               </span>
             )}
-          </div>
+          </h2>
+          <p
+            className="AddressText flex w-fit items-center gap-1 italic text-stone-600"
+            title={restaurant.address}
+          >
+            {restaurant.address}
+          </p>
         </div>
-        <HappyHourDisplay
-          happyHours={restaurant.happyHours}
-          today={today}
-          isExpanded={isExpanded}
-          onToggleExpanded={onToggleExpanded}
-        />
-        {restaurant.notes.length > 0 && (
-          <div className="NotesSection mt-2 w-full flex gap-2 rounded-lg bg-stone-200 px-4 py-2">
-            <p className="NoteTitle font-sans">Notes:</p>
-            <div className="Notes flex flex-col gap-1">
-              {restaurant.notes.map((note) => {
-                return (
-                  <p className="Note text-lg font-sans" key={note}>
-                    {note}
-                  </p>
-                );
-              })}
+        <div className="HHAndNotes flex flex-col gap-3 md:flex-row md:items-start md:justify-between">
+          <div className="HappyHourWrapper flex-1 min-w-0">
+            <div className="ActionButtons mb-2 flex flex-wrap items-center gap-2">
+              <a
+                className="GetDirectionsButton"
+                href={generateGoogleMapsUrl(
+                  restaurant.name,
+                  restaurant.address,
+                )}
+                target="_blank"
+                rel="noopener noreferrer"
+              >
+                <SiteButton
+                  text="Get Directions"
+                  rounded={false}
+                  variant="orange"
+                  size="xs"
+                />
+              </a>
+              {restaurant.website && (
+                <a
+                  className="VisitWebsiteButton"
+                  href={restaurant.website}
+                  target="_blank"
+                  rel="noopener"
+                >
+                  <SiteButton
+                    text="Visit Website"
+                    rounded={false}
+                    variant="white"
+                    size="xs"
+                  />
+                </a>
+              )}
+              {restaurant.distance && (
+                <span className="Distance inline-flex items-center gap-1 rounded-full bg-po1/10 px-2 py-1 text-xs font-medium text-po1">
+                  🚶 {restaurant.distance.toFixed(1)} miles
+                </span>
+              )}
             </div>
+            <HappyHourDisplay
+              happyHours={restaurant.happyHours}
+              today={today}
+              isExpanded={isExpanded}
+              onToggleExpanded={onToggleExpanded}
+            />
           </div>
-        )}
+          {restaurant.notes.length > 0 && (
+            <div className="NotesSection flex flex-col flex-wrap items-start gap-2">
+              <p className="NoteTitle font-sans text-sm text-stone-700">
+                Notes:
+              </p>
+              <div className="Notes flex flex-col flex-wrap gap-2">
+                {restaurant.notes.map((note, idx) => {
+                  const isUrl = /^https?:\/\//i.test(note);
+                  if (isUrl) {
+                    try {
+                      const url = new URL(note);
+                      const slug =
+                        url.pathname.split("/").filter(Boolean).pop() ||
+                        url.hostname;
+                      const label = slug.replace(/[-_]+/g, " ");
+                      return (
+                        <a
+                          className="NoteChip inline-flex capitalize items-center rounded-full bg-stone-200 px-3 py-1 text-xs text-stone-800 underline hover:bg-stone-300"
+                          key={`${note}-${idx}`}
+                          href={note}
+                          target="_blank"
+                          rel="noopener noreferrer"
+                          title={note}
+                        >
+                          {label}
+                        </a>
+                      );
+                    } catch {
+                      // fallthrough to plain chip
+                    }
+                  }
+                  return (
+                    <span
+                      className="NoteChip inline-flex items-center rounded-full bg-stone-200 px-3 py-1 text-xs text-stone-800"
+                      key={`${note}-${idx}`}
+                    >
+                      {note}
+                    </span>
+                  );
+                })}
+              </div>
+            </div>
+          )}
+        </div>
       </div>
     </div>
   );

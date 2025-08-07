@@ -71,7 +71,7 @@ function HappyHourDisplay({
       )}
       <p
         onClick={onToggleExpanded}
-        className="ShowMoreButton mt-1 cursor-pointer italic text-po1/80 hover:text-black"
+        className="ShowMoreButton mt-1 cursor-pointer italic text-po1 hover:text-black"
       >
         {isExpanded ? "Hide All" : "Show All"}
       </p>

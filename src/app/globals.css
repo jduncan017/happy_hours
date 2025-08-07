@@ -78,8 +78,9 @@ body {
 }
 
 a {
-  color: #ffbe3f;
+  color: #ff7930;
   text-decoration: underline;
+  font-weight: 500;
 }
 
 a:hover {

@@ -1,4 +1,4 @@
-import { useQueries } from "@tanstack/react-query";
+import { useQueries, useQuery } from "@tanstack/react-query";
 import { useMemo } from "react";
 import type { Restaurant } from "@/lib/types";
 
@@ -12,14 +12,28 @@ interface RestaurantImageResponse {
 }
 
 const fetchRestaurantImage = async (restaurantId: string): Promise<string> => {
-  try {
-    const response = await fetch(`/api/restaurants/${restaurantId}/image`);
-    const data: RestaurantImageResponse = await response.json();
+  const response = await fetch(`/api/restaurants/${restaurantId}/image`);
+  const data: RestaurantImageResponse = await response.json();
 
-    return data.data!.imageUrl;
-  } catch (error) {
+  if (!response.ok || !data.success) {
     return "/photo-missing.webp";
   }
+
+  return data.data!.imageUrl;
+};
+
+/**
+ * Hook to fetch a single restaurant's image
+ */
+export const useRestaurantImage = (restaurantId: string) => {
+  return useQuery({
+    queryKey: ["restaurantImage", restaurantId],
+    queryFn: () => fetchRestaurantImage(restaurantId),
+    staleTime: 1000 * 60 * 60 * 24, // 24 hours - images don't change often
+    gcTime: 1000 * 60 * 60 * 24 * 7, // 7 days
+    retry: 1,
+    refetchOnWindowFocus: false,
+  });
 };
 
 /**

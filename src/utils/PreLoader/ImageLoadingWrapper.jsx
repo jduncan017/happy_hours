@@ -1,7 +1,7 @@
 import React from "react";
 import Loader from "./PreLoader";
 import Image from "next/image";
-import { useRestaurantImage } from "@/hooks/useRestaurantImage";
+import { useRestaurantImage } from "@/hooks/useRestaurantImages";
 import { useImageBackground } from "@/hooks/useImageBackground";
 
 const ImageLoadingWrapper = ({ restaurant, className }) => {

@@ -18,12 +18,12 @@ interface RestaurantCardProps {
   onToggleExpanded: () => void;
 }
 
-function RestaurantCard({
+const RestaurantCard = React.memo<RestaurantCardProps>(({
   restaurant,
   today,
   isExpanded,
   onToggleExpanded,
-}: RestaurantCardProps) {
+}) => {
   return (
     <div className="RestaurantCard flex w-full max-w-[1000px] border-b border-gray-300 flex-col gap-5 text-wrap bg-white p-4 sm:p-6 text-black xs:flex-row">
       <div className="LeftColumn flex h-full w-full flex-col gap-2 xs:w-fit">
@@ -150,6 +150,8 @@ function RestaurantCard({
       </div>
     </div>
   );
-}
+});
 
-export default React.memo(RestaurantCard);
+RestaurantCard.displayName = "RestaurantCard";
+
+export default RestaurantCard;

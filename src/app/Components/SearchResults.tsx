@@ -6,6 +6,8 @@ import GoogleMap from "./GoogleMap";
 import { useRestaurantImages } from "@/hooks/useRestaurantImages";
 import ErrorBoundary from "./ErrorBoundary/ErrorBoundary";
 import MapErrorFallback from "./ErrorBoundary/MapErrorFallback";
+import LoadingSpinner from "./SmallComponents/LoadingSpinner";
+import ErrorState from "./SmallComponents/ErrorState";
 
 interface SearchResultsProps {
   restaurants: Restaurant[];
@@ -46,11 +48,7 @@ export const SearchResults = forwardRef<HTMLDivElement, SearchResultsProps>(
 
       // Return a stable copy once all images are loaded
       return { ...restaurantImages };
-    }, [
-      imagesLoading,
-      Object.keys(restaurantImages).length,
-      restaurants.length,
-    ]);
+    }, [imagesLoading, restaurantImages]);
 
     // Mobile tab state
     const [activeTab, setActiveTab] = useState<"list" | "map">("list");
@@ -62,19 +60,19 @@ export const SearchResults = forwardRef<HTMLDivElement, SearchResultsProps>(
           <div className="hidden lg:flex h-screen w-full">
             <div className="LeftPanel flex w-2/3 flex-col">
               <div className="ResultsSection flex flex-1 items-center justify-center">
-                <div className="h-8 w-8 animate-spin rounded-full border-b-2 border-stone-800"></div>
+                <LoadingSpinner />
               </div>
             </div>
             <div className="RightPanel h-full w-1/3 bg-gray-100 border-l border-gray-300">
               <div className="flex h-full items-center justify-center">
-                <p className="text-gray-500">Loading map...</p>
+                <LoadingSpinner message="Loading map..." size="sm" />
               </div>
             </div>
           </div>
 
           {/* Mobile Loading */}
           <div className="lg:hidden h-screen flex items-center justify-center">
-            <div className="h-8 w-8 animate-spin rounded-full border-b-2 border-stone-800"></div>
+            <LoadingSpinner />
           </div>
         </div>
       );
@@ -88,17 +86,7 @@ export const SearchResults = forwardRef<HTMLDivElement, SearchResultsProps>(
           <div className="hidden lg:flex h-screen w-full">
             <div className="LeftPanel flex w-2/3 flex-col">
               <div className="ResultsSection flex flex-1 items-center justify-center p-8">
-                <div className="text-center">
-                  <p className="mb-4 text-red-600">
-                    {error instanceof Error ? error.message : String(error)}
-                  </p>
-                  <button
-                    onClick={() => window.location.reload()}
-                    className="rounded bg-stone-800 px-4 py-2 text-white hover:bg-stone-700"
-                  >
-                    Try Again
-                  </button>
-                </div>
+                <ErrorState error={error} />
               </div>
             </div>
             <div className="RightPanel h-full w-1/3 bg-gray-100 border-l border-gray-300">
@@ -110,17 +98,7 @@ export const SearchResults = forwardRef<HTMLDivElement, SearchResultsProps>(
 
           {/* Mobile Error */}
           <div className="lg:hidden h-screen flex items-center justify-center p-8">
-            <div className="text-center">
-              <p className="mb-4 text-red-600">
-                {error instanceof Error ? error.message : String(error)}
-              </p>
-              <button
-                onClick={() => window.location.reload()}
-                className="rounded bg-stone-800 px-4 py-2 text-white hover:bg-stone-700"
-              >
-                Try Again
-              </button>
-            </div>
+            <ErrorState error={error} />
           </div>
         </div>
       );

@@ -8,12 +8,12 @@ interface HappyHourDisplayProps {
   onToggleExpanded: () => void;
 }
 
-function HappyHourDisplay({
+const HappyHourDisplay = React.memo<HappyHourDisplayProps>(({
   happyHours,
   today,
   isExpanded,
   onToggleExpanded,
-}: HappyHourDisplayProps) {
+}) => {
   const formatHappyHours = useMemo(
     () => (times: HappyHours, isExpanded: boolean) => {
       const daysToShow = isExpanded ? Object.keys(times) : [today];
@@ -77,6 +77,8 @@ function HappyHourDisplay({
       </p>
     </div>
   );
-}
+});
 
-export default React.memo(HappyHourDisplay);
+HappyHourDisplay.displayName = "HappyHourDisplay";
+
+export default HappyHourDisplay;

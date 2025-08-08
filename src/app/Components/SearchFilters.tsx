@@ -182,6 +182,7 @@ export default function SearchFilters({
             width={40}
             height={40}
             className="xs:block hidden"
+            sizes="40px"
           />
           <Image
             src="/h3-logo-wide.png"
@@ -189,6 +190,7 @@ export default function SearchFilters({
             width={337}
             height={40}
             className="block xs:hidden w-full"
+            sizes="(max-width: 460px) 336px, 337px"
           />
         </Link>
         <div className="HeroSloganContainer flex-wrap gap-1.5 w-full xs:flex hidden justify-center font-sans font-bold" role="banner">

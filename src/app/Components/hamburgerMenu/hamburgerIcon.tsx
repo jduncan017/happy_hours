@@ -11,13 +11,20 @@ const HamburgerIcon: React.FC<HamburgerIconProps> = ({
   onToggleMenu,
 }) => {
   return (
-    <button className={styles.siteContainer} onClick={onToggleMenu}>
+    <button 
+      className={styles.siteContainer} 
+      onClick={onToggleMenu}
+      aria-label={menuOpen ? "Close navigation menu" : "Open navigation menu"}
+      aria-expanded={menuOpen}
+      type="button"
+    >
       <svg
         xmlns="http://www.w3.org/2000/svg"
         className={`${styles.hamburgerIcon} ${menuOpen ? styles.hamburgerIconActive : ""}`}
         width="24"
         height="24"
         viewBox="0 0 48 48"
+        aria-hidden="true"
       >
         <rect
           className={`${styles.rect} ${styles.top}`}

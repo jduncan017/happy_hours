@@ -37,10 +37,12 @@ export default function HeroSection() {
           <Image
             className="Logo h-auto w-full sm:h-full sm:w-auto"
             src="/h3-logo-full.png"
-            alt="H3 Logo"
+            alt="Happy Hour Hunt Denver Logo"
             width={540}
             height={250}
             priority
+            fetchPriority="high"
+            sizes="(max-width: 640px) 380px, 540px"
           />
           <h1 className="HeroTitle m-auto w-full text-center font-serif capitalize">
             {`Your secret to the best dates, deals, & the happiest hours in Denver!`}

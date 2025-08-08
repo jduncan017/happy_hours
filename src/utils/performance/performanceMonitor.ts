@@ -27,7 +27,14 @@ interface MapPerformanceMetric extends PerformanceMetric {
   };
 }
 
-type CustomMetric = FilterPerformanceMetric | MapPerformanceMetric;
+interface WebVitalMetric extends PerformanceMetric {
+  name: 'web_vital_lcp' | 'web_vital_cls';
+  metadata: {
+    type: string;
+  };
+}
+
+type CustomMetric = FilterPerformanceMetric | MapPerformanceMetric | WebVitalMetric;
 
 class PerformanceMonitor {
   private metrics: PerformanceMetric[] = [];

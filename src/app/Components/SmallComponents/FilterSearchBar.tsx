@@ -49,6 +49,7 @@ export default function FilterSearchBar({
     <form
       onSubmit={handleSubmit}
       className={`FilterSearchBar relative ${className}`}
+      role="search"
     >
       <div className="relative">
         <input
@@ -57,8 +58,10 @@ export default function FilterSearchBar({
           onChange={handleChange}
           placeholder={placeholder}
           className="w-full h-8 pl-10 pr-4 bg-white border border-gray-300 rounded-full text-sm focus:border-stone-500 focus:outline-none focus:ring-1 focus:ring-stone-500"
+          aria-label="Search restaurants by name, cuisine, or area"
+          aria-describedby="search-icon"
         />
-        <div className="absolute inset-y-0 left-0 flex items-center pl-3">
+        <div className="absolute inset-y-0 left-0 flex items-center pl-3" id="search-icon" aria-hidden="true">
           <svg
             className="w-4 h-4 text-gray-400"
             fill="none"

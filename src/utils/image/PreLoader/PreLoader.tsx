@@ -1,6 +1,7 @@
+import React from "react";
 import "./PreLoader.css";
 
-const Loader = () => {
+const Loader: React.FC = () => {
   return (
     <div className="showbox">
       <div className="loader">

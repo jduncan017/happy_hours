@@ -1,5 +1,6 @@
 import React, { useMemo } from "react";
 import type { HappyHours, HappyHourTime } from "@/lib/types";
+import { formatTimeRange } from "@/utils/time/timeUtils";
 
 interface HappyHourDisplayProps {
   happyHours: HappyHours;
@@ -21,28 +22,15 @@ const HappyHourDisplay = React.memo<HappyHourDisplayProps>(({
       return daysToShow.map((day) => {
         const timesForDay = times[day];
         if (timesForDay) {
-          const timesFormatted = timesForDay.map((time: HappyHourTime) => {
-            let startHour = parseInt(time.Start.split(":")[0], 10);
-            let startMinutes = time.Start.split(":")[1];
-            let startMeridiem = startHour >= 12 ? "PM" : "AM";
-            startHour = startHour > 12 ? startHour - 12 : startHour;
-            startHour = startHour === 0 ? 12 : startHour;
-            let startTimeFormatted = `${startHour}:${startMinutes} ${startMeridiem}`;
-
-            let endHour = parseInt(time.End.split(":")[0], 10);
-            let endMinutes = time.End.split(":")[1];
-            let endMeridiem = endHour >= 12 ? "PM" : "AM";
-            endHour = endHour > 12 ? endHour - 12 : endHour;
-            endHour = endHour === 0 ? 12 : endHour;
-            let endTimeFormatted = `${endHour}:${endMinutes} ${endMeridiem}`;
-
-            return `${startTimeFormatted} - ${endTimeFormatted}`;
-          });
+          const timesFormatted = timesForDay.map((time: HappyHourTime) => 
+            formatTimeRange(time.Start, time.End)
+          );
 
           return (
             <li
               key={day}
               className="HappyHourTime tracking-wide text-gray-700 flex gap-1"
+              aria-label={`${day} happy hour: ${timesFormatted.join(', ')}`}
             >
               {isExpanded && <p className="HappyHourDay w-12">{`${day}:`}</p>}
               <div className="HappyHourTimes flex flex-col">
@@ -60,21 +48,25 @@ const HappyHourDisplay = React.memo<HappyHourDisplayProps>(({
   );
 
   return (
-    <div className="HHTimes w-full flex-grow">
-      <h3 className="TimeTitle font-sans font-semibold">
+    <div className="HHTimes w-full flex-grow" role="region" aria-label="Happy hour times">
+      <h3 className="TimeTitle font-sans font-semibold" id={`happy-hours-title`}>
         {isExpanded ? "All Happy Hours:" : `${today} Happy Hour:`}
       </h3>
-      {happyHours[today] || isExpanded ? (
-        formatHappyHours(happyHours, isExpanded)
-      ) : (
-        <p className="text-gray-700">{`No Happy Hour Today :(`}</p>
-      )}
-      <p
+      <div aria-labelledby="happy-hours-title">
+        {happyHours[today] || isExpanded ? (
+          formatHappyHours(happyHours, isExpanded)
+        ) : (
+          <p className="text-gray-700" aria-live="polite">{`No Happy Hour Today :(`}</p>
+        )}
+      </div>
+      <button
         onClick={onToggleExpanded}
-        className="ShowMoreButton mt-1 cursor-pointer italic text-po1 hover:text-black"
+        className="ShowMoreButton mt-1 cursor-pointer italic text-po1 hover:text-black bg-transparent border-none p-0 text-left"
+        aria-expanded={isExpanded}
+        aria-label={isExpanded ? "Hide all happy hour times" : "Show all happy hour times"}
       >
         {isExpanded ? "Hide All" : "Show All"}
-      </p>
+      </button>
     </div>
   );
 });

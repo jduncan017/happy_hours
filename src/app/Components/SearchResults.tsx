@@ -8,6 +8,7 @@ import ErrorBoundary from "./ErrorBoundary/ErrorBoundary";
 import MapErrorFallback from "./ErrorBoundary/MapErrorFallback";
 import LoadingSpinner from "./SmallComponents/LoadingSpinner";
 import ErrorState from "./SmallComponents/ErrorState";
+import MaxWidthContainer from "./Layout/MaxWidthContainer";
 
 interface SearchResultsProps {
   restaurants: Restaurant[];
@@ -63,7 +64,7 @@ export const SearchResults = forwardRef<HTMLDivElement, SearchResultsProps>(
                 <LoadingSpinner />
               </div>
             </div>
-            <div className="RightPanel h-full w-1/3 bg-gray-100 border-l border-gray-300">
+            <div className="RightPanel h-full w-1/3 bg-n2 border-l border-n3">
               <div className="flex h-full items-center justify-center">
                 <LoadingSpinner message="Loading map..." size="sm" />
               </div>
@@ -89,7 +90,7 @@ export const SearchResults = forwardRef<HTMLDivElement, SearchResultsProps>(
                 <ErrorState error={error} />
               </div>
             </div>
-            <div className="RightPanel h-full w-1/3 bg-gray-100 border-l border-gray-300">
+            <div className="RightPanel h-full w-1/3 bg-n2 border-l border-n3">
               <div className="flex h-full items-center justify-center">
                 <p className="text-gray-500">Map unavailable</p>
               </div>

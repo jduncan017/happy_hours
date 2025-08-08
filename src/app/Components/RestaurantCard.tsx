@@ -1,11 +1,13 @@
 import React from "react";
 import type { Restaurant } from "@/lib/types";
-import ImageLoadingWrapper from "../../utils/PreLoader/ImageLoadingWrapper";
+import ImageLoadingWrapper from "@/utils/image/PreLoader/ImageLoadingWrapper";
 import SiteButton from "./SmallComponents/siteButton";
-import generateGoogleMapsUrl from "@/utils/generateMapsURL";
+import generateGoogleMapsUrl from "@/utils/geo/generateMapsURL";
 import HappyHourDisplay from "./HappyHourDisplay";
 import ErrorBoundary from "./ErrorBoundary/ErrorBoundary";
 import ImageErrorFallback from "./ErrorBoundary/ImageErrorFallback";
+import MaxWidthContainer from "./Layout/MaxWidthContainer";
+import FlexContainer from "./Layout/FlexContainer";
 
 interface RestaurantWithDistance extends Restaurant {
   distance?: number;
@@ -21,17 +23,26 @@ interface RestaurantCardProps {
 const RestaurantCard = React.memo<RestaurantCardProps>(
   ({ restaurant, today, isExpanded, onToggleExpanded }) => {
     return (
-      <div className="RestaurantCard flex w-full max-w-[1000px] border-b border-gray-300 flex-col gap-5 text-wrap bg-white p-4 sm:p-6 text-black xs:flex-row">
-        <div className="LeftColumn flex h-full w-full flex-col gap-2 xs:w-fit">
-          <div className="RestaurantImage relative flex aspect-video w-full items-center overflow-hidden rounded-sm border border-gray-200 xs:aspect-square xs:w-[200px]">
+      <MaxWidthContainer 
+        className="RestaurantCard flex border-b border-stone-300 flex-col gap-5 text-wrap bg-white p-4 sm:p-6 text-black xs:flex-row"
+        role="article"
+        aria-label={`${restaurant.name} restaurant details`}
+      >
+        <FlexContainer
+          direction="col"
+          gap="2"
+          className="LeftColumn h-full w-full xs:w-fit"
+        >
+          <div className="RestaurantImage relative flex aspect-video w-full items-center overflow-hidden rounded-sm border border-n3 xs:aspect-square xs:w-[200px]">
             <ErrorBoundary fallback={ImageErrorFallback}>
               <ImageLoadingWrapper
                 restaurant={restaurant}
                 className="Image h-full w-full object-contain"
+                aria-label={`Photo of ${restaurant.name}`}
               />
             </ErrorBoundary>
           </div>
-        </div>
+        </FlexContainer>
         <div className="RightColumn flex w-full flex-col gap-2 overflow-hidden">
           <div className="Name&Address">
             <h2
@@ -48,13 +59,14 @@ const RestaurantCard = React.memo<RestaurantCardProps>(
             <p
               className="AddressText flex w-fit items-center gap-1 italic text-stone-600"
               title={restaurant.address}
+              aria-label={`Address: ${restaurant.address}`}
             >
               {restaurant.address}
             </p>
           </div>
           <div className="HHAndNotes flex flex-col gap-3 md:flex-row md:items-start md:justify-between">
             <div className="HappyHourWrapper flex-1 min-w-0">
-              <div className="ActionButtons mb-2 flex flex-wrap items-center gap-2">
+              <div className="ActionButtons mb-2 flex flex-wrap items-center gap-2" role="group" aria-label="Restaurant actions">
                 <a
                   className="GetDirectionsButton"
                   href={generateGoogleMapsUrl(
@@ -63,6 +75,7 @@ const RestaurantCard = React.memo<RestaurantCardProps>(
                   )}
                   target="_blank"
                   rel="noopener noreferrer"
+                  aria-label={`Get directions to ${restaurant.name}`}
                 >
                   <SiteButton
                     text="Get Directions"
@@ -77,6 +90,7 @@ const RestaurantCard = React.memo<RestaurantCardProps>(
                     href={restaurant.website}
                     target="_blank"
                     rel="noopener"
+                    aria-label={`Visit ${restaurant.name} website`}
                   >
                     <SiteButton
                       text="Visit Website"
@@ -87,7 +101,10 @@ const RestaurantCard = React.memo<RestaurantCardProps>(
                   </a>
                 )}
                 {restaurant.distance && (
-                  <span className="Distance inline-flex items-center gap-1 rounded-full bg-po1/10 px-2 py-1 text-xs font-medium text-po1">
+                  <span 
+                    className="Distance inline-flex items-center gap-1 rounded-full bg-po1/10 px-2 py-1 text-xs font-medium text-po1"
+                    aria-label={`Distance: ${restaurant.distance.toFixed(1)} miles away`}
+                  >
                     🚶 {restaurant.distance.toFixed(1)} miles
                   </span>
                 )}
@@ -100,11 +117,11 @@ const RestaurantCard = React.memo<RestaurantCardProps>(
               />
             </div>
             {restaurant.notes.length > 0 && (
-              <div className="NotesSection flex flex-col flex-wrap items-start gap-2">
-                <p className="NoteTitle font-sans text-sm text-stone-700">
+              <div className="NotesSection flex flex-col flex-wrap items-start gap-2" role="complementary" aria-label="Additional restaurant information">
+                <p className="NoteTitle font-sans text-sm text-stone-700" id={`notes-${restaurant.name.replace(/\s+/g, '-').toLowerCase()}`}>
                   Notes:
                 </p>
-                <div className="Notes flex flex-col flex-wrap gap-2">
+                <div className="Notes flex flex-col flex-wrap gap-2" aria-labelledby={`notes-${restaurant.name.replace(/\s+/g, '-').toLowerCase()}`}>
                   {restaurant.notes.map((note, idx) => {
                     const isUrl = /^https?:\/\//i.test(note);
                     if (isUrl) {
@@ -122,6 +139,7 @@ const RestaurantCard = React.memo<RestaurantCardProps>(
                             target="_blank"
                             rel="noopener noreferrer"
                             title={note}
+                            aria-label={`Visit link: ${label}`}
                           >
                             {label}
                           </a>
@@ -144,7 +162,7 @@ const RestaurantCard = React.memo<RestaurantCardProps>(
             )}
           </div>
         </div>
-      </div>
+      </MaxWidthContainer>
     );
   },
 );

@@ -3,8 +3,14 @@ import Loader from "./PreLoader";
 import Image from "next/image";
 import { useRestaurantImage } from "@/hooks/useRestaurantImages";
 import { useImageBackground } from "@/hooks/useImageBackground";
+import type { Restaurant } from "@/lib/types";
 
-const ImageLoadingWrapper = ({ restaurant, className }) => {
+interface ImageLoadingWrapperProps {
+  restaurant: Restaurant;
+  className?: string;
+}
+
+const ImageLoadingWrapper: React.FC<ImageLoadingWrapperProps> = ({ restaurant, className }) => {
   // Use the database-first image hook
   const { data: imageUrl, isLoading, isError } = useRestaurantImage(restaurant.id);
   const { backgroundClass, isAnalyzing } = useImageBackground(imageUrl);
@@ -46,7 +52,8 @@ const ImageLoadingWrapper = ({ restaurant, className }) => {
         onError={(e) => {
           // If image fails to load (CORS, 404, etc), show fallback
           console.warn(`Failed to load image for ${restaurant.name}: ${imageUrl}`);
-          e.target.src = '/photo-missing.webp';
+          const target = e.target as HTMLImageElement;
+          target.src = '/photo-missing.webp';
         }}
       />
     </div>

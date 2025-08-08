@@ -1,5 +1,5 @@
 import { useState, useEffect } from 'react';
-import { analyzeImageBrightness, type ImageAnalysisResult } from '@/utils/imageAnalysis';
+import { analyzeImageBrightness, type ImageAnalysisResult } from '@/utils/image/imageAnalysis';
 
 interface UseImageBackgroundReturn {
   backgroundClass: string;

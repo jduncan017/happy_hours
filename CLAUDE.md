@@ -12,6 +12,8 @@ HappyHourHunt is a Next.js web application for discovering happy hour deals in D
 - `npm run build` - Build production application
 - `npm start` - Start production server
 - `npm run lint` - Run ESLint for code quality checks
+- `npm run test` - Run comprehensive test suite (Jest with utils/hooks projects)
+- `npm run test:watch` - Run tests in watch mode for development
 
 ## Claude Development Server Rules
 
@@ -20,12 +22,6 @@ HappyHourHunt is a Next.js web application for discovering happy hour deals in D
 - Always kill the server when done: `kill $(lsof -t -i:3001)`
 - Never leave development servers running after debugging
 
-## Console Log Debugging
-
-**IMPORTANT**: When debugging with console.log statements:
-- Never start the development server to check console output
-- Always ask the user to check the browser console and report what they see
-- Add console.log statements as needed, then ask user for the output
 
 ## Architecture
 
@@ -39,26 +35,31 @@ The application centers around a static data structure in `src/lib/hh_list.ts` c
 
 ### Key Components
 
-- **Layout (`src/app/layout.tsx`)** - Root layout with navigation, footer, modal provider, and analytics
-- **SearchPage (`src/app/Components/searchPage.tsx`)** - Main component displaying restaurant cards with filtering capabilities (all, today, now)
+- **Layout (`src/app/layout.tsx`)** - Root layout with skip navigation, modal provider, React Query, and analytics
+- **SearchPage (`src/app/Components/searchPage.tsx`)** - Main component with integrated performance monitoring and filtering
+- **RestaurantCard (`src/app/Components/RestaurantCard.tsx`)** - Individual restaurant display with accessibility improvements
+- **SearchFilters (`src/app/Components/SearchFilters.tsx`)** - Filter controls with ARIA labels and semantic HTML
 - **ModalContext (`src/contexts/ModalContext.tsx`)** - Global modal state management using React Context
-- **Utils (`src/utils/happyHourUtils.ts`)** - Core business logic for sorting and filtering restaurants by time/day
+- **Performance Monitor (`src/utils/performance/performanceMonitor.ts`)** - Comprehensive performance tracking system
 
 ### Component Organization
 
 Components are organized in `src/app/Components/` with:
 
-- Main components at root level
-- `SmallComponents/` for reusable UI elements
-- `modals/` for modal components
+- Main components at root level (SearchPage, RestaurantCard, etc.)
+- `SmallComponents/` for reusable UI elements (LoadingSpinner, ErrorState, FilterButton)
+- `modals/` for modal components with focus management
 - `hamburgerMenu/` for mobile navigation
+- `Layout/` for layout components (MaxWidthContainer, FlexContainer)
+- `ErrorBoundary/` for error handling components
 
 ### Styling
 
 - Uses Tailwind CSS with custom configuration in `tailwind.config.ts`
-- Custom color palette with primary (#004e59), n2 (#fff9ee), and accent colors
+- Custom color palette with primary (#004e59), n2 (#fff9ee), and accent colors (po1, py1, pr1)
 - Custom fonts: Montserrat (sans), Playfair (serif), Allerta
 - Responsive design with custom breakpoint `xs: 460px`
+- Accessibility utilities: `.sr-only`, `.skip-link`, `.focus-visible` classes in globals.css
 
 ### Environment Requirements
 
@@ -130,207 +131,325 @@ Components are organized in `src/app/Components/` with:
 
 ### Code Standards
 
-4. **Single responsibility** - Focus on single-use functions and components for easy navigation and readability
-5. **Reusability over specificity** - Create reusable base components using Props, CVA, and CLSX for variants. Style variants when used, not as sub-components
-6. **No anticipatory features** - Never add functionality that isn't currently needed
-7. **Test new code** - Validate functionality with tests when appropriate
+1. **Single responsibility** - Focus on single-use functions and components for easy navigation and readability
+2. **Reusability over specificity** - Create reusable base components using Props, CVA, and CLSX for variants. Style variants when used, not as sub-components
+3. **No anticipatory features** - Never add functionality that isn't currently needed
+4. **Test new code** - Validate functionality with tests when appropriate
+5. **Accessibility first** - Build ARIA labels, semantic HTML, and keyboard navigation into components from the start
+6. **Performance conscious** - Use React.memo, useMemo, and performance monitoring for expensive operations
+7. **Type safety** - Prefer specific types over `any`, use discriminated unions for variant props
 
 ### Organization
 
-8. **Smart file organization** - Keep directory structure logical and group related functionality together
-9. **Document crucial components** - Note important workflows, components, and architectural decisions for future reference
+1. **Smart file organization** - Keep directory structure logical and group related functionality together
+2. **Document crucial components** - Note important workflows, components, and architectural decisions for future reference
+3. **Consistent naming** - Use PascalCase for components, camelCase for functions, descriptive names throughout
+4. **Error boundaries** - Wrap potentially failing components in error boundaries with fallback UI
 
-## Data Migration & PostGIS Patterns
 
-### Common Pitfalls & Best Practices
 
-#### PostGIS Integration Patterns
+## Next.js Client/Server Component Rules
 
-- **Column Types**: Use `geometry(Point, 4326)` not PostgreSQL `POINT` for PostGIS functions
-- **Coordinate Format**: PostGIS returns GeoJSON objects `{coordinates: [lng, lat]}`, not simple arrays
-- **Transform Pattern**: Extract coordinates as `row.coordinates.coordinates[0]` (lng) and `[1]` (lat)
+**CRITICAL**: Follow these serialization rules:
+- **Root-level only**: Only use `"use client"` at top-level entry points
+- **Child components**: Remove `"use client"` from child components within a client boundary
+- **Function props**: Components with `"use client"` cannot receive function props from Server Components
+- **Serialize complex data**: Transform Dates and complex objects before passing to client components
 
-#### Complex Migration Strategy
+## Google Maps Integration
 
-- **Multi-step approach**: Break complex operations (enum casting + PostGIS) into separate steps
-- **Function-based updates**: Create PostgreSQL functions for complex coordinate operations
-- **Incremental verification**: Test each step before proceeding to the next
+**Key Points**:
+- Uses cloud-based map styling with `NEXT_PUBLIC_GOOGLE_MAPS_STYLE_ID`
+- `mapId` required for AdvancedMarkerElement but prevents traditional styling
+- POIs hidden via cloud-based styling configuration
+- Fallback to `"denver-happy-hour-map"` if env var not set
 
-#### Database Function Patterns
+## Phase 2 Completion (Infrastructure & Developer Experience)
 
-- **Parameter order matters**: Required parameters before optional ones with defaults
-- **Explicit casting**: Use `::enum_type` for type safety in SQL functions
-- **Permission management**: Always grant `EXECUTE` to both `authenticated` and `service_role`
+### ✅ **Utils Architecture Reorganization**
 
-#### Migration Debugging Workflow
+**Completed**: Modern utility organization with clear separation of concerns
 
-1. **Isolated testing**: Create small test scripts for individual components
-2. **Raw data inspection**: Query database directly to understand stored formats
-3. **API verification**: Test transformation layer with curl/jq
-4. **Incremental fixes**: Address one issue at a time, verify before continuing
-
-### Geocoding Integration
-
-- **Caching strategy**: Implement caching to avoid API rate limits during development
-- **Address enhancement**: Supplement partial addresses with city/state for better accuracy
-- **API restrictions**: Temporarily disable website restrictions during development if needed
-
-## Phase 1 Completion (Architectural Modernization)
-
-### Major Accomplishments
-
-#### Component Architecture Refactor
-- **SearchPage Decomposition**: Broke down 320+ line monolithic component into focused modules:
-  - `RestaurantCard` - Individual restaurant display logic
-  - `RestaurantList` - List management with expansion state
-  - `SearchFilters` - Filter controls and hero section
-  - `HappyHourDisplay` - Time formatting and display
-  - `Pagination` - Ready for future pagination needs
-
-#### Modern Data Fetching
-- **React Query Integration**: Replaced manual fetch/useState patterns with TanStack Query
-- **Intelligent Caching**: 5-minute stale time, 10-minute garbage collection
-- **Error Handling**: Automatic retries with proper error states
-- **Developer Experience**: React Query DevTools for debugging
-
-#### API Architecture Enhancement
-- **Pagination Support**: Added pagination to `/api/restaurants` endpoint
-- **Backward Compatibility**: Created `useAllRestaurants()` hook for existing usage
-- **Response Standardization**: Consistent pagination metadata structure
-
-#### Data Quality Improvements
-- **Duplicate Cleanup**: Removed 12 duplicate restaurants (102 → 90 total)
-- **Migration Scripts**: Automated duplicate detection and cleanup
-- **Quality Verification**: Established data validation patterns
-
-### Development Best Practices Established
-
-#### React Query Patterns
-- **Custom Hooks**: Encapsulate query logic in reusable hooks
-- **Query Keys**: Structured keys for efficient cache management
-- **Loading States**: Differentiate between `isLoading` (first load) and `isFetching` (background updates)
-
-#### Component Design Principles
-- **Single Responsibility**: Each component handles one concern
-- **Props Interface**: Clean, typed interfaces for component communication
-- **State Management**: Local state where appropriate, lifted state for shared concerns
-
-#### Performance Optimizations
-- **Component Splitting**: Reduced bundle size through focused components
-- **Query Caching**: Eliminated redundant API calls
-- **Bundle Analysis**: Confirmed no regression in build size
-
-### Technical Debt Addressed
-- **File Organization**: Removed duplicate files, standardized naming
-- **Type Safety**: Full TypeScript coverage for new components
-- **Error Boundaries**: Proper error handling throughout data flow
-- **Build Verification**: All changes pass lint and build checks
-
-### Ready for Phase 2
-The architecture is now scalable and modern, with proper separation of concerns and data fetching patterns that will support the upcoming Google Maps integration and location-based features.
-
-## Component Serialization Guidelines
-
-### Next.js Client/Server Component Rules
-
-**CRITICAL**: When working with Next.js Server and Client Components, follow these serialization rules:
-
-#### "use client" Directive Usage
-- **Root-level only**: Only use `"use client"` at the top-level entry points (pages, layout components)
-- **Child components**: Remove `"use client"` from child components that are already within a client boundary
-- **Function props**: Components marked with `"use client"` cannot receive function props from Server Components
-
-#### Acceptable Patterns
-✅ **Good**: Root page component with "use client", child components without it
-```typescript
-// pages/search/page.tsx
-"use client";
-export default function SearchPage() {
-  return <SearchFilters onFilterChange={handleChange} />; // ✅ OK - within client boundary
-}
-
-// components/SearchFilters.tsx (no "use client" directive)
-interface Props {
-  onFilterChange: (value: string) => void; // ✅ OK - function prop within client boundary
-}
+#### New Utils Structure
+```
+src/utils/
+├── time/                    # Time conversion and formatting
+│   ├── timeUtils.ts         # Core time functions with restaurant day logic
+│   └── __tests__/           # Comprehensive time utility tests
+├── geo/                     # Geographic and mapping utilities
+│   ├── generateMapsURL.ts   # Google Maps URL generation
+│   └── geoUtils.ts          # Distance calculations (Haversine formula)
+├── search/                  # Search and filtering utilities
+│   ├── advancedFilterUtils.ts
+│   └── searchUtils.ts       # Text processing and matching
+├── image/                   # Image processing and loading
+│   └── PreLoader/           # Image loading components
+└── performance/             # Performance monitoring system
+    └── performanceMonitor.ts
 ```
 
-✅ **Good**: Components that only receive serializable props
-```typescript
-// components/RestaurantCard.tsx
-interface Props {
-  restaurant: Restaurant; // ✅ OK - plain object
-  isExpanded: boolean; // ✅ OK - primitive
-}
+#### Key Time Utilities (`src/utils/time/timeUtils.ts`)
+- `timeToMinutes(timeString)` - Converts time to minutes with restaurant day logic
+- `formatTime12Hour(time)` - Converts 24h to 12h format
+- `formatTimeRange(start, end)` - Formats time ranges for display
+- `isTimeInRange(current, start, end)` - Time range validation
+- `getCurrentDayOfWeek()` - Current day calculation
+
+### ✅ **Performance Monitoring System**
+
+**Architecture**: Comprehensive performance tracking with Web Vitals integration
+
+#### Core Features (`src/utils/performance/performanceMonitor.ts`)
+- **Filter Performance Tracking**: Monitors restaurant filtering with automatic slow operation warnings (>100ms)
+- **Web Vitals Integration**: LCP (Largest Contentful Paint) and CLS (Cumulative Layout Shift) tracking
+- **Custom Metrics**: Structured tracking for filter operations and map rendering
+- **Development Debugging**: Console warnings and performance summaries in dev mode
+- **Production Ready**: Disabled in test environment, configurable via env variables
+
+
+#### Performance Thresholds
+- **Filter Operations**: Warns if >100ms
+- **Map Rendering**: Warns if >500ms
+- **Web Vitals**: LCP and CLS tracking via PerformanceObserver API
+
+### ✅ **Comprehensive Accessibility Implementation**
+
+**Philosophy**: WCAG 2.1 AA compliance with focus on keyboard navigation and screen reader support
+
+#### Accessibility Architecture (`src/hooks/useAccessibility.ts`)
+- **Focus Management**: Programmatic focus control with scroll-into-view
+- **Keyboard Navigation**: Arrow key handling for lists, Enter/Space activation
+- **Focus Trapping**: Modal and dropdown focus containment
+- **Screen Reader Announcements**: Live regions with polite/assertive priorities
+- **Skip Navigation**: Bypass repetitive content for keyboard users
+
+#### Component-Level Accessibility
+
+**SearchFilters**: 
+- `role="search"` and `role="toolbar"` for semantic structure
+- `aria-label` and `aria-expanded` for filter buttons
+- `aria-live="polite"` for error announcements
+
+**RestaurantCard**:
+- `role="article"` for semantic restaurant information
+- `aria-label` for restaurant details and actions
+- `role="group"` for action buttons with descriptive labels
+- `role="complementary"` for notes section
+
+**HappyHourDisplay**:
+- `role="region"` for happy hour information
+- `aria-expanded` for show/hide functionality
+- Proper button element instead of clickable div
+- `aria-live` for dynamic content updates
+
+#### Global Accessibility Features
+- **Skip Links**: "Skip to main content" for keyboard users
+- **Screen Reader Styles**: `.sr-only` class for screen reader-only content
+- **Focus Indicators**: Enhanced focus styling with `.focus-visible`
+- **Semantic HTML**: Proper heading hierarchy and landmark roles
+
+### ✅ **Testing Infrastructure**
+
+**Architecture**: Multi-environment Jest configuration with comprehensive coverage
+
+#### Test Structure
+```
+jest.config.js                    # Multi-project configuration
+├── utils project (node env)      # Pure utility function testing
+│   ├── src/utils/**/__tests__/
+│   └── src/lib/**/__tests__/
+└── hooks project (jsdom env)     # React hook testing with DOM
+    └── src/hooks/**/__tests__/
 ```
 
-#### Patterns to Avoid
-❌ **Bad**: Child components with "use client" receiving functions
-```typescript
-// components/FilterButton.tsx
-"use client"; // ❌ BAD - unnecessary and causes warnings
-interface Props {
-  onClick: () => void; // ❌ BAD - function prop with "use client"
-}
+#### Test Coverage
+- **Time Utils**: 15 tests covering time conversion, formatting, and validation
+- **Hook Logic**: Time-based filtering verification
+- **Edge Cases**: Restaurant day boundary logic (2 AM = next day)
+- **Performance**: All tests <600ms execution
+
+### ✅ **Error Handling & Resilience**
+
+#### Enhanced Error Boundaries
+- **Component Isolation**: ImageErrorFallback for image loading failures
+- **Graceful Degradation**: Fallback UI for critical component failures
+- **Development Debugging**: Detailed error information in dev mode
+
+#### Error State Components
+- **ErrorState**: Reusable error display with retry functionality
+- **LoadingSpinner**: Consistent loading states with size variants
+- **ARIA Live Regions**: Accessible error announcements
+
+### ✅ **Development Experience Improvements**
+
+#### Enhanced Props & Type Safety
+- **MaxWidthContainer**: Extended to accept HTML div attributes
+- **Accessibility Props**: ARIA attributes properly typed
+- **Performance Types**: Structured metric interfaces
+
+## Architecture Decision Records (ADRs)
+
+### Key Architectural Decisions (ADRs)
+
+1. **Multi-Environment Jest**: Separate projects for utils (node) and hooks (jsdom)
+2. **Performance Monitoring**: Integrated directly into filtering logic for real-time insights
+3. **Accessibility-First**: Built into components from start for WCAG 2.1 AA compliance
+4. **Utils by Domain**: Organized by function (time, geo, search) for better discoverability
+
+## Current Application State & Development Guidelines
+
+### 🏁 **Phase 2 Complete - Ready for Feature Development**
+
+The application has completed major architectural improvements and is now ready for feature development with:
+- ✅ Modern component architecture with React Query
+- ✅ Comprehensive performance monitoring
+- ✅ WCAG 2.1 AA accessibility compliance
+- ✅ Full test coverage for critical utilities
+- ✅ Well-organized utility structure
+- ✅ Enhanced error handling and resilience
+
+### 🛠️ **Development Workflow**
+
+#### Before Adding New Features
+1. **Read this file** - Understand current architecture and patterns
+2. **Check existing components** - Look for reusable components before creating new ones
+3. **Follow accessibility patterns** - Use established ARIA patterns and semantic HTML
+4. **Add tests** - Write tests for new utility functions and complex logic
+5. **Monitor performance** - Use performance tracking for expensive operations
+
+#### Component Development Pattern
+1. **Start with accessibility** - Add ARIA labels, roles, and keyboard navigation
+2. **Use established utilities** - Leverage existing time, geo, and search utilities
+3. **Implement error boundaries** - Wrap potentially failing components
+4. **Add performance monitoring** - Track expensive operations
+5. **Write tests** - Focus on utility functions and critical logic
+6. **Document decisions** - Update this file with significant architectural changes
+
+### 🗺️ **Key Integration Points**
+
+#### Time-Based Features
+- Use `src/utils/time/timeUtils.ts` for all time operations
+- Restaurant day logic: 8 AM - 2 AM next day
+- Time formatting consistently uses 12-hour format
+- Custom hook: `useTimeBasedFiltering` for filtering logic
+
+#### Performance Monitoring
+- Import: `import { performanceMonitor } from '@/utils/performance/performanceMonitor'`
+- Pattern: `const tracker = performanceMonitor.trackFilterPerformance(count, type); /* work */ tracker.end();`
+- Automatic warnings for slow operations (>100ms filters, >500ms map rendering)
+
+#### Accessibility Integration
+- Import: `import { useAccessibility } from '@/hooks/useAccessibility'`
+- Use semantic HTML roles: `search`, `toolbar`, `article`, `complementary`, `region`
+- Add ARIA labels for all interactive elements
+- Use `.sr-only` class for screen reader-only content
+
+#### Error Handling
+- Reusable components: `LoadingSpinner`, `ErrorState`
+- Error boundaries around images and API calls
+- Consistent error messaging with retry functionality
+
+### 📊 **Performance Characteristics**
+
+- **Restaurant Filtering**: Typically 10-50ms, warns if >100ms
+- **Test Suite**: <600ms for full test run
+- **Web Vitals**: LCP and CLS automatically monitored
+- **Development warnings**: Automatic alerts for slow operations
+
+### 🔮 **Future Development Priorities**
+
+#### Next Phase: Maps & Location Features
+**Prerequisites**: Current architecture supports advanced features
+- Google Maps marker diffing for large datasets
+- Location-based restaurant filtering
+- Map performance monitoring integration
+
+
+### 📝 **Maintenance Guidelines**
+
+#### Regular Maintenance Tasks
+- **Test Suite**: Should remain under 1 second execution time
+- **Performance Monitoring**: Review slow operation warnings monthly
+- **Accessibility**: Test with screen readers quarterly
+- **Dependencies**: Update monthly, test thoroughly
+- **Type Safety**: Address TypeScript strict mode violations
+
+#### Code Quality Indicators
+- **Zero ESLint errors**: `npm run lint` should always pass
+- **All tests passing**: `npm test` should complete successfully
+- **No accessibility violations**: Manual testing with keyboard navigation
+- **Performance warnings**: Address any operations >100ms
+
+### 📚 **Learning Resources & References**
+
+
+## Development Command Reference
+
+### Essential Commands
+```bash
+# Development
+npm run dev                    # Start development server (port 3000)
+PORT=3001 npm run dev         # Claude development server (port 3001)
+npm run build                  # Production build
+npm start                      # Start production server
+
+# Quality Assurance  
+npm run lint                   # ESLint code quality check
+npm test                       # Run comprehensive test suite
+npm run test:watch            # Tests in watch mode
+
+# Database Operations
+npm run db:setup              # Initialize remote database
+npm run db:start              # Start local Supabase
+npm run db:reset              # Reset with migrations and seed data
+npm run db:types              # Generate TypeScript types
 ```
 
-❌ **Bad**: Passing non-serializable props from Server to Client
-```typescript
-// Server Component
-export default function ServerPage() {
-  const handler = () => {}; // ❌ BAD - function cannot be serialized
-  return <ClientComponent onSubmit={handler} />;
-}
+
+## Quick Architecture Reference
+
+### File Structure Overview
+```
+src/
+├── app/
+│   ├── Components/           # React components
+│   │   ├── SmallComponents/  # Reusable UI elements
+│   │   ├── Layout/           # Layout components
+│   │   ├── ErrorBoundary/    # Error handling
+│   │   └── modals/           # Modal components
+│   ├── layout.tsx           # Root layout with skip nav
+│   └── globals.css          # Global styles + accessibility
+├── hooks/                   # Custom React hooks
+│   ├── useAccessibility.ts  # Accessibility utilities
+│   ├── useTimeBasedFiltering.ts
+│   └── __tests__/           # Hook tests (jsdom env)
+├── utils/                   # Utility functions
+│   ├── time/                # Time operations
+│   ├── geo/                 # Geographic utilities
+│   ├── search/              # Search/filtering
+│   ├── image/               # Image processing
+│   ├── performance/         # Performance monitoring
+│   └── **/__tests__/        # Utility tests (node env)
+├── lib/                     # Core libraries
+│   ├── types.ts             # TypeScript definitions
+│   └── supabase/            # Database client
+└── contexts/                # React contexts
 ```
 
-#### Implementation Rules
-1. **Minimal "use client"**: Only use at entry points that need client-side interactivity
-2. **Remove redundant directives**: Child components inherit client boundary from parent
-3. **Serialize complex data**: Transform Dates, functions, and complex objects before passing to client components
-4. **Use client-side state**: Handle interactive logic within client components rather than passing functions down
+### Import Patterns
+```typescript
+// Utilities
+import { timeToMinutes } from '@/utils/time/timeUtils';
+import { performanceMonitor } from '@/utils/performance/performanceMonitor';
 
-## Google Maps Integration Notes
+// Hooks  
+import { useAccessibility } from '@/hooks/useAccessibility';
+import { useTimeBasedFiltering } from '@/hooks/useTimeBasedFiltering';
 
-### Map Styling Limitations
-**CRITICAL**: Google Maps styling behavior depends on map configuration:
+// Components
+import LoadingSpinner from '@/app/Components/SmallComponents/LoadingSpinner';
+import ErrorState from '@/app/Components/SmallComponents/ErrorState';
 
-- **With `mapId`**: Traditional `styles` array doesn't work. Must use cloud-based map styling
-- **Without `mapId`**: Traditional `styles` array works normally for hiding POIs and customizing appearance
-- **AdvancedMarkerElement**: Requires a `mapId` but prevents traditional styling
-
-### Cloud-Based Map Styling Setup
-
-**Current Implementation**: Uses environment variable `NEXT_PUBLIC_GOOGLE_MAPS_STYLE_ID` for cloud-styled map with hidden POIs.
-
-**Setup Instructions**:
-
-1. **Create Map Style in Google Cloud Console**:
-   - Go to [Google Cloud Console](https://console.cloud.google.com/)
-   - Navigate to "Map Styles" under Maps API
-   - Create new map style with these POI hiding rules:
-     ```json
-     [
-       {
-         "featureType": "poi",
-         "stylers": [{ "visibility": "off" }]
-       },
-       {
-         "featureType": "transit",
-         "stylers": [{ "visibility": "off" }]
-       },
-       {
-         "featureType": "poi.business",
-         "stylers": [{ "visibility": "off" }]
-       }
-     ]
-     ```
-
-2. **Get Map ID**:
-   - Copy the generated Map ID from the style
-   - Add to environment variables: `NEXT_PUBLIC_GOOGLE_MAPS_STYLE_ID=your-map-id-here`
-
-3. **Fallback**: 
-   - Code falls back to `"denver-happy-hour-map"` if env var not set
-   - `clickableIcons: false` provides minimal POI interaction disable
-
-**Alternative**: Remove `mapId` entirely to use traditional styling, but lose AdvancedMarkerElement benefits.
+// Types
+import type { Restaurant, TimeFilter } from '@/lib/types';
+```

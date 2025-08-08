@@ -19,9 +19,9 @@ const LoadingSpinner = React.memo<LoadingSpinnerProps>(({
 }) => {
   return (
     <div className={`LoadingSpinner flex flex-col items-center justify-center gap-2 ${className}`}>
-      <div className={`${sizeClasses[size]} animate-spin rounded-full border-b-2 border-stone-800`} />
+      <div className={`${sizeClasses[size]} animate-spin rounded-full border-b-2 border-pr1`} />
       {message && (
-        <p className="text-sm text-gray-500">{message}</p>
+        <p className="text-sm text-black/60">{message}</p>
       )}
     </div>
   );

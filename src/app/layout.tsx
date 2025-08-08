@@ -48,10 +48,16 @@ export default function RootLayout({
   return (
     <html lang="en">
       <body className="Body h-fit overflow-x-hidden bg-black">
+        {/* Skip navigation for screen readers and keyboard users */}
+        <a href="#main-content" className="skip-link">
+          Skip to main content
+        </a>
         <QueryProvider>
           <ModalProvider>
             <div className="Page -z-20 m-auto h-fit overflow-hidden bg-stone-100">
-              {children}
+              <main id="main-content" tabIndex={-1}>
+                {children}
+              </main>
               <Footer />
               <Analytics />
             </div>

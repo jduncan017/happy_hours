@@ -9,53 +9,14 @@ import {
 import {
   applyAdvancedFilters,
   hasActiveAdvancedFilters,
-} from "@/utils/advancedFilterUtils";
+} from "@/utils/search/advancedFilterUtils";
 import { useAllRestaurants } from "@/hooks/useRestaurants";
 import SearchFilters, { type AdvancedFilterOptions } from "./SearchFilters";
 import { type TimeFilter } from "./modals/TimeFilterModal";
 import { SearchResults } from "./SearchResults";
-
-// Helper function to convert time string to minutes since restaurant day start (8am)
-// Restaurant day runs 8am-2am, so we need to handle the overnight period
-const timeToMinutes = (timeString: string): number => {
-  const [hours, minutes] = timeString.split(':').map(Number);
-  const totalMinutes = hours * 60 + minutes;
-  
-  // If it's 8am or later (8:00-23:59), return as-is
-  if (hours >= 8) {
-    return totalMinutes;
-  }
-  // If it's early hours (0:00-2:59), add 24 hours to put it at end of restaurant day
-  else if (hours <= 2) {
-    return totalMinutes + (24 * 60);
-  }
-  // Hours 3-7 are not valid for restaurant operations, but handle gracefully
-  else {
-    return totalMinutes;
-  }
-};
-
-// Function to filter restaurants by time range
-const filterRestaurantsByTimeRange = (restaurants: Restaurant[], timeFilter: TimeFilter): Restaurant[] => {
-  return restaurants.filter(restaurant => {
-    const dayHours = restaurant.happyHours[timeFilter.dayOfWeek];
-    if (!dayHours || dayHours.length === 0) return false;
-
-    const filterStartMinutes = timeToMinutes(timeFilter.startTime);
-    const filterEndMinutes = timeToMinutes(timeFilter.endTime);
-
-    return dayHours.some(timeRange => {
-      const happyHourStartMinutes = timeToMinutes(timeRange.Start);
-      const happyHourEndMinutes = timeToMinutes(timeRange.End);
-
-      // Check if there's any overlap between the filter time range and happy hour time range
-      return (
-        (happyHourStartMinutes <= filterEndMinutes && happyHourEndMinutes >= filterStartMinutes) ||
-        (filterStartMinutes <= happyHourEndMinutes && filterEndMinutes >= happyHourStartMinutes)
-      );
-    });
-  });
-};
+import { getCurrentDayOfWeek } from "@/utils/time/timeUtils";
+import { useTimeBasedFiltering } from "@/hooks/useTimeBasedFiltering";
+import { performanceMonitor } from "@/utils/performance/performanceMonitor";
 
 export const SearchPage = forwardRef<HTMLDivElement>((_, ref) => {
   const [today, setToday] = useState("");
@@ -86,10 +47,11 @@ export const SearchPage = forwardRef<HTMLDivElement>((_, ref) => {
   // Use React Query to fetch restaurants
   const { data: allRestaurants = [], isLoading, error } = useAllRestaurants();
 
+  // Time-based filtering hook
+  const timeFilters = useTimeBasedFiltering(allRestaurants);
+
   useEffect(() => {
-    const daysOfWeek = ["Sun", "Mon", "Tue", "Wed", "Thu", "Fri", "Sat"];
-    const today = daysOfWeek[new Date().getDay()];
-    setToday(today);
+    setToday(getCurrentDayOfWeek());
   }, []);
 
   // Function to filter restaurants by search query
@@ -113,41 +75,49 @@ export const SearchPage = forwardRef<HTMLDivElement>((_, ref) => {
 
   // Memoized filtering calculation to prevent unnecessary re-computation
   const filteredRestaurants = useMemo(() => {
+    const perfTracker = performanceMonitor.trackFilterPerformance(
+      allRestaurants.length, 
+      `${filterOption}${timeFilter ? '-custom-time' : ''}${hasActiveAdvancedFilters(advancedFilters) ? '-advanced' : ''}${searchQuery ? '-search' : ''}`
+    );
+
     // Don't filter when location-based
     if (isLocationBased) {
+      perfTracker.end();
       return [];
     }
 
     // Don't filter until we have data
     if (allRestaurants.length === 0) {
+      perfTracker.end();
       return [];
     }
 
     const sortedRestaurants = sortRestaurants(allRestaurants);
     let result = sortedRestaurants;
 
-    // Apply search filter first
-    result = filterRestaurantsBySearch(result, searchQuery);
-
     // Apply basic time-based filters
     if (filterOption === "today") {
-      result = filterHappyHoursToday(result, today);
+      result = timeFilters.filterByToday(today);
     } else if (filterOption === "now") {
-      result = filterHappyHoursNow(result, today);
+      result = timeFilters.filterByNow(today);
     }
 
     // Apply time filter if active
     if (timeFilter) {
-      result = filterRestaurantsByTimeRange(result, timeFilter);
+      result = timeFilters.filterByTimeRange(timeFilter);
     }
+
+    // Apply search filter
+    result = filterRestaurantsBySearch(result, searchQuery);
 
     // Apply advanced filters
     if (hasActiveAdvancedFilters(advancedFilters)) {
       result = applyAdvancedFilters(result, advancedFilters);
     }
 
+    perfTracker.end();
     return result;
-  }, [filterOption, today, allRestaurants, advancedFilters, isLocationBased, timeFilter, searchQuery]);
+  }, [filterOption, today, allRestaurants, advancedFilters, isLocationBased, timeFilter, searchQuery, timeFilters]);
 
   // Update displayed restaurants when filtered results change, but prevent updates during loading
   useEffect(() => {

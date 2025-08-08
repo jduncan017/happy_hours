@@ -1,6 +1,6 @@
 import type { LegacyRestaurant, LegacyHappyHoursData } from "@/lib/types";
 import type { Restaurant } from "@/lib/types";
-import { getCurrentTime, isTimeInRange } from "@/lib/utils";
+import { getCurrentTime, isTimeInRange } from "./time/timeUtils";
 
 // sorts happy hours by name - supports both legacy and new restaurant types
 export function sortHappyHours(happyHourDataList: LegacyHappyHoursData) {

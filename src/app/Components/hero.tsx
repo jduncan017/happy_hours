@@ -42,7 +42,7 @@ export default function HeroSection() {
             height={250}
             priority
             fetchPriority="high"
-            sizes="(max-width: 640px) 380px, 540px"
+            sizes="(max-width: 640px) 332px, 380px"
           />
           <h1 className="HeroTitle m-auto w-full text-center font-serif capitalize">
             {`Your secret to the best dates, deals, & the happiest hours in Denver!`}

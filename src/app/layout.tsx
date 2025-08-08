@@ -76,6 +76,16 @@ export default function RootLayout({
 }) {
   return (
     <html lang="en">
+      <head>
+        {/* Preload critical fonts */}
+        <link
+          rel="preload"
+          href="/fonts/Montserrat-VariableFont_wght.ttf"
+          as="font"
+          type="font/ttf"
+          crossOrigin="anonymous"
+        />
+      </head>
       <body className="Body h-fit overflow-x-hidden bg-black">
         {/* Skip navigation for screen readers and keyboard users */}
         <a href="#main-content" className="skip-link">

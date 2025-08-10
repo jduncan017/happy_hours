@@ -16,7 +16,10 @@ const NavBar = () => {
     setMobileActive(!mobileActive);
   }
 
-  const links = [{ text: "Search", href: "/search" }, { text: "Contact" }];
+  const links = [
+    { text: "Find Your Happy Hour", href: "/search" },
+    { text: "Contact" },
+  ];
 
   const renderMenu = () => {
     return (

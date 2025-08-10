@@ -4,7 +4,32 @@ import { getCurrentUser } from "@/lib/supabase/auth";
 import AuthForm from "@/app/Components/auth/AuthForm";
 import AnimatedGradientBackground from "@/app/Components/SmallComponents/AnimatedGradientBackground";
 import CardWrapper from "@/app/Components/SmallComponents/CardWrapper";
+import FeatureList from "@/app/Components/SmallComponents/FeatureList";
 import Link from "next/link";
+
+// Features data for login page
+const loginFeatures = [
+  {
+    icon: "❤️",
+    title: "Your Saved Spots",
+    description: "Access your favorite happy hour locations.",
+  },
+  {
+    icon: "⚡",
+    title: "Live Updates",
+    description: "Real-time deals and new restaurant alerts.",
+  },
+  {
+    icon: "🎯",
+    title: "Personalized Picks",
+    description: "Recommendations based on your preferences.",
+  },
+  {
+    icon: "📊",
+    title: "Your Reviews",
+    description: "Track your experiences and share insights.",
+  },
+];
 
 export default async function LoginPage() {
   const supabase = await createClient();
@@ -21,7 +46,7 @@ export default async function LoginPage() {
       <AnimatedGradientBackground intensity="medium" speed="normal" />
 
       {/* Left Side - Features Panel (Desktop 1/3) */}
-      <div className="LoginFeaturesPanel h-fit w-full max-w-sm">
+      <div className="LoginFeaturesPanel w-full max-w-sm">
         {/* Panel variant for sm+ screens */}
         <CardWrapper
           variant="panel-dark"
@@ -39,71 +64,7 @@ export default async function LoginPage() {
           </p>
 
           {/* Features List */}
-          <div className="LoginFeatures grid gap-4">
-            <div className="FeatureItem rounded-2xl bg-stone-800/70 border border-white/5 p-4 sm:p-5 hover:bg-stone-800/90 transition">
-              <div className="flex items-start gap-4">
-                <div className="FeatureIcon h-9 w-9 shrink-0 rounded-xl bg-po1/20 grid place-items-center text-py1">
-                  ❤️
-                </div>
-                <div>
-                  <p className="FeatureTitle font-semibold text-white">
-                    Your Saved Spots
-                  </p>
-                  <p className="FeatureText text-sm text-white/70">
-                    Access your favorite happy hour locations.
-                  </p>
-                </div>
-              </div>
-            </div>
-
-            <div className="FeatureItem rounded-2xl bg-stone-800/70 border border-white/5 p-4 sm:p-5 hover:bg-stone-800/90 transition">
-              <div className="flex items-start gap-4">
-                <div className="FeatureIcon h-9 w-9 shrink-0 rounded-xl bg-po1/20 grid place-items-center text-py1">
-                  ⚡
-                </div>
-                <div>
-                  <p className="FeatureTitle font-semibold text-white">
-                    Live Updates
-                  </p>
-                  <p className="FeatureText text-sm text-white/70">
-                    Real-time deals and new restaurant alerts.
-                  </p>
-                </div>
-              </div>
-            </div>
-
-            <div className="FeatureItem rounded-2xl bg-stone-800/70 border border-white/5 p-4 sm:p-5 hover:bg-stone-800/90 transition">
-              <div className="flex items-start gap-4">
-                <div className="FeatureIcon h-9 w-9 shrink-0 rounded-xl bg-po1/20 grid place-items-center text-py1">
-                  🎯
-                </div>
-                <div>
-                  <p className="FeatureTitle font-semibold text-white">
-                    Personalized Picks
-                  </p>
-                  <p className="FeatureText text-sm text-white/70">
-                    Recommendations based on your preferences.
-                  </p>
-                </div>
-              </div>
-            </div>
-
-            <div className="FeatureItem rounded-2xl bg-stone-800/70 border border-white/5 p-4 sm:p-5 hover:bg-stone-800/90 transition">
-              <div className="flex items-start gap-4">
-                <div className="FeatureIcon h-9 w-9 shrink-0 rounded-xl bg-po1/20 grid place-items-center text-py1">
-                  📊
-                </div>
-                <div>
-                  <p className="FeatureTitle font-semibold text-white">
-                    Your Reviews
-                  </p>
-                  <p className="FeatureText text-sm text-white/70">
-                    Track your experiences and share insights.
-                  </p>
-                </div>
-              </div>
-            </div>
-          </div>
+          <FeatureList features={loginFeatures} />
         </CardWrapper>
       </div>
 

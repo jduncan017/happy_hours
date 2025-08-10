@@ -17,6 +17,7 @@ export default function AuthForm({ mode, onSuccess }: AuthFormProps) {
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
   const [fullName, setFullName] = useState("");
+  const [acceptedTerms, setAcceptedTerms] = useState(false);
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState<string | null>(null);
   const [success, setSuccess] = useState<string | null>(null);
@@ -25,6 +26,15 @@ export default function AuthForm({ mode, onSuccess }: AuthFormProps) {
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
+
+    // Validate terms acceptance for signup
+    if (mode === "signup" && !acceptedTerms) {
+      setError(
+        "You must accept the Terms of Service and Privacy Policy to continue.",
+      );
+      return;
+    }
+
     setLoading(true);
     setError(null);
     setSuccess(null);
@@ -197,14 +207,16 @@ export default function AuthForm({ mode, onSuccess }: AuthFormProps) {
 
         {/* Terms Checkbox - Only for Signup */}
         {mode === "signup" && (
-          <div className="flex items-start gap-3 text-sm">
+          <div className="flex items-center pl-4 gap-3 text-sm">
             <input
               id="terms"
               type="checkbox"
               required
-              className="mt-1 h-4 w-4 rounded border-white/20 bg-stone-800 text-po1 focus:ring-po1"
+              checked={acceptedTerms}
+              onChange={(e) => setAcceptedTerms(e.target.checked)}
+              className="h-4 w-4 rounded border-white/20 bg-stone-800 text-po1 focus:ring-po1 focus:ring-offset-2 focus:ring-offset-stone-900"
             />
-            <label htmlFor="terms" className="text-white/70">
+            <label htmlFor="terms" className="text-white/70 leading-relaxed">
               I agree to the{" "}
               <Link
                 href="/terms"

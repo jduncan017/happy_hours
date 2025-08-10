@@ -16,14 +16,14 @@ export default async function SignupPage() {
   }
 
   return (
-    <div className="SignupPage relative min-h-90vh bg-gradient-to-br from-stone-950 via-stone-950 to-stone-900">
-      {/* Animated Background for entire page */}
+    <div className="SignupPage relative min-h-screen flex justify-center bg-gradient-to-br from-stone-950 via-stone-950 to-stone-900">
+      {/* Animated Background */}
       <AnimatedGradientBackground intensity="medium" speed="slow" />
       
-      <div className="relative z-10 lg:grid lg:grid-cols-3 gap-10 p-4 lg:p-10 min-h-90vh">
+      <div className="UILayer relative z-10 w-full p-4 gap-6 flex lg:py-10 max-w-7xl lg:px-20 min-h-screen mx-auto">
         {/* Left Side - Form Content (2/3) */}
-        <div className="SignupFormSide lg:col-span-2 flex items-center justify-center">
-          <div className="SignupFormContainer w-full max-w-md bg-stone-900/70 backdrop-blur rounded-3xl p-6 sm:p-8 shadow-2xl border border-white/5">
+        <div className="SignupFormSide w-2/3 max-w-2xl flex items-start justify-center">
+          <div className="SignupFormContainer w-full bg-stone-900/70 backdrop-blur rounded-3xl p-6 sm:p-8 shadow-2xl border border-white/5">
             {/* Header */}
             <div className="SignupHeader mb-6">
               <h1 className="SignupTitle text-2xl sm:text-3xl font-serif font-bold text-white">
@@ -55,8 +55,8 @@ export default async function SignupPage() {
         </div>
 
         {/* Right Side - Welcome Panel (Desktop 1/3) */}
-        <div className="SignupWelcomePanel hidden lg:block lg:col-span-1">
-          <div className="bg-stone-900/60 border border-white/5 shadow-2xl h-full rounded-3xl p-7 sm:p-10 lg:p-12 flex flex-col justify-center">
+        <div className="SignupWelcomePanel h-fit hidden lg:block flex-1">
+          <div className="bg-stone-900/60 border border-white/5 shadow-2xl h-full rounded-3xl p-7 sm:p-10 lg:p-12 flex flex-col">
             <div className="SignupWelcomeIcon h-12 w-12 rounded-2xl bg-gradient-to-br from-po1 to-py1 grid place-items-center text-stone-900 font-bold text-xl mb-6">
               🍸
             </div>
@@ -125,7 +125,7 @@ export default async function SignupPage() {
 
       {/* Mobile Welcome Card - Below form */}
       <div className="SignupMobileWelcome lg:hidden flex justify-center px-4 pb-4">
-        <div className="w-full max-w-md bg-stone-900/70 backdrop-blur rounded-3xl p-6 shadow-2xl border border-white/5">
+        <div className="w-full max-w-2xl bg-stone-900/70 backdrop-blur rounded-3xl p-6 shadow-2xl border border-white/5">
           <div className="text-center mb-6">
             <div className="SignupWelcomeIcon h-12 w-12 mx-auto mb-4 rounded-2xl bg-gradient-to-br from-po1 to-py1 grid place-items-center text-stone-900 font-bold text-xl">
               🍸

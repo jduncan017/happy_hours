@@ -73,7 +73,9 @@ export default function UserMenu() {
           />
         ) : (
           <div className="UserAvatar w-8 h-8 bg-po1 text-white rounded-full flex items-center justify-center font-bold shadow-lg">
-            {(userProfile?.full_name || user.user_metadata?.full_name || user.email)?.[0]?.toUpperCase() || "U"}
+            {(userProfile?.full_name ||
+              user.user_metadata?.full_name ||
+              user.email)?.[0]?.toUpperCase() || "U"}
           </div>
         )}
         <div className="UserInfo hidden sm:block text-left">
@@ -94,7 +96,7 @@ export default function UserMenu() {
       {isOpen && (
         <div className="UserDropdown absolute right-0 mt-3 w-64 bg-white rounded-2xl shadow-xl border border-n3 py-3 z-50">
           {/* User Info Header */}
-          <div className="UserDropdownHeader px-4 py-3 border-b border-n3">
+          <div className="UserDropdownHeader flex flex-col gap-3 px-4 py-3 border-b border-n3">
             <div className="flex items-center gap-3">
               {userProfile?.avatar_url ? (
                 <Image
@@ -107,23 +109,27 @@ export default function UserMenu() {
                 />
               ) : (
                 <div className="UserAvatarLarge w-10 h-10 bg-po1 text-white rounded-full flex items-center justify-center font-bold">
-                  {(userProfile?.full_name || user.user_metadata?.full_name || user.email)?.[0]?.toUpperCase() || "U"}
+                  {(userProfile?.full_name ||
+                    user.user_metadata?.full_name ||
+                    user.email)?.[0]?.toUpperCase() || "U"}
                 </div>
               )}
               <div>
                 <div className="UserNameLarge text-sm font-bold text-gray-800">
-                  {userProfile?.full_name || user.user_metadata?.full_name || "User"}
+                  {userProfile?.full_name ||
+                    user.user_metadata?.full_name ||
+                    "User"}
                 </div>
                 <div className="UserEmailLarge text-xs text-gray-600 truncate">
                   {user.email}
                 </div>
               </div>
-              {userRole === "admin" && (
-                <div className="AdminBadge bg-po1 text-white text-xs px-2 py-1 rounded-full font-bold">
-                  Admin
-                </div>
-              )}
             </div>
+            {userRole === "admin" && (
+              <div className="AdminBadge bg-po1 w-fit text-white text-xs px-2 py-1 rounded-full font-bold">
+                Admin
+              </div>
+            )}
           </div>
 
           {/* Menu Items */}
@@ -152,13 +158,10 @@ export default function UserMenu() {
             <div className="LogoutSection border-t border-n3 mt-2 pt-2">
               <button
                 onClick={handleSignOut}
-                className="LogoutButton w-full flex items-center px-4 py-3 text-sm text-pr1 hover:bg-pr1/10 transition-colors group font-medium"
+                className="LogoutButton w-full flex items-center px-4 py-3 text-xs text-gray-500 cursor-pointer hover:bg-pr1/10 transition-colors group font-medium"
               >
                 <LogOut className="LogoutIcon w-5 h-5 mr-3 group-hover:scale-110 transition-transform" />
                 <span>Sign Out</span>
-                <div className="ml-auto text-xs text-gray-500 group-hover:text-pr1">
-                  ⌘Q
-                </div>
               </button>
             </div>
           </div>

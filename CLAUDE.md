@@ -44,22 +44,23 @@ The application centers around a static data structure in `src/lib/hh_list.ts` c
 
 ### Component Organization
 
+**📋 See [STYLEGUIDE.md](./STYLEGUIDE.md) for complete component library documentation**
+
 Components are organized in `src/app/Components/` with:
 
-- Main components at root level (SearchPage, RestaurantCard, etc.)
-- `SmallComponents/` for reusable UI elements (LoadingSpinner, ErrorState, FilterButton)
-- `modals/` for modal components with focus management
-- `hamburgerMenu/` for mobile navigation
-- `Layout/` for layout components (MaxWidthContainer, FlexContainer)
-- `ErrorBoundary/` for error handling components
+- **SmallComponents/**: Reusable UI library (FormField, ActionButton, AvatarUpload, etc.)
+- **Layout/**: Container and layout components  
+- **Feature folders**: Organized by functionality (profile, auth, search, etc.)
+- **modals/**: Modal components with focus management
+- **ErrorBoundary/**: Error handling components
 
 ### Styling
 
-- Uses Tailwind CSS with custom configuration in `tailwind.config.ts`
-- Custom color palette with primary (#004e59), n2 (#fff9ee), and accent colors (po1, py1, pr1)
-- Custom fonts: Montserrat (sans), Playfair (serif), Allerta
-- Responsive design with custom breakpoint `xs: 460px`
-- Accessibility utilities: `.sr-only`, `.skip-link`, `.focus-visible` classes in globals.css
+**📋 See [STYLEGUIDE.md](./STYLEGUIDE.md) for complete design system documentation**
+
+- Uses Tailwind CSS with custom theme colors and responsive design
+- Dark theme for backend pages (Profile, Admin), Light theme for frontend
+- Comprehensive reusable component library with consistent theming
 
 ### Environment Requirements
 
@@ -118,33 +119,24 @@ Components are organized in `src/app/Components/` with:
 - `NEXT_PUBLIC_GOOGLE_MAPS_API_KEY` - Google Maps JavaScript API key
 - `NEXT_PUBLIC_GOOGLE_MAPS_STYLE_ID` - Cloud-based map style ID with POIs hidden (optional)
 
-## Development Guardrails
+## Development Guidelines
 
-### Styling Standards
+**📋 For complete styling standards, component library, and development guidelines, see [STYLEGUIDE.md](./STYLEGUIDE.md)**
 
-1. **Always use Tailwind CSS** - Never use inline styles unless absolutely necessary
-2. **Use custom theme colors first** - Always use custom color classes (po1=orange, py1=yellow, pr1=red, n1/n2/n3=neutrals) defined in globals.css before standard Tailwind colors
-3. **Fallback to Tailwind colors** - Only use standard Tailwind colors (gray-400, blue-500, etc.) when custom theme colors don't exist for that color family
-4. **Never use hex codes** - Always use named color classes, never raw hex values
-5. **ThemeContext for inline styles** - When inline styles are required, reference theme values from ThemeContext instead of hex codes
-6. **PascalCase className prefixes** - Start every Tailwind className with a PascalCase descriptor (e.g., `"CTAButton"`, `"RestaurantCard"`)
+### Quick Reference
 
-### Code Standards
+- **Theme Strategy**: Dark for backend pages, Light for frontend pages
+- **Component Library**: Use reusable components from SmallComponents/ directory
+- **Styling**: Custom theme colors (po1, py1, pr1, n1-n3) with Tailwind CSS
+- **Accessibility**: WCAG 2.1 AA compliance built into all components
+- **TypeScript**: Full type safety with proper interfaces
 
-1. **Single responsibility** - Focus on single-use functions and components for easy navigation and readability
-2. **Reusability over specificity** - Create reusable base components using Props, CVA, and CLSX for variants. Style variants when used, not as sub-components
-3. **No anticipatory features** - Never add functionality that isn't currently needed
-4. **Test new code** - Validate functionality with tests when appropriate
-5. **Accessibility first** - Build ARIA labels, semantic HTML, and keyboard navigation into components from the start
-6. **Performance conscious** - Use React.memo, useMemo, and performance monitoring for expensive operations
-7. **Type safety** - Prefer specific types over `any`, use discriminated unions for variant props
+### Development Workflow
 
-### Organization
-
-1. **Smart file organization** - Keep directory structure logical and group related functionality together
-2. **Document crucial components** - Note important workflows, components, and architectural decisions for future reference
-3. **Consistent naming** - Use PascalCase for components, camelCase for functions, descriptive names throughout
-4. **Error boundaries** - Wrap potentially failing components in error boundaries with fallback UI
+1. **Check STYLEGUIDE.md** for existing reusable components before creating new ones
+2. **Use theme-aware components** with `theme="light" | "dark"` props
+3. **Follow accessibility patterns** established in the component library
+4. **Update STYLEGUIDE.md** when creating new reusable components
 
 
 
@@ -318,12 +310,14 @@ The application has completed major architectural improvements and is now ready 
 5. **Monitor performance** - Use performance tracking for expensive operations
 
 #### Component Development Pattern
-1. **Start with accessibility** - Add ARIA labels, roles, and keyboard navigation
-2. **Use established utilities** - Leverage existing time, geo, and search utilities
-3. **Implement error boundaries** - Wrap potentially failing components
-4. **Add performance monitoring** - Track expensive operations
-5. **Write tests** - Focus on utility functions and critical logic
-6. **Document decisions** - Update this file with significant architectural changes
+1. **Check STYLEGUIDE.md** - Review existing components before creating new ones
+2. **Start with accessibility** - Add ARIA labels, roles, and keyboard navigation
+3. **Use theme-aware patterns** - Implement `theme="light" | "dark"` support
+4. **Leverage established utilities** - Use existing time, geo, and search utilities
+5. **Implement error boundaries** - Wrap potentially failing components
+6. **Add performance monitoring** - Track expensive operations
+7. **Write tests** - Focus on utility functions and critical logic
+8. **Update STYLEGUIDE.md** - Document new reusable components
 
 ### 🗺️ **Key Integration Points**
 
@@ -404,6 +398,16 @@ npm run db:start              # Start local Supabase
 npm run db:reset              # Reset with migrations and seed data
 npm run db:types              # Generate TypeScript types
 ```
+
+## 📝 Important Development Notes
+
+**CRITICAL**: When creating new reusable components, always update [STYLEGUIDE.md](./STYLEGUIDE.md) with:
+- Component documentation and purpose
+- Props interface and usage examples
+- Theme support and styling variants
+- Accessibility features
+
+This ensures the design system documentation stays current and useful for future development.
 
 
 ## Quick Architecture Reference

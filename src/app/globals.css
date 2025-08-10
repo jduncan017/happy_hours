@@ -127,7 +127,7 @@ body {
 
 a {
   color: #ff7930;
-  text-decoration: underline;
+  text-decoration: none;
   font-weight: 500;
 }
 

@@ -52,17 +52,17 @@ export default function ContactModal() {
     <ModalWrapper>
       <div className="contactModal">
         <div className="formWrapper relative flex max-h-[100dvh] w-full max-w-[500px] flex-col px-2 font-sans sm:px-6">
-          <h1 className="font-3xl mb-2 mt-0 border-b border-dotted border-white font-serif font-bold uppercase leading-10 text-white sm:text-4xl">
+          <h1 className="font-3xl mb-2 mt-0 border-b border-dotted border-black font-serif font-bold uppercase leading-10 text-black sm:text-4xl">
             Contact Us!
           </h1>
-          <p className="formDescription m-0 w-full text-white">
+          <p className="formDescription m-0 w-full text-gray-700">
             This is a beta site and there are lots of new features in the works.
             If you have a question or suggestion, please reach out below!
           </p>
 
           {/* Contact Form */}
           <form
-            className="contactForm flex w-full flex-col items-center gap-2 pt-2 text-start text-white sm:gap-4 sm:pt-5"
+            className="contactForm flex w-full flex-col items-center gap-2 pt-2 text-start text-black sm:gap-4 sm:pt-5"
             onSubmit={handleSubmit}
             noValidate
           >

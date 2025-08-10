@@ -16,24 +16,42 @@ const NavBar = () => {
     setMobileActive(!mobileActive);
   }
 
-  const links = [{ text: "Contact" }];
+  const links = [{ text: "Search", href: "/search" }, { text: "Contact" }];
 
   const renderMenu = () => {
     return (
       <div className="LinksContainer mt-6 flex flex-col gap-6 sm:mt-0 sm:flex-row sm:items-center sm:gap-8">
-        {links.map((link, index) => (
-          <button
-            key={index}
-            onClick={() => {
-              showModal(<ContactModal />);
-              setMobileActive(false);
-            }}
-          >
-            <p className="AboutText text-xl font-medium uppercase tracking-wider sm:text-base lg:text-lg text-po1 cursor-pointer transition-all duration-200 hover:scale-105 hover:text-white">
-              {link.text}
-            </p>
-          </button>
-        ))}
+        {links.map((link, index) => {
+          if (link.href) {
+            // Navigation link
+            return (
+              <Link
+                key={index}
+                href={link.href}
+                onClick={() => setMobileActive(false)}
+              >
+                <p className="AboutText text-xl font-medium uppercase tracking-wider sm:text-base lg:text-lg text-po1 cursor-pointer transition-all duration-200 hover:scale-105 hover:text-white">
+                  {link.text}
+                </p>
+              </Link>
+            );
+          } else {
+            // Modal trigger (Contact)
+            return (
+              <button
+                key={index}
+                onClick={() => {
+                  showModal(<ContactModal />);
+                  setMobileActive(false);
+                }}
+              >
+                <p className="AboutText w-fit text-xl font-medium uppercase tracking-wider sm:text-base lg:text-lg text-po1 cursor-pointer transition-all duration-200 hover:scale-105 hover:text-white">
+                  {link.text}
+                </p>
+              </button>
+            );
+          }
+        })}
         <UserMenu />
       </div>
     );
@@ -61,8 +79,8 @@ const NavBar = () => {
       {/* Mobile Menu */}
       <div
         className={` ${
-          mobileActive ? "h-[260px] rounded-xl" : "h-[74px]"
-        } ${"MobileNav fixed z-30 flex w-full flex-col justify-center overflow-hidden bg-black px-4 py-3 font-sans transition-all duration-500 sm:hidden"} `}
+          mobileActive ? "h-[260px] rounded-b-xl" : "h-[74px]"
+        } ${"MobileNav fixed z-30 flex w-full flex-col justify-center overflow-hidden bg-black px-4 py-3 font-sans transition-all duration-400 sm:hidden"} `}
       >
         <div className="NavBar flex w-full items-center justify-between gap-5">
           <div className="LogoSection flex h-full">

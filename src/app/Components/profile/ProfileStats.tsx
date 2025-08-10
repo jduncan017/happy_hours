@@ -27,16 +27,16 @@ export default function ProfileStats({ isMobile = false }: ProfileStatsProps) {
     const fetchStats = async () => {
       // Wait for user context to load
       if (userLoading) return;
-      
+
       try {
         if (!user) {
           setStatsLoading(false);
           return;
         }
-        
+
         // Mock stats for now - in a real app you'd query:
         // - user_favorites table for saved restaurants
-        // - reviews table for reviews count  
+        // - reviews table for reviews count
         // - check-ins or visits table for places visited
         const mockStats: UserStats = {
           savedRestaurants: Math.floor(Math.random() * 15) + 5, // 5-20
@@ -44,8 +44,8 @@ export default function ProfileStats({ isMobile = false }: ProfileStatsProps) {
           placesVisited: Math.floor(Math.random() * 25) + 10, // 10-35
           joinDate: new Date(user.created_at).toLocaleDateString("en-US", {
             month: "long",
-            year: "numeric"
-          })
+            year: "numeric",
+          }),
         };
 
         setStats(mockStats);
@@ -82,7 +82,9 @@ export default function ProfileStats({ isMobile = false }: ProfileStatsProps) {
           <div className="StatIcon h-8 w-8 mx-auto mb-2 rounded-lg bg-po1/20 flex items-center justify-center">
             <Heart className="w-4 h-4 text-po1" />
           </div>
-          <div className="StatNumber text-lg font-bold text-white">{stats.savedRestaurants}</div>
+          <div className="StatNumber text-lg font-bold text-white">
+            {stats.savedRestaurants}
+          </div>
           <div className="StatLabel text-xs text-white/70">Saved</div>
         </div>
 
@@ -90,7 +92,9 @@ export default function ProfileStats({ isMobile = false }: ProfileStatsProps) {
           <div className="StatIcon h-8 w-8 mx-auto mb-2 rounded-lg bg-po1/20 flex items-center justify-center">
             <Star className="w-4 h-4 text-py1" />
           </div>
-          <div className="StatNumber text-lg font-bold text-white">{stats.reviewsCount}</div>
+          <div className="StatNumber text-lg font-bold text-white">
+            {stats.reviewsCount}
+          </div>
           <div className="StatLabel text-xs text-white/70">Reviews</div>
         </div>
 
@@ -98,7 +102,9 @@ export default function ProfileStats({ isMobile = false }: ProfileStatsProps) {
           <div className="StatIcon h-8 w-8 mx-auto mb-2 rounded-lg bg-po1/20 flex items-center justify-center">
             <MapPin className="w-4 h-4 text-pr1" />
           </div>
-          <div className="StatNumber text-lg font-bold text-white">{stats.placesVisited}</div>
+          <div className="StatNumber text-lg font-bold text-white">
+            {stats.placesVisited}
+          </div>
           <div className="StatLabel text-xs text-white/70">Visited</div>
         </div>
 
@@ -106,7 +112,9 @@ export default function ProfileStats({ isMobile = false }: ProfileStatsProps) {
           <div className="StatIcon h-8 w-8 mx-auto mb-2 rounded-lg bg-po1/20 flex items-center justify-center">
             <Calendar className="w-4 h-4 text-py1" />
           </div>
-          <div className="StatNumber text-sm font-bold text-white">{stats.joinDate}</div>
+          <div className="StatNumber text-sm font-bold text-white">
+            {stats.joinDate}
+          </div>
           <div className="StatLabel text-xs text-white/70">Member</div>
         </div>
       </div>
@@ -123,8 +131,12 @@ export default function ProfileStats({ isMobile = false }: ProfileStatsProps) {
               <Heart className="w-5 h-5 text-po1" />
             </div>
             <div>
-              <p className="StatNumber text-xl font-bold text-white">{stats.savedRestaurants}</p>
-              <p className="StatLabel text-sm text-white/70">Saved Restaurants</p>
+              <p className="StatNumber text-xl font-bold text-white">
+                {stats.savedRestaurants}
+              </p>
+              <p className="StatLabel text-sm text-white/70">
+                Saved Restaurants
+              </p>
             </div>
           </div>
         </div>
@@ -135,7 +147,9 @@ export default function ProfileStats({ isMobile = false }: ProfileStatsProps) {
               <Star className="w-5 h-5 text-py1" />
             </div>
             <div>
-              <p className="StatNumber text-xl font-bold text-white">{stats.reviewsCount}</p>
+              <p className="StatNumber text-xl font-bold text-white">
+                {stats.reviewsCount}
+              </p>
               <p className="StatLabel text-sm text-white/70">Reviews Written</p>
             </div>
           </div>
@@ -147,7 +161,9 @@ export default function ProfileStats({ isMobile = false }: ProfileStatsProps) {
               <MapPin className="w-5 h-5 text-pr1" />
             </div>
             <div>
-              <p className="StatNumber text-xl font-bold text-white">{stats.placesVisited}</p>
+              <p className="StatNumber text-xl font-bold text-white">
+                {stats.placesVisited}
+              </p>
               <p className="StatLabel text-sm text-white/70">Places Visited</p>
             </div>
           </div>
@@ -159,8 +175,12 @@ export default function ProfileStats({ isMobile = false }: ProfileStatsProps) {
               <Calendar className="w-5 h-5 text-py1" />
             </div>
             <div>
-              <p className="StatNumber text-sm font-bold text-white">Member Since</p>
-              <p className="StatLabel text-sm text-white/70">{stats.joinDate}</p>
+              <p className="StatNumber text-sm font-bold text-white">
+                Member Since
+              </p>
+              <p className="StatLabel text-sm text-white/70">
+                {stats.joinDate}
+              </p>
             </div>
           </div>
         </div>
@@ -173,17 +193,24 @@ export default function ProfileStats({ isMobile = false }: ProfileStatsProps) {
             🏆
           </div>
           <div>
-            <p className="BadgeTitle text-sm font-semibold text-white">Happy Hour Explorer</p>
+            <p className="BadgeTitle text-sm font-semibold text-white">
+              Happy Hour Explorer
+            </p>
             <p className="BadgeDescription text-xs text-white/70">
-              {stats.placesVisited >= 20 ? "Expert Level" : 
-               stats.placesVisited >= 10 ? "Advanced Level" : "Getting Started"}
+              {stats.placesVisited >= 20
+                ? "Expert Level"
+                : stats.placesVisited >= 10
+                  ? "Advanced Level"
+                  : "Getting Started"}
             </p>
           </div>
         </div>
         <div className="ProgressBar bg-stone-800/50 rounded-full h-2 overflow-hidden">
-          <div 
+          <div
             className="ProgressFill h-full bg-gradient-to-r from-po1 to-py1 rounded-full transition-all duration-500"
-            style={{ width: `${Math.min(100, (stats.placesVisited / 30) * 100)}%` }}
+            style={{
+              width: `${Math.min(100, (stats.placesVisited / 30) * 100)}%`,
+            }}
           />
         </div>
         <p className="ProgressText text-xs text-white/60 mt-2">
@@ -193,8 +220,10 @@ export default function ProfileStats({ isMobile = false }: ProfileStatsProps) {
 
       {/* Quick Actions */}
       <div className="QuickActions space-y-3">
-        <h4 className="text-sm font-semibold text-white/90 mb-3">Quick Actions</h4>
-        
+        <h4 className="text-sm font-semibold text-white/90 mb-3">
+          Quick Actions
+        </h4>
+
         <Link
           href="/#search"
           className="QuickAction block w-full text-left p-3 rounded-xl bg-stone-800/50 hover:bg-stone-800/70 transition-colors border border-white/5 group"
@@ -203,7 +232,9 @@ export default function ProfileStats({ isMobile = false }: ProfileStatsProps) {
             <span className="text-sm text-white group-hover:text-po1 transition-colors">
               Find New Spots
             </span>
-            <span className="text-po1 group-hover:translate-x-1 transition-transform">→</span>
+            <span className="text-po1 group-hover:translate-x-1 transition-transform">
+              →
+            </span>
           </div>
         </Link>
 
@@ -215,7 +246,9 @@ export default function ProfileStats({ isMobile = false }: ProfileStatsProps) {
             <span className="text-sm text-white group-hover:text-po1 transition-colors">
               View Saved Places
             </span>
-            <span className="text-po1 group-hover:translate-x-1 transition-transform">→</span>
+            <span className="text-po1 group-hover:translate-x-1 transition-transform">
+              →
+            </span>
           </div>
         </Link>
       </div>

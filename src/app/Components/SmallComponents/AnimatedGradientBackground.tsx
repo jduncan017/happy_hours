@@ -35,14 +35,14 @@ export default function AnimatedGradientBackground({
     >
       {/* Large liquid-like flowing blobs with theme colors */}
       <div
-        className={`absolute -top-60 -left-60 w-64 h-64 bg-po1/20 rounded-full blur-3xl ${intensitySettings[intensity]}`}
+        className={`absolute -top-60 -left-60 w-80 h-80 bg-po1/20 rounded-full blur-3xl ${intensitySettings[intensity]}`}
         style={{
           animation: `liquid-flow-1 ${currentSpeed.duration} ease-in-out infinite`,
         }}
       />
 
       <div
-        className={`absolute top-0 -right-40 w-64 h-64 bg-py1/20 rounded-full blur-3xl ${intensitySettings[intensity]}`}
+        className={`absolute top-0 -right-40 w-80 h-80 bg-py1/20 rounded-full blur-3xl ${intensitySettings[intensity]}`}
         style={{
           animation: `liquid-flow-2 ${currentSpeed.bounce} ease-in-out infinite`,
           animationDelay: "2s",
@@ -50,7 +50,7 @@ export default function AnimatedGradientBackground({
       />
 
       <div
-        className={`absolute -bottom-60 left-0 w-64 h-64 bg-pr1/20 rounded-full blur-3xl ${intensitySettings[intensity]}`}
+        className={`absolute -bottom-60 left-0 w-80 h-80 bg-pr1/20 rounded-full blur-3xl ${intensitySettings[intensity]}`}
         style={{
           animation: `liquid-flow-3 ${currentSpeed.duration} ease-in-out infinite`,
           animationDelay: "4s",
@@ -58,7 +58,7 @@ export default function AnimatedGradientBackground({
       />
 
       <div
-        className={`absolute top-1/3 left-1/2 w-64 h-64 bg-po1/20 rounded-full blur-3xl ${intensitySettings[intensity]}`}
+        className={`absolute top-1/3 left-1/2 w-80 h-80 bg-po1/20 rounded-full blur-3xl ${intensitySettings[intensity]}`}
         style={{
           animation: `liquid-flow-4 ${currentSpeed.bounce} ease-in-out infinite`,
           animationDelay: "1s",

@@ -34,7 +34,7 @@ const ModalWrapper: FC<ModalWrapperProps> = ({ children }) => {
         animate={{ scale: 1 }}
         initial={{ scale: 0 }}
         transition={{ duration: 0.2 }}
-        className="ModalContent relative mt-16 h-fit max-h-[84vh] w-fit max-w-[98vw] rounded-2xl bg-stone-900/90 px-6 py-6 text-center shadow-themeShadow backdrop-blur-md sm:py-10"
+        className="ModalContent relative mt-16 h-fit max-h-[84vh] w-fit max-w-[98vw] rounded-2xl bg-stone-100/80 px-6 py-6 text-center shadow-themeShadow backdrop-blur-md sm:py-10"
         onClick={handleModalContentClick}
       >
         <button

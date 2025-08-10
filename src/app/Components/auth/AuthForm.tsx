@@ -55,7 +55,7 @@ export default function AuthForm({ mode, onSuccess }: AuthFormProps) {
             if (onSuccess) {
               onSuccess();
             } else {
-              router.push("/");
+              router.push("/search");
             }
           }, 1000);
         }

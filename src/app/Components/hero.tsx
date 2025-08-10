@@ -7,7 +7,7 @@ export default function HeroSection() {
   const router = useRouter();
 
   return (
-    <div className="HeroSection relative flex h-screen max-h-[1040px] min-h-fit flex-col items-center justify-center bg-black px-4 py-[70px] xs:px-10">
+    <div className="HeroSection relative flex h-[calc(100svh-72px)] max-h-[1040px] min-h-fit flex-col items-center justify-center bg-black px-4 py-[70px] xs:px-10">
       <div className="ImageContainer absolute inset-0 z-10 flex h-full items-center justify-center overflow-hidden shadow-themeShadow">
         {/* mobile video */}
         <video

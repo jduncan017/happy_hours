@@ -65,6 +65,18 @@ export const HappyHoursDataSchema = z.object({
   CO: CitySchema,
 });
 
+// User Profile Schema
+export const UserProfileSchema = z.object({
+  id: z.string().uuid(),
+  full_name: z.string().nullable(),
+  avatar_url: z.string().url().nullable(),
+  role: z.enum(["user", "admin", "restaurant_owner"]),
+  location: z.string().nullable(),
+  preferences: z.record(z.string(), z.any()).optional(),
+  created_at: z.date(),
+  updated_at: z.date(),
+});
+
 export type HappyHourTime = z.infer<typeof HappyHourTimeSchema>;
 export type HappyHours = z.infer<typeof HappyHoursSchema>;
 export type Coordinates = z.infer<typeof CoordinatesSchema>;
@@ -74,3 +86,4 @@ export type Restaurant = z.infer<typeof RestaurantSchema>;
 export type City = z.infer<typeof CitySchema>;
 export type States = z.infer<typeof StatesSchema>;
 export type HappyHoursData = z.infer<typeof HappyHoursDataSchema>;
+export type UserProfile = z.infer<typeof UserProfileSchema>;

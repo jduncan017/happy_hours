@@ -173,35 +173,16 @@ export default function SearchFilters({
   }
 
   return (
-    <div className="SearchFilters w-full bg-stone-800" role="search" aria-label="Restaurant filters and search">
-      <div className="NavbarSection bg-black/80 sm:px-8 px-4 py-3 w-full flex flex-col xs:flex-row xs:items-center gap-3 xs:gap-2 justify-start mb-4">
-        <Link href={"/"} aria-label="Happy Hour Hunt - Go to homepage">
-          <Image
-            src="/h3-logo5.png"
-            alt="Happy Hour Hunt logo"
-            width={40}
-            height={40}
-            className="xs:block hidden"
-            sizes="40px"
-          />
-          <Image
-            src="/h3-logo-wide.png"
-            alt="Happy Hour Hunt logo"
-            width={337}
-            height={40}
-            className="block xs:hidden w-full"
-            sizes="(max-width: 460px) 336px, 337px"
-          />
-        </Link>
-        <div className="HeroSloganContainer flex-wrap gap-1.5 w-full xs:flex hidden justify-center font-sans font-bold" role="banner">
-          <h1 className="HeroSlogan text-white text-base">{`It's Happy Hour`}</h1>
-          <h1 className="HeroSlogan text-py1 uppercase italic text-base">
-            Somewhere!
-          </h1>
-        </div>
-      </div>
-
-      <div className="FilterRow w-full flex flex-wrap gap-2 px-4 sm:px-8 pb-4" role="toolbar" aria-label="Restaurant filter controls">
+    <div
+      className="SearchFilters w-full bg-stone-800"
+      role="search"
+      aria-label="Restaurant filters and search"
+    >
+      <div
+        className="FilterRow w-full flex flex-wrap gap-2 px-4 sm:px-8 py-4"
+        role="toolbar"
+        aria-label="Restaurant filter controls"
+      >
         <FilterSearchBar
           placeholder="Search restaurants, cuisine, area..."
           onSearch={handleSearch}
@@ -220,7 +201,11 @@ export default function SearchFilters({
           }
           onClick={handleOpenTimeFilterModal}
           aria-label="Filter restaurants by time - currently showing all times"
-          aria-expanded={!!currentTimeFilter || filterOption === "now" || filterOption === "today"}
+          aria-expanded={
+            !!currentTimeFilter ||
+            filterOption === "now" ||
+            filterOption === "today"
+          }
         >
           {currentTimeFilter
             ? `🕐 ${currentTimeFilter.dayOfWeek} ${new Date(`1970-01-01T${currentTimeFilter.startTime}`).toLocaleTimeString([], { hour: "numeric", minute: "2-digit", hour12: true })}`
@@ -259,8 +244,8 @@ export default function SearchFilters({
           currentTimeFilter ||
           filterOption !== "all" ||
           searchQuery) && (
-          <FilterButton 
-            active={false} 
+          <FilterButton
+            active={false}
             onClick={handleClearAllFilters}
             aria-label="Clear all active filters"
           >
@@ -279,7 +264,7 @@ export default function SearchFilters({
 
       {/* Error Display */}
       {error && (
-        <div 
+        <div
           className="ErrorMessage mt-2 text-center text-xs text-red-300 bg-red-900/30 p-2 rounded"
           role="alert"
           aria-live="polite"

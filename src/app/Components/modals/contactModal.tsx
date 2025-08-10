@@ -2,9 +2,11 @@
 import { useState } from "react";
 import ModalWrapper from "./modalWrapper";
 import SiteButton from "../SmallComponents/siteButton";
+import TextInput from "../SmallComponents/TextInput";
 import { useFormspark } from "@formspark/use-formspark";
 import { useModal } from "../../../contexts/ModalContext";
 import SubmitConfirmModal from "./submitConfirmModal";
+import { User, Mail } from "lucide-react";
 
 const FORMSPARK_FORM_ID = "TJYoTsOiJ";
 
@@ -67,57 +69,53 @@ export default function ContactModal() {
             {/* Name Input */}
 
             <div className="NameSection flex w-full gap-6">
-              <div className="FirstNameContainer flex w-full flex-col gap-1">
-                <label className="m-0 text-lg" htmlFor="name">
-                  First Name:*
-                </label>
-                <input
-                  className="FirstNameInput mt-0.5 box-border h-[32px] w-full rounded-md border border-gray-400 p-1 text-black"
-                  type="text"
-                  id="first-name"
-                  name="first-name"
-                  minLength={2}
-                  required
-                  placeholder="First Name"
-                />
-              </div>
-              <div className="LastNameContainer flex w-full flex-col gap-1">
-                <label className="m-0 text-lg" htmlFor="name">
-                  Last Name:*
-                </label>
-                <input
-                  className="LastNameInput mt-0.5 box-border h-[32px] w-full rounded-md border border-gray-400 p-1 text-black"
-                  type="text"
-                  id="last-name"
-                  name="last-name"
-                  minLength={2}
-                  required
-                  placeholder="Last Name"
-                />
-              </div>
+              <TextInput
+                type="text"
+                id="first-name"
+                name="first-name"
+                label="First Name:*"
+                minLength={2}
+                required
+                placeholder="First Name"
+                icon={<User className="w-4 h-4" />}
+                size="sm"
+                containerClassName="flex-1"
+                className="h-[32px] text-black bg-white"
+              />
+              <TextInput
+                type="text"
+                id="last-name"
+                name="last-name"
+                label="Last Name:*"
+                minLength={2}
+                required
+                placeholder="Last Name"
+                icon={<User className="w-4 h-4" />}
+                size="sm"
+                containerClassName="flex-1"
+                className="h-[32px] text-black bg-white"
+              />
             </div>
 
             {/* Email Input */}
-            <div className="EmailContainer w-full">
-              <label className="m-0 text-lg" htmlFor="email">
-                Email:*
-              </label>
-              <input
-                className="EmailInput mt-0.5 box-border h-[32px] w-full rounded-md border border-gray-400 p-1 text-black"
-                type="email"
-                id="email"
-                name="email"
-                required
-                placeholder="youremail@gmail.com"
-              />
-            </div>
+            <TextInput
+              type="email"
+              id="email"
+              name="email"
+              label="Email:*"
+              required
+              placeholder="happyhunter@mail.com"
+              icon={<Mail className="w-4 h-4" />}
+              size="sm"
+              className="h-[32px] text-black bg-white"
+            />
 
             <div className="MessageContainer w-full">
               <label className="m-0 text-lg" htmlFor="message">
                 Message:
               </label>
               <textarea
-                className="MessageInput mt-1 box-border w-full rounded-md border border-gray-400 p-1 text-black"
+                className="MessageInput bg-white mt-1 box-border w-full rounded-md border border-gray-400 p-1 text-black"
                 id="message"
                 name="message"
                 rows={4}
@@ -134,7 +132,7 @@ export default function ContactModal() {
               type="submit"
               variant="orange"
               rounded={true}
-              size="md"
+              size="sm"
               addClasses="mb-4"
               disabled={buttonDisabled}
             />

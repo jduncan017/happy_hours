@@ -5,6 +5,7 @@ import Link from "next/link";
 import { useModal } from "../../contexts/ModalContext";
 import HamburgerIcon from "./hamburgerMenu/hamburgerIcon";
 import ContactModal from "./modals/contactModal";
+import UserMenu from "./auth/UserMenu";
 
 const NavBar = () => {
   const [mobileActive, setMobileActive] = useState(false);
@@ -19,7 +20,7 @@ const NavBar = () => {
 
   const renderMenu = () => {
     return (
-      <div className="LinksContainer mt-6 flex flex-col gap-6 p-1 sm:mt-0 sm:flex-row sm:items-center sm:gap-3">
+      <div className="LinksContainer mt-6 flex flex-col gap-6 sm:mt-0 sm:flex-row sm:items-center sm:gap-8">
         {links.map((link, index) => (
           <button
             key={index}
@@ -28,28 +29,30 @@ const NavBar = () => {
               setMobileActive(false);
             }}
           >
-            <div className="Link bg-po1 rounded-full px-8 py-2 text-white backdrop-blur-md transition-all duration-200 hover:scale-105 hover:bg-white/50 hover:text-black">
-              <p className="AboutText text-xl font-medium uppercase tracking-wider duration-300 sm:text-base lg:text-lg">
-                {link.text}
-              </p>
-            </div>
+            <p className="AboutText text-xl font-medium uppercase tracking-wider sm:text-base lg:text-lg text-po1 cursor-pointer transition-all duration-200 hover:scale-105 hover:text-white">
+              {link.text}
+            </p>
           </button>
         ))}
+        <UserMenu />
       </div>
     );
   };
 
   return (
-    <nav className="NavContainer w-fuull flex justify-center">
-      <div className="NavBar fixed z-30 hidden w-full max-w-[2400px] bg-black/40 font-sans backdrop-blur-lg sm:absolute sm:block">
-        <div className="Container mx-auto flex items-center justify-between px-8 py-2">
+    <nav className="NavContainer w-full flex justify-center">
+      <div className="NavBar hidden w-full bg-black font-sans sm:block">
+        <div className="Container mx-auto max-w-[2400px] flex items-center justify-between gap-4 px-8 py-2">
           <div className="LogoSection flex h-fit items-center gap-2">
-            <Image
-              src="/h3-logo-wide.png"
-              alt="H3 Logo"
-              width={337}
-              height={40}
-            />
+            <Link href="/">
+              <Image
+                src="/h3-logo-wide.png"
+                alt="H3 Logo"
+                width={337}
+                height={40}
+                priority
+              />
+            </Link>
           </div>
           {renderMenu()}
         </div>
@@ -72,6 +75,7 @@ const NavBar = () => {
                 alt="H3 Logo"
                 width={337}
                 height={40}
+                priority
               />
             </Link>
           </div>

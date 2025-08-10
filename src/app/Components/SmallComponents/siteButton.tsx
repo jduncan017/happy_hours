@@ -54,13 +54,13 @@ const SiteButton = ({
       break;
     case "gradient":
       buttonColor =
-        "bg-gradient-to-tr from-pr1 via-po1 to-py1 text-white font-medium text-shadow-xs";
+        "bg-gradient-to-tr from-pr1 via-po1 to-py1 text-white font-medium";
       break;
   }
 
   return (
     <button
-      className={`SiteButton text-nowrap cursor-pointer transition-all duration-200 hover:scale-102 hover:border-none hover:bg-stone-200 hover:text-black disabled:bg-gray-500 disabled:hover:cursor-not-allowed disabled:hover:text-white ${buttonSize} ${rounded ? "rounded-full" : "rounded-sm"} ${buttonColor} ${addClasses}`}
+      className={`SiteButton text-nowrap cursor-pointer transition-all duration-200 hover:bg-stone-200 hover:text-black disabled:bg-gray-500 disabled:hover:cursor-not-allowed disabled:hover:text-white ${buttonSize} ${rounded ? "rounded-full" : "rounded-sm"} ${buttonColor} ${addClasses}`}
       type={type ?? "button"}
       onClick={onSubmit}
       disabled={disabled}

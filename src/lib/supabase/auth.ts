@@ -9,6 +9,7 @@ export interface UserProfile {
   email: string;
   full_name?: string;
   avatar_url?: string;
+  role?: string;
   created_at: string;
 }
 
@@ -82,13 +83,52 @@ export async function isAuthenticated(supabase: SupabaseClient): Promise<boolean
   return !!user;
 }
 
-// Get user role (for future admin features)
-export async function getUserRole(supabase: SupabaseClient): Promise<string | null> {
+// Get user profile with role
+export async function getUserProfile(supabase: SupabaseClient): Promise<UserProfile | null> {
   const user = await getCurrentUser(supabase);
   
   if (!user) return null;
   
-  // You can add custom role logic here
-  // For now, we'll check user metadata
-  return user.user_metadata?.role || 'user';
+  try {
+    const { data: profile, error } = await supabase
+      .from('user_profiles')
+      .select('*')
+      .eq('id', user.id)
+      .single();
+    
+    if (error) {
+      console.error('Error getting user profile:', error);
+      return null;
+    }
+    
+    return {
+      id: profile.id,
+      email: user.email || '',
+      full_name: profile.full_name,
+      avatar_url: profile.avatar_url,
+      role: profile.role || 'user',
+      created_at: profile.created_at
+    };
+  } catch (error) {
+    console.error('Error in getUserProfile:', error);
+    return null;
+  }
+}
+
+// Get user role (for backward compatibility)
+export async function getUserRole(supabase: SupabaseClient): Promise<string | null> {
+  const profile = await getUserProfile(supabase);
+  return profile?.role || null;
+}
+
+// Check if user is admin
+export async function isAdmin(supabase: SupabaseClient): Promise<boolean> {
+  const role = await getUserRole(supabase);
+  return role === 'admin';
+}
+
+// Check if user is restaurant owner or admin
+export async function isRestaurantOwner(supabase: SupabaseClient): Promise<boolean> {
+  const role = await getUserRole(supabase);
+  return role === 'restaurant_owner' || role === 'admin';
 }

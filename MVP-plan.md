@@ -1,11 +1,13 @@
 # HappyHourHunt MVP Development Plan
 
 ## Overview
+
 Transform HappyHourHunt from a static Denver happy hour site into a dynamic, user-driven platform with location-based search, community features, and comprehensive restaurant data.
 
 ## Phase 1: Core Infrastructure & Data Model (2-3 weeks)
 
 ### 1.1 Enhanced Data Structure
+
 - [x] **Current**: Basic restaurant with name, address, happy hours, notes
 - [x] **New**: Add cuisine type, price category, coordinates, deals, hero image, ratings
 - **Tasks**:
@@ -14,9 +16,10 @@ Transform HappyHourHunt from a static Denver happy hour site into a dynamic, use
   - [x] Add validation schemas
 
 ### 1.2 Supabase Database Setup
+
 - **Database Tables**:
   - [x] `restaurants` - Enhanced restaurant data with coordinates
-  - [x] `users` - User profiles and authentication  
+  - [x] `users` - User profiles and authentication
   - [x] `reviews` - User ratings (food, drink, service, atmosphere, price)
   - [x] `restaurant_images` - Photo management system
   - [x] `edit_suggestions` - Community editing with upvoting
@@ -28,6 +31,7 @@ Transform HappyHourHunt from a static Denver happy hour site into a dynamic, use
   - [x] Automatic image optimization
 
 ### 1.3 Data Migration
+
 - [x] Convert current static data to database
 - [x] Add coordinates using Google Geocoding API
 - [ ] Create admin interface for data management
@@ -35,6 +39,7 @@ Transform HappyHourHunt from a static Denver happy hour site into a dynamic, use
 ## Phase 2: Enhanced Search & Maps (2-3 weeks)
 
 ### 2.1 Google Maps Integration
+
 - **Components**:
   - [x] Interactive map view with restaurant markers
   - [x] Map/list toggle functionality
@@ -45,6 +50,7 @@ Transform HappyHourHunt from a static Denver happy hour site into a dynamic, use
   - [x] Geocoding API for address conversion
 
 ### 2.2 Location-Based Search
+
 - **"Find Happy Hour Now" Button**:
   - [x] Get user's current location
   - [x] Search within 10-mile radius (configurable)
@@ -58,22 +64,24 @@ Transform HappyHourHunt from a static Denver happy hour site into a dynamic, use
   - [x] Distance calculations and sorting
 
 ### 2.3 Advanced Filtering System
+
 - **Filters**:
   - [ ] Distance (1, 5, 10, 25 miles)
-  - [ ] Cuisine type (dropdown with all available types)
-  - [ ] Day of week (multi-select)
-  - [ ] Time range (slider or time pickers)
+  - [x] Cuisine type (dropdown with all available types)
+  - [x] Day of week (multi-select)
+  - [x] Time range (slider or time pickers)
   - [ ] Price category ($ to $$$$)
   - [ ] Location (zip code or address search)
 - **UI/UX**:
   - [ ] Collapsible filter panel
-  - [ ] Clear all filters button
+  - [x] Clear all filters button
   - [ ] Filter count indicators
   - [ ] Mobile-optimized filter drawer
 
 ## Phase 3: User System & Content Management (3-4 weeks)
 
 ### 3.1 User Authentication
+
 - **Supabase Auth Integration**:
   - [ ] Email/password signup/login
   - [ ] Social logins (Google, Facebook)
@@ -85,6 +93,7 @@ Transform HappyHourHunt from a static Denver happy hour site into a dynamic, use
   - [ ] Submission history
 
 ### 3.2 Restaurant Submission System
+
 - **User Submission Form**:
   - [ ] Restaurant URL input
   - [ ] Manual data entry fallback
@@ -100,6 +109,7 @@ Transform HappyHourHunt from a static Denver happy hour site into a dynamic, use
   - [ ] Automated verification where possible
 
 ### 3.3 Restaurant Profile Management
+
 - **Restaurant Owner Accounts**:
   - [ ] Claim existing restaurants
   - [ ] Update hours, deals, photos
@@ -111,6 +121,7 @@ Transform HappyHourHunt from a static Denver happy hour site into a dynamic, use
 ## Phase 4: Community Features (2-3 weeks)
 
 ### 4.1 Rating & Review System
+
 - **5-Category Rating**:
   - [ ] Food, Drink, Service, Atmosphere, Price
   - [ ] Overall score calculation
@@ -122,6 +133,7 @@ Transform HappyHourHunt from a static Denver happy hour site into a dynamic, use
   - [ ] Response from restaurant owners
 
 ### 4.2 Photo System
+
 - **User Photo Uploads**:
   - [ ] Multiple photos per restaurant
   - [ ] Photo categories (food, drinks, interior, exterior)
@@ -132,6 +144,7 @@ Transform HappyHourHunt from a static Denver happy hour site into a dynamic, use
   - [ ] Photo likes and comments
 
 ### 4.3 Community Editing
+
 - **Edit Suggestions**:
   - [ ] Users suggest changes to restaurant info
   - [ ] Community upvoting system
@@ -144,6 +157,7 @@ Transform HappyHourHunt from a static Denver happy hour site into a dynamic, use
 ## Phase 5: Monetization & Polish (1-2 weeks)
 
 ### 5.1 Advertising Integration
+
 - **Ad Placements**:
   - [ ] Sponsored restaurant listings
   - [ ] Banner ads in search results
@@ -154,6 +168,7 @@ Transform HappyHourHunt from a static Denver happy hour site into a dynamic, use
   - [ ] Local business directory listings
 
 ### 5.2 Performance & Analytics
+
 - **Optimization**:
   - [x] Image lazy loading and optimization (Dynamic backgrounds, React Query caching)
   - [x] Database query optimization (PostGIS geospatial queries)
@@ -167,15 +182,17 @@ Transform HappyHourHunt from a static Denver happy hour site into a dynamic, use
 ## Technical Stack
 
 ### Frontend
+
 - **Current**: Next.js 14, TypeScript, Tailwind CSS
-- **Additions**: 
+- **Additions**:
   - Google Maps React components
   - Framer Motion for animations
   - React Hook Form for forms
   - Zustand for state management
 
 ### Backend & Database
-- **Supabase**: 
+
+- **Supabase**:
   - PostgreSQL with PostGIS
   - Authentication
   - Real-time subscriptions
@@ -186,6 +203,7 @@ Transform HappyHourHunt from a static Denver happy hour site into a dynamic, use
   - Image processing (Sharp)
 
 ### Third-Party Services
+
 - **Maps**: Google Maps Platform
 - **AI/Scraping**: OpenAI API for data extraction
 - **Analytics**: Vercel Analytics + Google Analytics
@@ -202,16 +220,19 @@ Transform HappyHourHunt from a static Denver happy hour site into a dynamic, use
 ## Success Metrics
 
 ### Phase 1-2
+
 - Successfully migrate all existing data
 - Maps integration working smoothly
 - Location search accuracy >95%
 
-### Phase 3-4  
+### Phase 3-4
+
 - 10+ user-submitted restaurants per week
 - 50+ active user accounts
 - Average 4+ star ratings on submissions
 
 ### Phase 5
+
 - $200+ monthly revenue from ads
 - Break-even on operational costs
 - 1000+ monthly active users

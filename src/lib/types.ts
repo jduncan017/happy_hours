@@ -9,6 +9,7 @@ export {
   type City,
   type States,
   type HappyHoursData,
+  type UserProfile,
 } from "./schemas";
 
 // Import for use in legacy types

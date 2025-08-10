@@ -1,9 +1,12 @@
 import "./globals.css";
 import { Analytics } from "@vercel/analytics/react";
+import { Toaster } from "react-hot-toast";
 import Footer from "./Components/footer";
 import { ModalProvider } from "../contexts/ModalContext";
+import { UserProvider } from "../contexts/UserContext";
 import { QueryProvider } from "../providers/QueryProvider";
 import StructuredData from "./Components/StructuredData";
+import Navbar from "./Components/nav";
 
 if (!process.env.NEXT_PUBLIC_BASE_URL) {
   throw new Error("NEXT_PUBLIC_BASE_URL is not defined");
@@ -92,16 +95,44 @@ export default function RootLayout({
           Skip to main content
         </a>
         <QueryProvider>
-          <ModalProvider>
-            <div className="Page -z-20 m-auto h-fit overflow-hidden bg-stone-100">
-              <main id="main-content" tabIndex={-1}>
-                {children}
-              </main>
-              <Footer />
-              <Analytics />
-              <StructuredData />
-            </div>
-          </ModalProvider>
+          <UserProvider>
+            <ModalProvider>
+              <div className="Page -z-20 m-auto h-fit overflow-hidden bg-stone-100">
+                <Navbar />
+                <main id="main-content" tabIndex={-1}>
+                  {children}
+                </main>
+                <Footer />
+                <Analytics />
+                <StructuredData />
+                <Toaster 
+                  position="top-right"
+                  toastOptions={{
+                    duration: 4000,
+                    style: {
+                      background: '#1c1917', // stone-900
+                      color: '#fff9ee',       // n2
+                      border: '1px solid rgba(255, 249, 238, 0.1)',
+                      borderRadius: '12px',
+                      fontSize: '14px',
+                    },
+                    success: {
+                      iconTheme: {
+                        primary: '#ea580c', // po1
+                        secondary: '#fff9ee', // n2
+                      },
+                    },
+                    error: {
+                      iconTheme: {
+                        primary: '#dc2626', // pr1
+                        secondary: '#fff9ee', // n2
+                      },
+                    },
+                  }}
+                />
+              </div>
+            </ModalProvider>
+          </UserProvider>
         </QueryProvider>
       </body>
     </html>

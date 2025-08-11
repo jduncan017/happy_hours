@@ -1001,8 +1001,8 @@ export default function AdminDashboard({
                   Ready to Validate
                 </h3>
                 <p className="text-white/70">
-                  Click the "Validate URLs" button to check all restaurant
-                  links.
+                  {`Click the "Validate URLs" button to check all restaurant
+                  links.`}
                 </p>
               </div>
             )}

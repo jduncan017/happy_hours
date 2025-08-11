@@ -13,8 +13,8 @@ export default function HeroSection() {
         <video
           className="BackgroundImage block h-full w-full object-cover lg:hidden"
           src="/mobile-hero.mp4"
-          width={1728}
-          height={1138}
+          width={1024}
+          height={1820}
           autoPlay
           loop
           muted
@@ -25,8 +25,8 @@ export default function HeroSection() {
         <video
           className="BackgroundImage hidden h-full w-full object-cover lg:block"
           src="/desktop-hero.mp4"
-          width={1728}
-          height={1138}
+          width={1910}
+          height={1080}
           autoPlay
           loop
           muted

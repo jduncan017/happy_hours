@@ -58,7 +58,7 @@ export default function UserMenu() {
     <div className="UserMenu relative" ref={menuRef}>
       <button
         onClick={() => setIsOpen(!isOpen)}
-        className="UserMenuTrigger flex items-center gap-2 p-2 rounded-xl hover:bg-white hover:shadow-md transition-all duration-300"
+        className="UserMenuTrigger flex items-center gap-2 p-2 rounded-xl hover:bg-po1/30 hover:shadow-md transition-all duration-300"
         aria-expanded={isOpen}
         aria-haspopup="menu"
       >
@@ -94,9 +94,9 @@ export default function UserMenu() {
       </button>
 
       {isOpen && (
-        <div className="UserDropdown absolute right-0 mt-3 w-64 bg-white rounded-2xl shadow-xl border border-n3 py-3 z-50">
+        <div className="UserDropdown absolute right-0 mt-3 w-64 bg-stone-950/80 backdrop-blur-lg rounded-xl shadow-xl border border-white/10 py-3 z-50">
           {/* User Info Header */}
-          <div className="UserDropdownHeader flex flex-col gap-3 px-4 py-3 border-b border-n3">
+          <div className="UserDropdownHeader flex flex-col gap-3 px-4 py-3 border-b border-y-white/10">
             <div className="flex items-center gap-3">
               {userProfile?.avatar_url ? (
                 <Image
@@ -104,7 +104,7 @@ export default function UserMenu() {
                   alt="Profile avatar"
                   width={40}
                   height={40}
-                  className="UserAvatarLarge w-10 h-10 rounded-full object-cover border border-gray-200"
+                  className="UserAvatarLarge w-10 h-10 rounded-full object-cover border border-white/10"
                   key={userProfile.avatar_url}
                 />
               ) : (
@@ -115,18 +115,18 @@ export default function UserMenu() {
                 </div>
               )}
               <div>
-                <div className="UserNameLarge text-sm font-bold text-gray-800">
+                <div className="UserNameLarge text-sm font-bold text-gray-100">
                   {userProfile?.full_name ||
                     user.user_metadata?.full_name ||
                     "User"}
                 </div>
-                <div className="UserEmailLarge text-xs text-gray-600 truncate">
+                <div className="UserEmailLarge text-xs text-gray-300 truncate">
                   {user.email}
                 </div>
               </div>
             </div>
             {userRole === "admin" && (
-              <div className="AdminBadge bg-po1 w-fit text-white text-xs px-2 py-1 rounded-full font-bold">
+              <div className="AdminBadge bg-gray-700 w-fit text-white text-xs px-2 py-1 rounded-full font-medium">
                 Admin
               </div>
             )}
@@ -134,34 +134,40 @@ export default function UserMenu() {
 
           {/* Menu Items */}
           <div className="UserDropdownItems py-2">
-            <a
+            <Link
               href="/profile"
-              className="UserMenuItem flex items-center px-4 py-3 text-sm text-gray-700 hover:bg-n3 transition-colors group"
+              className="UserMenuItem flex items-center px-4 py-3 text-sm text-gray-700 hover:bg-po1/10 transition-colors group"
               onClick={() => setIsOpen(false)}
             >
-              <User2 className="MenuItemIcon w-5 h-5 mr-3 text-gray-500 group-hover:text-po1" />
-              <span className="font-medium">Profile Settings</span>
-            </a>
+              <User2 className="MenuItemIcon w-4 h-4 mr-3 text-gray-500 group-hover:text-po1 group-hover:scale-110 transition-transform" />
+              <span className="font-medium text-xs text-gray-400 group-hover:text-po1">
+                Profile Settings
+              </span>
+            </Link>
 
             {userRole === "admin" && (
-              <a
+              <Link
                 href="/admin"
                 className="UserMenuItem flex items-center px-4 py-3 text-sm text-gray-700 hover:bg-po1/10 transition-colors group"
                 onClick={() => setIsOpen(false)}
               >
-                <Settings className="MenuItemIcon w-5 h-5 mr-3 text-po1" />
-                <span className="font-medium text-po1">Admin Dashboard</span>
-              </a>
+                <Settings className="MenuItemIcon w-4 h-4 mr-3 text-gray-500 group-hover:text-po1 group-hover:scale-110 transition-transform" />
+                <span className="font-medium text-xs text-gray-400 group-hover:text-po1">
+                  Admin Dashboard
+                </span>
+              </Link>
             )}
 
             {/* Logout Section */}
-            <div className="LogoutSection border-t border-n3 mt-2 pt-2">
+            <div className="LogoutSection border-t border-y-white/10 mt-2 pt-2">
               <button
                 onClick={handleSignOut}
                 className="LogoutButton w-full flex items-center px-4 py-3 text-xs text-gray-500 cursor-pointer hover:bg-pr1/10 transition-colors group font-medium"
               >
-                <LogOut className="LogoutIcon w-5 h-5 mr-3 group-hover:scale-110 transition-transform" />
-                <span>Sign Out</span>
+                <LogOut className="LogoutIcon w-4 h-4 mr-3 group-hover:scale-110 transition-transform" />
+                <span className="font-medium text-xs text-gray-400 group-hover:text-po1">
+                  Sign Out
+                </span>
               </button>
             </div>
           </div>

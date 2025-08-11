@@ -1,5 +1,3 @@
-'use client';
-
 import { useState } from 'react';
 import { Restaurant } from '@/lib/types';
 import { createClient } from '@/lib/supabase/client';

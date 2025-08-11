@@ -7,7 +7,7 @@ export default function HeroSection() {
   const router = useRouter();
 
   return (
-    <div className="HeroSection relative flex h-[calc(100svh-72px)] max-h-[1040px] min-h-fit flex-col items-center justify-center bg-black px-4 py-[70px] xs:px-10">
+    <div className="HeroSection relative flex h-[calc(100svh-74px)] max-h-[1040px] min-h-fit flex-col items-center justify-center bg-black px-4 py-[70px] xs:px-10">
       <div className="ImageContainer absolute inset-0 z-10 flex h-full items-center justify-center overflow-hidden shadow-themeShadow">
         {/* mobile video */}
         <video
@@ -19,6 +19,7 @@ export default function HeroSection() {
           loop
           muted
           playsInline
+          poster="/mobile-hero-poster.webp"
         />
         {/* desktop video */}
         <video
@@ -30,6 +31,7 @@ export default function HeroSection() {
           loop
           muted
           playsInline
+          poster="/desktop-hero-poster.webp"
         />
       </div>
       <div className="TitleSection z-20 mx-auto mt-12 flex h-fit w-full flex-col gap-4 rounded-2xl bg-black/70 p-6 py-12 text-white shadow-themeShadow backdrop-blur-lg backdrop-filter sm:max-w-[600px] sm:rounded-xl sm:px-12 sm:py-10">

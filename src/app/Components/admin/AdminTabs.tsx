@@ -42,7 +42,7 @@ export default function AdminTabs({ activeTab, onTabChange }: AdminTabsProps) {
             <button
               key={tab.id}
               onClick={() => onTabChange(tab.id)}
-              className={`AdminTabButton group w-full p-4 rounded-2xl border transition-all ${
+              className={`AdminTabButton group w-full px-4 py-2 rounded-lg border transition-all ${
                 isActive
                   ? "bg-po1/20 border-po1/30 text-po1"
                   : "bg-stone-800/50 border-white/10 text-white/70 hover:bg-stone-800/70 hover:text-white hover:border-white/20"

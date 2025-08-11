@@ -226,15 +226,17 @@ export default function AdminPage() {
         <CardWrapper
           variant="panel-dark"
           padding="lg"
-          className="border-r rounded-none h-full"
+          className="border-r rounded-none h-full flex flex-col"
         >
           <div className="AdminPanelHeader mb-6">
-            <div className="AdminPanelIcon w-16 h-16 bg-gradient-to-br from-po1 to-py1 rounded-2xl flex items-center justify-center mb-4">
-              <Shield className="w-8 h-8 text-stone-900" />
+            <div className="TitleWrapper flex gap-2">
+              <div className="AdminPanelIcon w-12 h-12 bg-gradient-to-br from-po1 to-py1 rounded-2xl flex items-center justify-center mb-4">
+                <Shield className="w-8 h-8 text-stone-900" />
+              </div>
+              <h2 className="AdminPanelTitle text-lg sm:text-xl font-serif font-bold leading-tight text-white mb-4">
+                Admin Command Center
+              </h2>
             </div>
-            <h2 className="AdminPanelTitle text-2xl sm:text-3xl font-serif font-bold leading-tight text-white mb-4">
-              Admin Command Center
-            </h2>
             <p className="AdminPanelText text-white/70 max-w-prose mb-8">
               Manage Denver&apos;s happy hour ecosystem with powerful tools and
               real-time insights.
@@ -247,15 +249,15 @@ export default function AdminPage() {
           </div>
 
           {/* Quick Actions */}
-          <div className="AdminQuickActions space-y-3 mt-auto">
+          <div className="AdminQuickActions mt-auto flex flex-1">
             <Link
               href="/"
-              className="QuickActionButton group flex items-center gap-3 w-full rounded-2xl bg-stone-800/70 border border-white/5 p-4 hover:bg-stone-800/90 transition"
+              className="QuickActionButton group mt-auto flex items-center gap-3 w-full rounded-lg bg-stone-800/70 border border-white/5 px-4 py-2 hover:bg-stone-800/90 transition"
             >
-              <div className="QuickActionIcon h-9 w-9 rounded-xl bg-white/10 grid place-items-center text-white/70 group-hover:text-white transition-colors">
-                <Home className="w-5 h-5" />
+              <div className="QuickActionIcon h-8 w-8 rounded-xl bg-white/10 grid place-items-center text-white/70 group-hover:text-white transition-colors">
+                <Home className="w-4 h-4" />
               </div>
-              <span className="QuickActionText text-white font-medium">
+              <span className="QuickActionText text-white text-xs font-bold">
                 Back to Site
               </span>
             </Link>

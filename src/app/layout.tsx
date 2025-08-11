@@ -105,27 +105,28 @@ export default function RootLayout({
                 <Footer />
                 <Analytics />
                 <StructuredData />
-                <Toaster 
-                  position="top-right"
+                <Toaster
+                  position="bottom-center"
+                  containerStyle={{ bottom: "24px" }}
                   toastOptions={{
                     duration: 4000,
                     style: {
-                      background: '#1c1917', // stone-900
-                      color: '#fff9ee',       // n2
-                      border: '1px solid rgba(255, 249, 238, 0.1)',
-                      borderRadius: '12px',
-                      fontSize: '14px',
+                      background: "#1c1917", // stone-900
+                      color: "#fff9ee", // n2
+                      border: "1px solid rgba(255, 249, 238, 0.1)",
+                      borderRadius: "16px",
+                      fontSize: "16px",
                     },
                     success: {
                       iconTheme: {
-                        primary: '#ea580c', // po1
-                        secondary: '#fff9ee', // n2
+                        primary: "#ea580c", // po1
+                        secondary: "#fff9ee", // n2
                       },
                     },
                     error: {
                       iconTheme: {
-                        primary: '#dc2626', // pr1
-                        secondary: '#fff9ee', // n2
+                        primary: "#dc2626", // pr1
+                        secondary: "#fff9ee", // n2
                       },
                     },
                   }}

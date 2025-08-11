@@ -2,6 +2,8 @@ import { useState } from "react";
 import { Restaurant } from "@/lib/types";
 import RestaurantEditorModal from "./RestaurantEditorModal";
 import AdminFilterDropdown from "../SmallComponents/AdminFilterDropdown";
+import type { RestaurantUrlValidation } from "@/lib/supabase/urlValidation";
+import toast from "react-hot-toast";
 import {
   Building2,
   CheckCircle,
@@ -14,8 +16,14 @@ import {
   Users,
   Filter,
   Search,
+  Globe,
+  AlertCircle,
+  ExternalLink,
+  Save,
+  Link,
+  Trash2,
+  ArrowLeft,
 } from "lucide-react";
-import CardWrapper from "../SmallComponents/CardWrapper";
 
 interface AdminStats {
   totalRestaurants: number;
@@ -65,6 +73,22 @@ export default function AdminDashboard({
     useState<Restaurant | null>(null);
   const [showEditorModal, setShowEditorModal] = useState(false);
   const [loadingMore, setLoadingMore] = useState(false);
+  const [urlValidation, setUrlValidation] = useState<{
+    results: RestaurantUrlValidation[];
+    isValidating: boolean;
+    progress?: { completed: number; total: number; message?: string };
+    lastValidated?: Date;
+  }>({ results: [], isValidating: false });
+  const [urlEdits, setUrlEdits] = useState<
+    Record<string, { website?: string; menuUrl?: string }>
+  >({});
+  const [isSaving, setIsSaving] = useState(false);
+  const [savingProgress, setSavingProgress] = useState<{
+    phase: "saving" | "revalidating";
+    current: number;
+    total: number;
+  } | null>(null);
+  const [showValidationMode, setShowValidationMode] = useState(false);
 
   const handleRestaurantSelect = (restaurant: Restaurant) => {
     setSelectedRestaurant(restaurant);
@@ -84,8 +108,380 @@ export default function AdminDashboard({
 
   const handleLoadMore = async () => {
     setLoadingMore(true);
-    await onLoadMore();
+    onLoadMore();
     setLoadingMore(false);
+  };
+
+  const handleUrlValidation = async () => {
+    setShowValidationMode(true);
+    setUrlValidation((prev) => ({
+      ...prev,
+      isValidating: true,
+      progress: undefined,
+      results: [],
+    }));
+
+    try {
+      console.log("🚀 Starting streaming URL validation...");
+
+      // Use streaming API for progress updates
+      const response = await fetch("/api/admin/validate-urls-stream", {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+        },
+      });
+
+      if (!response.ok) {
+        throw new Error(
+          `API request failed: ${response.status} ${response.statusText}`,
+        );
+      }
+
+      const reader = response.body?.getReader();
+      if (!reader) {
+        throw new Error("Failed to get response reader");
+      }
+
+      const decoder = new TextDecoder();
+      let buffer = "";
+
+      // Read the stream
+      while (true) {
+        const { done, value } = await reader.read();
+
+        if (done) break;
+
+        buffer += decoder.decode(value, { stream: true });
+        const lines = buffer.split("\n");
+        buffer = lines.pop() || ""; // Keep incomplete line in buffer
+
+        for (const line of lines) {
+          if (line.trim()) {
+            try {
+              const data = JSON.parse(line);
+
+              switch (data.type) {
+                case "progress":
+                  setUrlValidation((prev) => ({
+                    ...prev,
+                    progress: {
+                      completed: data.completed,
+                      total: data.total,
+                      message: data.message,
+                    },
+                  }));
+                  break;
+
+                case "complete":
+                  setUrlValidation({
+                    results: data.results,
+                    isValidating: false,
+                    lastValidated: new Date(),
+                  });
+
+                  toast.success(
+                    `Validation complete! ${data.results.length} restaurants checked, ${data.summary.brokenUrls} have broken URLs`,
+                  );
+                  break;
+
+                case "fatal_error":
+                  throw new Error(data.error);
+
+                case "error":
+                  console.warn(`⚠️ ${data.message}`);
+                  break;
+
+                default:
+                  console.log(`ℹ️ ${data.message}`);
+                  break;
+              }
+            } catch (parseError) {
+              console.warn("Failed to parse streaming response:", line);
+            }
+          }
+        }
+      }
+    } catch (error) {
+      console.error("Streaming URL validation failed:", error);
+      setUrlValidation((prev) => ({
+        ...prev,
+        isValidating: false,
+        progress: undefined,
+      }));
+
+      toast.error(
+        `URL validation failed: ${error instanceof Error ? error.message : "Unknown error"}`,
+      );
+    }
+  };
+
+  const handleExitValidationMode = () => {
+    setShowValidationMode(false);
+    setUrlValidation((prev) => ({ ...prev, isValidating: false, results: [] }));
+    setUrlEdits({});
+  };
+
+  // Get broken URLs count for display
+  const brokenUrlsCount = urlValidation.results.filter((result) => {
+    const hasBrokenWebsite = result.website && !result.website.isValid;
+    const hasBrokenMenuUrl = result.menuUrl && !result.menuUrl.isValid;
+    return hasBrokenWebsite || hasBrokenMenuUrl;
+  }).length;
+
+  // Handle URL replacement
+  const handleUrlEdit = (
+    restaurantId: string,
+    type: "website" | "menuUrl",
+    value: string,
+  ) => {
+    setUrlEdits((prev) => ({
+      ...prev,
+      [restaurantId]: {
+        ...prev[restaurantId],
+        [type]: value,
+      },
+    }));
+  };
+
+  const handleBatchSave = async () => {
+    const restaurantIds = Object.keys(urlEdits);
+    if (restaurantIds.length === 0) {
+      toast.error("No changes to save");
+      return;
+    }
+
+    setIsSaving(true);
+    setSavingProgress({
+      phase: "saving",
+      current: 0,
+      total: restaurantIds.length,
+    });
+
+    let successCount = 0;
+    let errorCount = 0;
+    const successfulUpdates: {
+      restaurantId: string;
+      edits: (typeof urlEdits)[string];
+    }[] = [];
+
+    // Phase 1: Save all URL changes
+    for (let i = 0; i < restaurantIds.length; i++) {
+      const restaurantId = restaurantIds[i];
+      const edits = urlEdits[restaurantId];
+      if (!edits) continue;
+
+      setSavingProgress({
+        phase: "saving",
+        current: i + 1,
+        total: restaurantIds.length,
+      });
+
+      try {
+        const response = await fetch("/api/admin/update-restaurant-urls", {
+          method: "POST",
+          headers: {
+            "Content-Type": "application/json",
+          },
+          body: JSON.stringify({
+            restaurantId,
+            websiteUrl:
+              edits.website !== undefined
+                ? edits.website === ""
+                  ? null
+                  : edits.website
+                : undefined,
+            menuUrl:
+              edits.menuUrl !== undefined
+                ? edits.menuUrl === ""
+                  ? null
+                  : edits.menuUrl
+                : undefined,
+          }),
+        });
+
+        const data = await response.json();
+
+        if (data.success) {
+          successCount++;
+          successfulUpdates.push({ restaurantId, edits });
+        } else {
+          console.error(
+            `Failed to update URLs for restaurant ${restaurantId}:`,
+            data.error,
+          );
+          errorCount++;
+        }
+      } catch (error) {
+        console.error(
+          `Error updating URLs for restaurant ${restaurantId}:`,
+          error,
+        );
+        errorCount++;
+      }
+    }
+
+    // Phase 2: Re-validate the successfully updated restaurants
+    if (successfulUpdates.length > 0) {
+      setSavingProgress({
+        phase: "revalidating",
+        current: 0,
+        total: successfulUpdates.length,
+      });
+
+      const updatedValidationResults = [...urlValidation.results];
+
+      for (let i = 0; i < successfulUpdates.length; i++) {
+        const { restaurantId, edits } = successfulUpdates[i];
+
+        setSavingProgress({
+          phase: "revalidating",
+          current: i + 1,
+          total: successfulUpdates.length,
+        });
+
+        // Find the restaurant in the original validation results
+        const originalResult = urlValidation.results.find(
+          (r) => r.restaurantId === restaurantId,
+        );
+        if (!originalResult) continue;
+
+        // Create the new URLs for validation
+        const newWebsiteUrl =
+          edits.website !== undefined
+            ? edits.website === ""
+              ? null
+              : edits.website
+            : originalResult.website?.url;
+        const newMenuUrl =
+          edits.menuUrl !== undefined
+            ? edits.menuUrl === ""
+              ? null
+              : edits.menuUrl
+            : originalResult.menuUrl?.url;
+
+        try {
+          // Re-validate with the new URLs using the correct API endpoint
+          const response = await fetch(
+            "/api/admin/validate-single-restaurant",
+            {
+              method: "POST",
+              headers: {
+                "Content-Type": "application/json",
+              },
+              body: JSON.stringify({
+                restaurantId,
+                website: newWebsiteUrl,
+                menuUrl: newMenuUrl,
+              }),
+            },
+          );
+
+          const data = await response.json();
+
+          if (!data.success) {
+            console.error(
+              `Failed to re-validate restaurant ${restaurantId}:`,
+              data.error,
+            );
+            continue;
+          }
+
+          const revalidationResult = data.result;
+
+          // Update the validation results
+          const resultIndex = updatedValidationResults.findIndex(
+            (r) => r.restaurantId === restaurantId,
+          );
+          if (resultIndex !== -1) {
+            updatedValidationResults[resultIndex] = revalidationResult;
+          }
+        } catch (error) {
+          console.error(
+            `Failed to re-validate restaurant ${restaurantId}:`,
+            error,
+          );
+        }
+      }
+
+      // Update the validation results state
+      setUrlValidation((prev) => ({
+        ...prev,
+        results: updatedValidationResults,
+      }));
+    }
+
+    // Clear all edits on completion
+    if (successCount > 0) {
+      setUrlEdits({});
+    }
+
+    // Reset saving state
+    setIsSaving(false);
+    setSavingProgress(null);
+
+    // Show completion toast
+    if (errorCount === 0) {
+      toast.success(
+        `✅ Successfully updated and revalidated ${successCount} restaurant${successCount !== 1 ? "s" : ""}!`,
+      );
+    } else if (successCount > 0) {
+      toast.success(`✅ Updated ${successCount} restaurants successfully`);
+      toast.error(`${errorCount} restaurants failed to update`);
+    } else {
+      toast.error(
+        `Failed to update ${errorCount} restaurant${errorCount !== 1 ? "s" : ""}`,
+      );
+    }
+  };
+
+  const handleDeleteRestaurant = async (
+    restaurantId: string,
+    restaurantName: string,
+  ) => {
+    const confirmed = confirm(
+      `⚠️ Are you sure you want to delete "${restaurantName}"?\n\nThis action cannot be undone and will permanently remove the restaurant from the database.`,
+    );
+
+    if (!confirmed) return;
+
+    try {
+      const response = await fetch("/api/admin/delete-restaurant", {
+        method: "DELETE",
+        headers: {
+          "Content-Type": "application/json",
+        },
+        body: JSON.stringify({
+          restaurantId,
+        }),
+      });
+
+      const data = await response.json();
+
+      if (data.success) {
+        toast.success(`✅ Restaurant "${restaurantName}" has been deleted`);
+
+        // Remove from validation results
+        setUrlValidation((prev) => ({
+          ...prev,
+          results: prev.results.filter((r) => r.restaurantId !== restaurantId),
+        }));
+
+        // Clear any edits for this restaurant
+        setUrlEdits((prev) => {
+          const newEdits = { ...prev };
+          delete newEdits[restaurantId];
+          return newEdits;
+        });
+      } else {
+        toast.error(`Failed to delete restaurant: ${data.error}`);
+      }
+    } catch (error) {
+      console.error("Error deleting restaurant:", error);
+      toast.error(
+        `Error deleting restaurant: ${error instanceof Error ? error.message : "Unknown error"}`,
+      );
+    }
   };
 
   return (
@@ -154,101 +550,134 @@ export default function AdminDashboard({
         </div>
       </div>
 
-      {/* Restaurant Search */}
-      <div className="RestaurantListInfo flex items-center">
-        <div className="RestaurantListIcon w-12 h-12 bg-po1/20 rounded-xl flex items-center justify-center mr-4">
-          <Building2 className="w-6 h-6 text-po1" />
+      {/* Restaurant Directory Header */}
+      <div className="RestaurantListInfo flex items-center justify-between">
+        <div className="flex items-center">
+          <div className="RestaurantListIcon w-12 h-12 bg-po1/20 rounded-xl flex items-center justify-center mr-4">
+            <Building2 className="w-6 h-6 text-po1" />
+          </div>
+          <div>
+            <h2 className="RestaurantListTitle text-xl font-bold text-white uppercase tracking-wide">
+              Restaurant Directory
+            </h2>
+            <p className="RestaurantListSubtitle text-white/70">
+              {hasFilters
+                ? `Showing ${restaurants.length} of ${totalFiltered} restaurants`
+                : "Use the search bar and filters to find restaurants"}
+            </p>
+          </div>
         </div>
-        <div>
-          <h2 className="RestaurantListTitle text-xl font-bold text-white uppercase tracking-wide">
-            Restaurant Directory
-          </h2>
-          <p className="RestaurantListSubtitle text-white/70">
-            {hasFilters
-              ? `Showing ${restaurants.length} of ${totalFiltered} restaurants`
-              : "Use the search bar and filters to find restaurants"}
-          </p>
-        </div>
+
+        {/* URL Validation Button */}
+        <button
+          onClick={handleUrlValidation}
+          disabled={urlValidation.isValidating}
+          className="AdminUrlValidationButton px-4 py-3 bg-blue-600/20 hover:bg-blue-600/30 border border-blue-500/30 rounded-xl text-blue-300 hover:text-blue-200 transition-all flex items-center gap-2 disabled:opacity-50 disabled:cursor-not-allowed"
+        >
+          {urlValidation.isValidating ? (
+            <>
+              <Loader2 className="w-4 h-4 animate-spin" />
+              {urlValidation.progress
+                ? `Validated ${urlValidation.progress.completed}/${urlValidation.progress.total}`
+                : "Starting validation..."}
+            </>
+          ) : (
+            <>
+              <Globe className="w-4 h-4" />
+              Validate URLs
+              {brokenUrlsCount > 0 && (
+                <span className="bg-red-500/20 text-red-300 px-2 py-1 rounded-md text-xs ml-2">
+                  {brokenUrlsCount} broken
+                </span>
+              )}
+            </>
+          )}
+        </button>
       </div>
 
-      {/* Filters Bar */}
-      <div className="AdminFiltersBar">
-        <div className="AdminFiltersContainer flex flex-col gap-4 w-full bg-stone-800/50 rounded-2xl p-4 border border-white/10">
-          <div className="AdminFiltersRow flex flex-wrap gap-4 items-center">
-            {/* Search Bar */}
-            <div className="AdminSearchContainer relative flex-1 min-w-[300px]">
-              <Search className="AdminSearchIcon absolute left-3 top-1/2 transform -translate-y-1/2 w-5 h-5 text-white/50" />
-              <input
-                type="text"
-                placeholder="Search restaurants..."
-                value={searchQuery}
-                onChange={(e) => onSearchChange(e.target.value)}
-                className="AdminSearchInput w-full pl-10 pr-4 py-3 bg-stone-700/50 border border-white/10 rounded-xl text-white placeholder-white/40 focus:outline-none focus:ring-2 focus:ring-po1 focus:border-po1 transition-all"
-              />
-              {searchQuery && (
-                <button
-                  onClick={() => onSearchChange("")}
-                  className="AdminClearSearchButton absolute right-3 top-1/2 transform -translate-y-1/2 w-5 h-5 text-white/50 hover:text-white/80 transition-colors"
-                >
-                  ×
-                </button>
-              )}
-            </div>
+      {/* Conditional Content: Search & Filters OR URL Validation Results */}
+      {!showValidationMode ? (
+        <>
+          {/* Filters Bar */}
+          <div className="AdminFiltersBar">
+            <div className="AdminFiltersContainer flex flex-col gap-4 w-full bg-stone-800/50 rounded-2xl p-4 border border-white/10">
+              <div className="AdminFiltersRow flex flex-wrap gap-4 items-center">
+                {/* Search Bar */}
+                <div className="AdminSearchContainer relative flex-1 min-w-[300px]">
+                  <Search className="AdminSearchIcon absolute left-3 top-1/2 transform -translate-y-1/2 w-5 h-5 text-white/50" />
+                  <input
+                    type="text"
+                    placeholder="Search restaurants..."
+                    value={searchQuery}
+                    onChange={(e) => onSearchChange(e.target.value)}
+                    className="AdminSearchInput w-full pl-10 pr-4 py-3 bg-stone-700/50 border border-white/10 rounded-xl text-white placeholder-white/40 focus:outline-none focus:ring-2 focus:ring-po1 focus:border-po1 transition-all"
+                  />
+                  {searchQuery && (
+                    <button
+                      onClick={() => onSearchChange("")}
+                      className="AdminClearSearchButton absolute right-3 top-1/2 transform -translate-y-1/2 w-5 h-5 text-white/50 hover:text-white/80 transition-colors"
+                    >
+                      ×
+                    </button>
+                  )}
+                </div>
 
-            {/* Verification Status Filter */}
-            <div className="AdminFilterGroup">
-              <AdminFilterDropdown
-                label="Status"
-                value={filters.verificationStatus}
-                options={[
-                  { value: "verified", label: "Verified" },
-                  { value: "pending", label: "Pending" },
-                ]}
-                onChange={(value) =>
-                  onFilterChange("verificationStatus", value)
-                }
-                multiple={true}
-                placeholder="Any Status"
-              />
-            </div>
+                {/* Verification Status Filter */}
+                <div className="AdminFilterGroup">
+                  <AdminFilterDropdown
+                    label="Status"
+                    value={filters.verificationStatus}
+                    options={[
+                      { value: "verified", label: "Verified" },
+                      { value: "pending", label: "Pending" },
+                    ]}
+                    onChange={(value) =>
+                      onFilterChange("verificationStatus", value)
+                    }
+                    multiple={true}
+                    placeholder="Any Status"
+                  />
+                </div>
 
-            {/* Area Filter */}
-            <div className="AdminFilterGroup">
-              <AdminFilterDropdown
-                label="Area"
-                value={filters.areas}
-                options={uniqueAreas}
-                onChange={(value) => onFilterChange("areas", value)}
-                multiple={true}
-                placeholder="Any Area"
-              />
-            </div>
+                {/* Area Filter */}
+                <div className="AdminFilterGroup">
+                  <AdminFilterDropdown
+                    label="Area"
+                    value={filters.areas}
+                    options={uniqueAreas}
+                    onChange={(value) => onFilterChange("areas", value)}
+                    multiple={true}
+                    placeholder="Any Area"
+                  />
+                </div>
 
-            {/* Cuisine Filter */}
-            <div className="AdminFilterGroup">
-              <AdminFilterDropdown
-                label="Cuisine"
-                value={filters.cuisineTypes}
-                options={uniqueCuisineTypes}
-                onChange={(value) => onFilterChange("cuisineTypes", value)}
-                multiple={true}
-                placeholder="Any Cuisine"
-              />
-            </div>
+                {/* Cuisine Filter */}
+                <div className="AdminFilterGroup">
+                  <AdminFilterDropdown
+                    label="Cuisine"
+                    value={filters.cuisineTypes}
+                    options={uniqueCuisineTypes}
+                    onChange={(value) => onFilterChange("cuisineTypes", value)}
+                    multiple={true}
+                    placeholder="Any Cuisine"
+                  />
+                </div>
 
-            {/* Clear Filters Button */}
-            {(filters.areas.length > 0 ||
-              filters.cuisineTypes.length > 0 ||
-              filters.verificationStatus.length > 0 ||
-              searchQuery) && (
-              <button
-                onClick={onClearFilters}
-                className="AdminClearFiltersButton px-4 py-3 bg-stone-700/50 hover:bg-stone-700/70 border border-white/10 rounded-xl text-white/80 hover:text-white transition-all flex items-center gap-2"
-              >
-                <Filter className="w-4 h-4" />
-                Clear Filters
-              </button>
-            )}
+                {/* Clear Filters Button */}
+                {(filters.areas.length > 0 ||
+                  filters.cuisineTypes.length > 0 ||
+                  filters.verificationStatus.length > 0 ||
+                  searchQuery) && (
+                  <button
+                    onClick={onClearFilters}
+                    className="AdminClearFiltersButton px-4 py-3 bg-stone-700/50 hover:bg-stone-700/70 border border-white/10 rounded-xl text-white/80 hover:text-white transition-all flex items-center gap-2"
+                  >
+                    <Filter className="w-4 h-4" />
+                    Clear Filters
+                  </button>
+                )}
+              </div>
+            </div>
           </div>
 
           {/* Restaurant List */}
@@ -366,8 +795,220 @@ export default function AdminDashboard({
               </div>
             )}
           </div>
+        </>
+      ) : (
+        /* URL Validation Mode */
+        <div className="UrlValidationMode h-fit">
+          <div className="UrlValidationResults bg-stone-800/50 rounded-2xl p-6 border border-white/10">
+            {/* Header with Back Button */}
+            <div className="flex items-center justify-between mb-4">
+              <div className="flex items-center gap-4">
+                <h3 className="text-xl font-medium text-white flex items-center gap-2">
+                  <Globe className="w-5 h-5" />
+                  URL Validation Results
+                </h3>
+                <button
+                  onClick={handleExitValidationMode}
+                  className="flex items-center gap-2 text-xs cursor-pointer px-3 py-2 bg-stone-700/50 hover:bg-stone-700/70 border border-white/10 rounded-lg text-white/70 hover:text-white transition-all"
+                >
+                  <ArrowLeft className="w-4 h-4" />
+                  Back to Search
+                </button>
+              </div>
+
+              <div className="flex items-center gap-4">
+                {Object.keys(urlEdits).length > 0 && (
+                  <button
+                    onClick={handleBatchSave}
+                    disabled={isSaving}
+                    className="flex items-center gap-2 px-3 py-2 bg-green-600/20 hover:bg-green-600/30 border border-green-500/30 rounded-lg text-green-300 hover:text-green-200 transition-all disabled:opacity-50 disabled:cursor-not-allowed"
+                  >
+                    {isSaving ? (
+                      <>
+                        <Loader2 className="w-4 h-4 animate-spin" />
+                        {savingProgress ? (
+                          <>
+                            {savingProgress.phase === "saving"
+                              ? `Saving ${savingProgress.current}/${savingProgress.total}...`
+                              : `Revalidating ${savingProgress.current}/${savingProgress.total}...`}
+                          </>
+                        ) : (
+                          "Processing..."
+                        )}
+                      </>
+                    ) : (
+                      <>
+                        <Save className="w-4 h-4" />
+                        Save All Changes ({Object.keys(urlEdits).length})
+                      </>
+                    )}
+                  </button>
+                )}
+                {urlValidation.lastValidated && (
+                  <span className="text-xs text-white/60">
+                    Last checked: {urlValidation.lastValidated.toLocaleString()}
+                  </span>
+                )}
+              </div>
+            </div>
+
+            {/* Validation Content */}
+            {urlValidation.isValidating ? (
+              <div className="text-center py-8">
+                <Loader2 className="w-8 h-8 animate-spin mx-auto mb-4 text-blue-300" />
+                <p className="text-white/70 mb-2">
+                  {urlValidation.progress
+                    ? `Validating URLs... ${urlValidation.progress.completed}/${urlValidation.progress.total}`
+                    : "Starting validation..."}
+                </p>
+              </div>
+            ) : brokenUrlsCount > 0 ? (
+              <div className="space-y-4">
+                <div className="flex items-center gap-2 text-red-300 mb-4">
+                  <AlertCircle className="w-5 h-5" />
+                  <span className="font-medium text-lg">
+                    {brokenUrlsCount} restaurant
+                    {brokenUrlsCount !== 1 ? "s" : ""} with broken URLs
+                  </span>
+                </div>
+
+                <div className="space-y-4">
+                  {urlValidation.results
+                    .filter((result) => {
+                      const hasBrokenWebsite =
+                        result.website && !result.website.isValid;
+                      const hasBrokenMenuUrl =
+                        result.menuUrl && !result.menuUrl.isValid;
+                      return hasBrokenWebsite || hasBrokenMenuUrl;
+                    })
+                    .map((result) => {
+                      const currentEdits = urlEdits[result.restaurantId] || {};
+
+                      return (
+                        <div
+                          key={result.restaurantId}
+                          className="bg-stone-700/30 rounded-lg p-4 space-y-3"
+                        >
+                          <div className="flex items-center justify-between">
+                            <div className="font-medium text-white text-lg">
+                              {result.restaurantName}
+                            </div>
+                            <button
+                              onClick={() =>
+                                handleDeleteRestaurant(
+                                  result.restaurantId,
+                                  result.restaurantName,
+                                )
+                              }
+                              className="flex items-center text-xs gap-2 px-3 py-2 bg-red-600/20 hover:bg-red-600/30 border border-red-500/30 rounded-lg text-red-300 hover:text-red-200 transition-all"
+                            >
+                              <Trash2 className="w-4 h-4" />
+                              Delete Restaurant
+                            </button>
+                          </div>
+
+                          {result.website && !result.website.isValid && (
+                            <div className="flex flex-col gap-4">
+                              <div className="URLResult flex gap-2">
+                                <div className="text-sm text-gray-400 flex items-center gap-2">
+                                  <span>
+                                    {result.website.error ||
+                                      `Status ${result.website.statusCode} - `}
+                                  </span>
+                                </div>
+                                <div className="flex items-center gap-2">
+                                  <a
+                                    href={result.website.url}
+                                    target="_blank"
+                                    rel="noopener noreferrer"
+                                    className="text-xs break-all"
+                                  >
+                                    {result.website.url}
+                                  </a>
+                                </div>
+                              </div>
+                              <input
+                                type="url"
+                                placeholder="Enter new website URL or leave empty to remove..."
+                                value={currentEdits.website || ""}
+                                onChange={(e) =>
+                                  handleUrlEdit(
+                                    result.restaurantId,
+                                    "website",
+                                    e.target.value,
+                                  )
+                                }
+                                className="w-full px-3 py-2 text-sm bg-stone-600/50 border border-white/10 rounded text-white placeholder-white/40 focus:outline-none focus:ring-2 focus:ring-py1/40 focus:border-py1/40"
+                              />
+                            </div>
+                          )}
+
+                          {result.menuUrl && !result.menuUrl.isValid && (
+                            <div className="space-y-2">
+                              <div className="text-sm text-red-300 flex items-center gap-2">
+                                <ExternalLink className="w-4 h-4" />
+                                <span>
+                                  Menu:{" "}
+                                  {result.menuUrl.error ||
+                                    `Status ${result.menuUrl.statusCode}`}
+                                </span>
+                              </div>
+                              <div className="flex items-center gap-2">
+                                <Link className="w-4 h-4 text-red-300" />
+                                <a
+                                  href={result.menuUrl.url}
+                                  target="_blank"
+                                  rel="noopener noreferrer"
+                                  className="text-blue-400 hover:text-blue-300 underline bg-stone-800 px-2 py-1 rounded break-all"
+                                >
+                                  {result.menuUrl.url}
+                                </a>
+                              </div>
+                              <input
+                                type="url"
+                                placeholder="Enter new menu URL or leave empty to remove..."
+                                value={currentEdits.menuUrl || ""}
+                                onChange={(e) =>
+                                  handleUrlEdit(
+                                    result.restaurantId,
+                                    "menuUrl",
+                                    e.target.value,
+                                  )
+                                }
+                                className="w-full px-3 py-2 bg-stone-600/50 border border-white/10 rounded text-white placeholder-white/40 focus:outline-none focus:ring-2 focus:ring-green-500 focus:border-green-500"
+                              />
+                            </div>
+                          )}
+                        </div>
+                      );
+                    })}
+                </div>
+              </div>
+            ) : urlValidation.results.length > 0 ? (
+              <div className="text-center py-8">
+                <CheckCircle className="w-12 h-12 mx-auto mb-4 text-green-400" />
+                <h3 className="text-lg font-medium text-white mb-2">
+                  All URLs Working!
+                </h3>
+                <p className="text-white/70">
+                  All restaurant URLs are working correctly.
+                </p>
+              </div>
+            ) : (
+              <div className="text-center py-8">
+                <Globe className="w-12 h-12 mx-auto mb-4 text-white/50" />
+                <h3 className="text-lg font-medium text-white mb-2">
+                  Ready to Validate
+                </h3>
+                <p className="text-white/70">
+                  Click the "Validate URLs" button to check all restaurant
+                  links.
+                </p>
+              </div>
+            )}
+          </div>
         </div>
-      </div>
+      )}
 
       {/* Restaurant Editor Modal */}
       {showEditorModal && selectedRestaurant && (

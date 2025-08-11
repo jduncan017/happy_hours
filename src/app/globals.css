@@ -121,7 +121,13 @@
 }
 
 /* Apply the fonts globally */
-body {
+body,
+h1,
+h2,
+h3,
+h4,
+h5,
+h6 {
   font-family: "Montserrat", serif;
 }
 
@@ -147,46 +153,6 @@ a:hover {
   scrollbar-width: none; /* Firefox */
 }
 
-h1 {
-  font-size: 18px;
-  line-height: 1.2;
-  text-transform: uppercase;
-}
-
-h2 {
-  font-size: 24px;
-  line-height: 1.25;
-  text-transform: uppercase;
-  font-weight: 800;
-}
-
-h3 {
-  font-size: 18px;
-  line-height: 1.75;
-  text-transform: uppercase;
-  font-weight: 600;
-}
-
-h4 {
-  font-size: 16px;
-  line-height: 1.25;
-  font-weight: 500;
-}
-
-p,
-label {
-  font-size: 16px;
-  line-height: 1.2rem;
-}
-
-/* xs */
-@media (min-width: 460px) {
-  h1 {
-    font-size: 22px;
-    line-height: 1.2rem;
-  }
-}
-
 /* sm */
 @media (min-width: 640px) {
   .scrollbar-hide::-webkit-scrollbar {
@@ -198,41 +164,4 @@ label {
     -ms-overflow-style: initial; /* IE and Edge */
     scrollbar-width: thin; /* Firefox */
   }
-
-  h1 {
-    font-size: 24px;
-    line-height: 1.2;
-    text-transform: uppercase;
-  }
-
-  h2 {
-    font-size: 30px;
-  }
-
-  h4 {
-    font-size: 18px;
-    line-height: 2rem;
-  }
-}
-
-/* md */
-@media (min-width: 768px) {
-  h2 {
-    font-size: 28px;
-  }
-}
-
-/* lg */
-@media (min-width: 1024px) {
-}
-
-/* xl */
-@media (min-width: 1280px) {
-  h1 {
-    font-size: 26px;
-  }
-}
-
-/* 2xl */
-@media (min-width: 1536px) {
 }

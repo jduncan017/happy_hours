@@ -33,7 +33,7 @@ const NavBar = () => {
                 href={link.href}
                 onClick={() => setMobileActive(false)}
               >
-                <p className="AboutText text-xl font-medium uppercase tracking-wider sm:text-base lg:text-lg text-po1 cursor-pointer transition-all duration-200 hover:scale-105 hover:text-white">
+                <p className="AboutText font-medium tracking-wider text-white cursor-pointer transition-all duration-200 hover:scale-105 hover:text-po1">
                   {link.text}
                 </p>
               </Link>
@@ -48,7 +48,7 @@ const NavBar = () => {
                   setMobileActive(false);
                 }}
               >
-                <p className="AboutText w-fit text-xl font-medium uppercase tracking-wider sm:text-base lg:text-lg text-po1 cursor-pointer transition-all duration-200 hover:scale-105 hover:text-white">
+                <p className="AboutText w-fit font-medium tracking-wider text-white cursor-pointer transition-all duration-200 hover:scale-105 hover:text-po1">
                   {link.text}
                 </p>
               </button>

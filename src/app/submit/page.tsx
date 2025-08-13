@@ -1,10 +1,12 @@
+"use client";
+
+import ProtectedRoute from "@/app/Components/auth/ProtectedRoute";
 import RestaurantSubmissionPageContent from "./RestaurantSubmissionPageContent";
 
-export const metadata = {
-  title: "Submit a Restaurant",
-  description: "Help grow Denver's happy hour community by submitting your favorite restaurants and bars. Quick and easy form with automatic data extraction.",
-};
-
 export default function SubmitRestaurantPage() {
-  return <RestaurantSubmissionPageContent />;
+  return (
+    <ProtectedRoute>
+      <RestaurantSubmissionPageContent />
+    </ProtectedRoute>
+  );
 }

@@ -1,9 +1,8 @@
 "use client";
 
 import { useState, useEffect, useMemo } from "react";
-import { redirect } from "next/navigation";
 import { createClient } from "@/lib/supabase/client";
-import { isAdmin } from "@/lib/supabase/auth";
+import ProtectedRoute from "@/app/Components/auth/ProtectedRoute";
 import { getAllRestaurants } from "@/lib/supabase/restaurants";
 import { 
   applyRestaurantFilters, 
@@ -47,12 +46,6 @@ export default function AdminPage() {
   useEffect(() => {
     const fetchData = async () => {
       const supabase = createClient();
-
-      // Check if user is admin
-      const userIsAdmin = await isAdmin(supabase);
-      if (!userIsAdmin) {
-        redirect("/auth/login");
-      }
 
       // Only fetch stats initially, not restaurants
       const { count: restaurantCount } = await supabase
@@ -180,7 +173,8 @@ export default function AdminPage() {
   }
 
   return (
-    <div className="AdminPage flex w-full bg-gradient-to-br from-stone-950 via-stone-900 to-stone-950">
+    <ProtectedRoute requireAdmin={true}>
+      <div className="AdminPage flex w-full bg-gradient-to-br from-stone-950 via-stone-900 to-stone-950">
       {/* Fixed Left Side - Admin Info Panel */}
       <div className="AdminInfoPanel min-h-full w-80 z-10 pt-[74px] sm:pt-0">
         <CardWrapper
@@ -260,6 +254,7 @@ export default function AdminPage() {
           {activeTab === "settings" && <AdminSettings />}
         </div>
       </div>
-    </div>
+      </div>
+    </ProtectedRoute>
   );
 }

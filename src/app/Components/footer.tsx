@@ -25,8 +25,8 @@ const Footer = () => {
             </Link>
             <p className="text-gray-300 text-center lg:text-left mb-6 max-w-md">
               Denver&apos;s premier destination for discovering the best happy
-              hour deals. Find amazing food and drink specials at 90+
-              restaurants and bars across the city.
+              hour deals. Find amazing food and drink specials at restaurants
+              and bars across the city.
             </p>
           </div>
 
@@ -69,6 +69,15 @@ const Footer = () => {
                       Submit Restaurant
                     </Link>
                   </li>
+                  <li>
+                    <Link
+                      href="/contact"
+                      className="text-gray-300 hover:text-po1 transition-colors flex items-center gap-2"
+                    >
+                      <Mail className="w-4 h-4" />
+                      Contact
+                    </Link>
+                  </li>
                 </ul>
               </div>
 
@@ -103,20 +112,14 @@ const Footer = () => {
                 </ul>
               </div>
 
-              {/* Contact & Info */}
+              {/* About */}
               <div className="sm:col-span-2">
                 <h4 className="text-lg font-medium mb-4 text-po1">
-                  Get in Touch
+                  About
                 </h4>
-                <div className="flex flex-col sm:flex-row gap-4">
-                  <div className="flex items-center gap-2 text-gray-300">
-                    <Mail className="w-4 h-4" />
-                    <span className="text-sm">Denver, Colorado</span>
-                  </div>
-                  <div className="flex items-center gap-2 text-gray-300">
-                    <MapPin className="w-4 h-4" />
-                    <span className="text-sm">Covering 90+ locations</span>
-                  </div>
+                <div className="flex items-center gap-2 text-gray-300">
+                  <MapPin className="w-4 h-4" />
+                  <span className="text-sm">Serving Denver, Colorado</span>
                 </div>
               </div>
             </div>

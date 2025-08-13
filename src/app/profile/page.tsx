@@ -4,6 +4,7 @@ import { getCurrentUser } from "@/lib/supabase/auth";
 import AnimatedGradientBackground from "@/app/Components/SmallComponents/AnimatedGradientBackground";
 import ProfileForm from "@/app/Components/profile/ProfileForm";
 import ProfileStats from "@/app/Components/profile/ProfileStats";
+import CardWrapper from "../Components/SmallComponents/CardWrapper";
 
 export default async function ProfilePage() {
   const supabase = await createClient();
@@ -29,7 +30,10 @@ export default async function ProfilePage() {
       <div className="UILayer relative z-10 w-full p-4 gap-6 flex lg:py-10 max-w-7xl lg:px-20 min-h-screen">
         {/* Left Side - Profile Form (2/3) */}
         <div className="ProfileFormSide w-2/3 max-w-2xl flex items-start justify-center">
-          <div className="ProfileFormContainer w-full bg-stone-900/70 backdrop-blur rounded-3xl p-6 sm:p-8 shadow-2xl border border-white/5">
+          <CardWrapper
+            variant="dark-glass"
+            className="ProfileFormContainer w-full"
+          >
             {/* Header */}
             <div className="ProfileHeader mb-8">
               <h1 className="ProfileTitle text-3xl sm:text-4xl font-serif font-bold text-white mb-2">
@@ -42,12 +46,12 @@ export default async function ProfilePage() {
 
             {/* Profile Form */}
             <ProfileForm user={user} profile={profile} />
-          </div>
+          </CardWrapper>
         </div>
 
         {/* Right Side - Stats & Info Panel (Desktop 1/3) */}
         <div className="ProfileStatsPanel h-fit hidden lg:block flex-1">
-          <div className="bg-stone-900/60 border border-white/5 shadow-2xl h-full rounded-3xl p-7 sm:p-10 lg:p-12 flex flex-col">
+          <CardWrapper variant="dark-glass" className="h-full flex flex-col">
             <h2 className="ProfileStatsTitle text-2xl sm:text-3xl font-serif font-bold leading-tight text-white mb-4">
               Your Happy Hour Journey
             </h2>
@@ -59,7 +63,7 @@ export default async function ProfilePage() {
 
             {/* Stats Component */}
             <ProfileStats userId={user.id} />
-          </div>
+          </CardWrapper>
         </div>
       </div>
 

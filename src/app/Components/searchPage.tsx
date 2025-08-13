@@ -10,6 +10,7 @@ import {
   applyAdvancedFilters,
   hasActiveAdvancedFilters,
 } from "@/utils/search/advancedFilterUtils";
+import { filterRestaurantsBySearch as filterBySearchQuery } from "@/utils/search/restaurantFilterUtils";
 import { useAllRestaurants } from "@/hooks/useRestaurants";
 import SearchFilters, { type AdvancedFilterOptions } from "./SearchFilters";
 import { type TimeFilter } from "./modals/TimeFilterModal";
@@ -54,22 +55,13 @@ export const SearchPage = forwardRef<HTMLDivElement>((_, ref) => {
     setToday(getCurrentDayOfWeek());
   }, []);
 
-  // Function to filter restaurants by search query
+  // Function to filter restaurants by search query using shared utility
   const filterRestaurantsBySearch = (restaurants: Restaurant[], query: string): Restaurant[] => {
-    if (!query.trim()) return restaurants;
-    
-    const searchTerms = query.toLowerCase().split(' ').filter(term => term.length > 0);
-    
-    return restaurants.filter(restaurant => {
-      const searchableText = [
-        restaurant.name,
-        restaurant.area,
-        restaurant.address,
-        restaurant.cuisineType,
-        restaurant.notes || ''
-      ].join(' ').toLowerCase();
-      
-      return searchTerms.every(term => searchableText.includes(term));
+    // Use the shared utility with notes included for public search
+    return filterBySearchQuery(restaurants, query, {
+      includeNotes: true,
+      caseSensitive: false,
+      exactMatch: false,
     });
   };
 

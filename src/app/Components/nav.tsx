@@ -18,6 +18,7 @@ const NavBar = () => {
 
   const links = [
     { text: "Find Your Happy Hour", href: "/search" },
+    { text: "Submit Restaurant", href: "/submit" },
     { text: "Contact" },
   ];
 
@@ -39,7 +40,7 @@ const NavBar = () => {
               </Link>
             );
           } else {
-            // Modal trigger (Contact)
+            // Modal trigger (Contact only now)
             return (
               <button
                 key={index}

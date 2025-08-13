@@ -1,58 +1,160 @@
+"use client";
+
 import React from "react";
 import Image from "next/image";
 import Link from "next/link";
+import { Plus, MapPin, Clock, Users, Mail } from "lucide-react";
 
 const Footer = () => {
   return (
-    <div className="Footer flex h-fit w-full flex-col items-center gap-4 bg-black px-4 pb-6 pt-4 sm:gap-6 sm:pt-10 md:px-16">
-      <div className="Content flex h-fit w-full max-w-[2000px] justify-center items-center flex-col gap-8 md:flex-row md:gap-24">
-        <div className="Newsletter flex w-full flex-col items-center justify-center gap-6">
-          <Image
-            src="/h3-logo-full.png"
-            alt="H3 Logo"
-            width={540}
-            height={250}
-            className="w-100 h-auto"
-          />
-        </div>
-        {/* <div className="Links border-n1 flex w-full gap-12 border-l pl-12">
-          <div className="Column flex flex-col gap-4">
-            <h3 className="ColumnOne text-n2 w-full font-sans text-base font-semibold uppercase leading-normal">
+    <footer className="Footer w-full bg-black text-white">
+      {/* Main Footer Content */}
+      <div className="FooterContent max-w-7xl mx-auto px-4 py-12 sm:px-6 lg:px-8">
+        <div className="grid grid-cols-1 lg:grid-cols-2 gap-12 lg:gap-16">
+          {/* Left Side - Logo and Mission */}
+          <div className="LogoSection flex flex-col items-center lg:items-start">
+            <Link href="/" className="mb-6">
+              <Image
+                src="/h3-logo-full.png"
+                alt="Happy Hour Hunt Denver"
+                width={400}
+                height={185}
+                className="h-auto w-full max-w-[300px] sm:max-w-[400px]"
+                priority
+              />
+            </Link>
+            <p className="text-gray-300 text-center lg:text-left mb-6 max-w-md">
+              Denver&apos;s premier destination for discovering the best happy
+              hour deals. Find amazing food and drink specials at 90+
+              restaurants and bars across the city.
+            </p>
+          </div>
+
+          {/* Right Side - Sitemap */}
+          <div className="SitemapSection">
+            <h3 className="text-xl font-semibold mb-8 text-center lg:text-left">
               Sitemap
             </h3>
-            <div className="FooterLinks flex w-fit flex-col items-start justify-start">
-              <div className="Link flex w-fit items-start justify-start py-2">
-                <Link href={"/"}>
-                  <div className="LinkOne font-normal leading-tight">Home</div>
-                </Link>
+            <div className="grid grid-cols-1 sm:grid-cols-2 gap-8">
+              {/* Navigation Links */}
+              <div>
+                <h4 className="text-lg font-medium mb-4 text-po1">
+                  Navigation
+                </h4>
+                <ul className="space-y-3">
+                  <li>
+                    <Link
+                      href="/"
+                      className="text-gray-300 hover:text-po1 transition-colors flex items-center gap-2"
+                    >
+                      <MapPin className="w-4 h-4" />
+                      Home
+                    </Link>
+                  </li>
+                  <li>
+                    <Link
+                      href="/search"
+                      className="text-gray-300 hover:text-po1 transition-colors flex items-center gap-2"
+                    >
+                      <Clock className="w-4 h-4" />
+                      Find Happy Hours
+                    </Link>
+                  </li>
+                  <li>
+                    <Link
+                      href="/submit"
+                      className="text-gray-300 hover:text-po1 transition-colors flex items-center gap-2"
+                    >
+                      <Plus className="w-4 h-4" />
+                      Submit Restaurant
+                    </Link>
+                  </li>
+                </ul>
+              </div>
+
+              {/* User Account Links */}
+              <div>
+                <h4 className="text-lg font-medium mb-4 text-po1">Account</h4>
+                <ul className="space-y-3">
+                  <li>
+                    <Link
+                      href="/profile"
+                      className="text-gray-300 hover:text-po1 transition-colors flex items-center gap-2"
+                    >
+                      <Users className="w-4 h-4" />
+                      Profile
+                    </Link>
+                  </li>
+                  <li className="SignInUp Wrapper flex gap-2">
+                    <Link
+                      href="/auth/login"
+                      className="text-gray-300 hover:text-po1 transition-colors"
+                    >
+                      Sign In
+                    </Link>
+                    <span>/</span>
+                    <Link
+                      href="/auth/signup"
+                      className="text-gray-300 hover:text-po1 transition-colors"
+                    >
+                      Sign Up
+                    </Link>
+                  </li>
+                </ul>
+              </div>
+
+              {/* Contact & Info */}
+              <div className="sm:col-span-2">
+                <h4 className="text-lg font-medium mb-4 text-po1">
+                  Get in Touch
+                </h4>
+                <div className="flex flex-col sm:flex-row gap-4">
+                  <div className="flex items-center gap-2 text-gray-300">
+                    <Mail className="w-4 h-4" />
+                    <span className="text-sm">Denver, Colorado</span>
+                  </div>
+                  <div className="flex items-center gap-2 text-gray-300">
+                    <MapPin className="w-4 h-4" />
+                    <span className="text-sm">Covering 90+ locations</span>
+                  </div>
+                </div>
               </div>
             </div>
           </div>
-        </div> */}
-      </div>
-      <div className="Credits flex h-fit w-full flex-col items-center justify-between gap-2 border-t-2 border-gray-700 pt-4 md:items-start lg:flex-row">
-        <div className="text-n2 font-normal leading-tight text-center w-full">
-          © 2024 Happy Hour Hunt. All rights reserved.
         </div>
-        {/* <div className="FooterLinks flex items-start justify-start gap-6">
-          <Link href="/privacy">
-            <div className="PrivacyPolicy text-n2 font-normal leading-tight underline">
-              Privacy Policy
-            </div>
-          </Link>
-          <Link href="/terms-and-conditions">
-            <div className="TermsOfService text-n2 font-normal leading-tight underline">
-              Terms and Conditions
-            </div>
-          </Link>
-          <Link href="/cookie-policy">
-            <div className="CookiesSettings text-n2 font-normal leading-tight underline">
-              Cookie Policy
-            </div>
-          </Link>
-        </div> */}
       </div>
-    </div>
+
+      {/* Footer Bottom */}
+      <div className="FooterBottom border-t border-gray-700 py-6">
+        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+          <div className="flex flex-col sm:flex-row justify-between items-center gap-4">
+            <div className="text-gray-400 text-sm text-center sm:text-left">
+              © 2024 Happy Hour Hunt Denver. All rights reserved.
+            </div>
+            <div className="flex flex-wrap justify-center gap-4 text-sm">
+              <Link
+                href="/privacy"
+                className="text-gray-400 hover:text-po1 transition-colors"
+              >
+                Privacy Policy
+              </Link>
+              <Link
+                href="/terms"
+                className="text-gray-400 hover:text-po1 transition-colors"
+              >
+                Terms of Service
+              </Link>
+              <Link
+                href="/sitemap.xml"
+                className="text-gray-400 hover:text-po1 transition-colors"
+              >
+                XML Sitemap
+              </Link>
+            </div>
+          </div>
+        </div>
+      </div>
+    </footer>
   );
 };
 

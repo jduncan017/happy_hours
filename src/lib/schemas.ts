@@ -87,3 +87,47 @@ export type City = z.infer<typeof CitySchema>;
 export type States = z.infer<typeof StatesSchema>;
 export type HappyHoursData = z.infer<typeof HappyHoursDataSchema>;
 export type UserProfile = z.infer<typeof UserProfileSchema>;
+
+// Restaurant Submission Schemas
+export const RestaurantSubmissionSchema = z.object({
+  id: z.string().uuid(),
+  submitted_by: z.string().uuid(),
+  website_url: z.string().url().optional(),
+  extracted_data: z.record(z.string(), z.any()).optional(),
+  status: z.enum(["pending", "approved", "rejected"]).default("pending"),
+  admin_notes: z.string().optional(),
+  created_at: z.date(),
+  reviewed_at: z.date().optional(),
+});
+
+// For creating new submissions
+export const CreateSubmissionSchema = z.object({
+  manual_data: z.object({
+    name: z.string().min(1, "Restaurant name is required"),
+    address: z.string().min(1, "Address is required"),
+    area: z.string().optional(),
+    cuisine_type: z.string().optional(),
+    website: z.string().url().optional(),
+    menu_url: z.string().url("Please enter a valid menu URL").min(1, "Menu URL is required"),
+    phone: z.string().optional(),
+    happy_hour_times: z.record(z.string(), z.array(z.object({
+      start_time: z.string().min(1, "Start time is required"),
+      end_time: z.string().min(1, "End time is required"),
+    }))).refine((times) => Object.keys(times).length > 0, {
+      message: "Please add at least one day with happy hour times"
+    }),
+    notes: z.array(z.string()).optional(),
+  }),
+  submission_notes: z.string().max(500, "Notes must be less than 500 characters").optional(),
+});
+
+// For admin review
+export const ReviewSubmissionSchema = z.object({
+  status: z.enum(["approved", "rejected"]),
+  admin_notes: z.string().optional(),
+  edited_data: z.record(z.string(), z.any()).optional(),
+});
+
+export type RestaurantSubmission = z.infer<typeof RestaurantSubmissionSchema>;
+export type CreateSubmission = z.infer<typeof CreateSubmissionSchema>;
+export type ReviewSubmission = z.infer<typeof ReviewSubmissionSchema>;

@@ -10,6 +10,9 @@ export {
   type States,
   type HappyHoursData,
   type UserProfile,
+  type RestaurantSubmission,
+  type CreateSubmission,
+  type ReviewSubmission,
 } from "./schemas";
 
 // Import for use in legacy types

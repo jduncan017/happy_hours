@@ -94,7 +94,7 @@ export default function UserMenu() {
       </button>
 
       {isOpen && (
-        <div className="UserDropdown absolute right-0 mt-3 w-64 bg-stone-950/80 backdrop-blur-lg rounded-lg shadow-xl border border-white/10 py-3 z-50">
+        <div className="UserDropdown absolute right-0 mt-3 w-64 bg-stone-950/80 backdrop-blur-lg rounded-lg shadow-xl border border-white/10 z-50">
           {/* User Info Header */}
           <div className="UserDropdownHeader flex flex-col gap-3 px-4 py-3 border-b border-y-white/10">
             <div className="flex items-center gap-3">
@@ -125,11 +125,6 @@ export default function UserMenu() {
                 </div>
               </div>
             </div>
-            {userRole === "admin" && (
-              <div className="AdminBadge bg-gray-700 w-fit text-white text-xs px-2 py-1 rounded-full font-medium">
-                Admin
-              </div>
-            )}
           </div>
 
           {/* Menu Items */}

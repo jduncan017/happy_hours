@@ -165,3 +165,8 @@ a:hover {
     scrollbar-width: thin; /* Firefox */
   }
 }
+
+/* Simple styling for remaining time inputs if any */
+input[type="time"] {
+  width: 140px;
+}

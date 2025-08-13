@@ -11,6 +11,14 @@
 ### **Theme Implementation**
 All components support `theme="light" | "dark"` prop for consistent theming across the application.
 
+## 📏 Layout Constraints
+
+### **Width Guidelines**
+- **Maximum Section Width**: 1280px for all content sections
+- **Text Body Width**: 600-700px maximum for optimal readability
+- **Form Width**: 600-800px for optimal form completion experience
+- **Card Grids**: Use responsive breakpoints with max container width
+
 ## 🧩 Component Library
 
 ### **Layout Components**

@@ -5,6 +5,11 @@ import { redirect } from "next/navigation";
 import { createClient } from "@/lib/supabase/client";
 import { isAdmin } from "@/lib/supabase/auth";
 import { getAllRestaurants } from "@/lib/supabase/restaurants";
+import { 
+  applyRestaurantFilters, 
+  extractUniqueFilterOptions,
+  type RestaurantSearchFilters 
+} from "@/utils/search/restaurantFilterUtils";
 import AdminDashboard from "@/app/Components/admin/AdminDashboard";
 import AdminTabs, { AdminTab } from "@/app/Components/admin/AdminTabs";
 import AdminAnalytics from "@/app/Components/admin/AdminAnalytics";
@@ -25,10 +30,10 @@ export default function AdminPage() {
     Restaurant[]
   >([]);
   const [searchQuery, setSearchQuery] = useState("");
-  const [filters, setFilters] = useState({
-    areas: [] as string[],
-    cuisineTypes: [] as string[],
-    verificationStatus: [] as string[],
+  const [filters, setFilters] = useState<Omit<RestaurantSearchFilters, 'searchQuery'>>({
+    areas: [],
+    cuisineTypes: [],
+    verificationStatus: [],
   });
   const [stats, setStats] = useState({
     totalRestaurants: 0,
@@ -74,9 +79,9 @@ export default function AdminPage() {
   useEffect(() => {
     const hasActiveFilters = Boolean(
       searchQuery ||
-        filters.areas.length > 0 ||
-        filters.cuisineTypes.length > 0 ||
-        filters.verificationStatus.length > 0,
+        (filters.areas && filters.areas.length > 0) ||
+        (filters.cuisineTypes && filters.cuisineTypes.length > 0) ||
+        (filters.verificationStatus && filters.verificationStatus.length > 0),
     );
 
     if (hasActiveFilters && allRestaurants.length === 0) {
@@ -97,67 +102,22 @@ export default function AdminPage() {
   }, [searchQuery, filters, allRestaurants.length]);
 
   // Extract unique values for filters
-  const uniqueAreas = useMemo(() => {
-    return Array.from(
-      new Set(
-        allRestaurants
-          .map((r) => r.area)
-          .filter(Boolean)
-          .sort(),
-      ),
-    ).map((area) => ({ value: area, label: area }));
-  }, [allRestaurants]);
-
-  const uniqueCuisineTypes = useMemo(() => {
-    return Array.from(
-      new Set(
-        allRestaurants
-          .map((r) => r.cuisineType)
-          .filter(Boolean)
-          .sort(),
-      ),
-    ).map((cuisine) => ({ value: cuisine, label: cuisine }));
+  const { areas: uniqueAreas, cuisineTypes: uniqueCuisineTypes } = useMemo(() => {
+    return extractUniqueFilterOptions(allRestaurants);
   }, [allRestaurants]);
 
   // Filter restaurants based on search and filters
   useEffect(() => {
-    let filtered = allRestaurants;
+    const combinedFilters: RestaurantSearchFilters = {
+      searchQuery,
+      ...filters,
+    };
 
-    // Apply search filter
-    if (searchQuery.trim()) {
-      const query = searchQuery.toLowerCase();
-      filtered = filtered.filter(
-        (restaurant) =>
-          restaurant.name.toLowerCase().includes(query) ||
-          restaurant.area?.toLowerCase().includes(query) ||
-          restaurant.cuisineType?.toLowerCase().includes(query) ||
-          restaurant.address.toLowerCase().includes(query),
-      );
-    }
-
-    // Apply area filter
-    if (filters.areas.length > 0) {
-      filtered = filtered.filter((restaurant) =>
-        filters.areas.includes(restaurant.area),
-      );
-    }
-
-    // Apply cuisine filter
-    if (filters.cuisineTypes.length > 0) {
-      filtered = filtered.filter((restaurant) =>
-        filters.cuisineTypes.includes(restaurant.cuisineType),
-      );
-    }
-
-    // Apply verification status filter
-    if (filters.verificationStatus.length > 0) {
-      if (filters.verificationStatus.includes("verified")) {
-        filtered = filtered.filter((restaurant) => restaurant.verified);
-      }
-      if (filters.verificationStatus.includes("pending")) {
-        filtered = filtered.filter((restaurant) => !restaurant.verified);
-      }
-    }
+    const filtered = applyRestaurantFilters(allRestaurants, combinedFilters, {
+      includeNotes: false, // Admin search typically doesn't include notes
+      caseSensitive: false,
+      exactMatch: false,
+    });
 
     setFilteredRestaurants(filtered);
     setCurrentPage(1); // Reset to first page when filters change
@@ -174,9 +134,9 @@ export default function AdminPage() {
   useEffect(() => {
     const hasActiveFilters = Boolean(
       searchQuery ||
-        filters.areas.length > 0 ||
-        filters.cuisineTypes.length > 0 ||
-        filters.verificationStatus.length > 0,
+        (filters.areas && filters.areas.length > 0) ||
+        (filters.cuisineTypes && filters.cuisineTypes.length > 0) ||
+        (filters.verificationStatus && filters.verificationStatus.length > 0),
     );
     if (!hasActiveFilters) {
       setDisplayedRestaurants([]);
@@ -275,15 +235,19 @@ export default function AdminPage() {
               totalFiltered={filteredRestaurants.length}
               hasFilters={Boolean(
                 searchQuery ||
-                  filters.areas.length > 0 ||
-                  filters.cuisineTypes.length > 0 ||
-                  filters.verificationStatus.length > 0,
+                  (filters.areas && filters.areas.length > 0) ||
+                  (filters.cuisineTypes && filters.cuisineTypes.length > 0) ||
+                  (filters.verificationStatus && filters.verificationStatus.length > 0),
               )}
               onLoadMore={handleLoadMore}
               hasMore={displayedRestaurants.length < filteredRestaurants.length}
               searchQuery={searchQuery}
               onSearchChange={setSearchQuery}
-              filters={filters}
+              filters={{
+                areas: filters.areas || [],
+                cuisineTypes: filters.cuisineTypes || [],
+                verificationStatus: filters.verificationStatus || []
+              }}
               onFilterChange={handleFilterChange}
               onClearFilters={handleClearFilters}
               uniqueAreas={uniqueAreas}

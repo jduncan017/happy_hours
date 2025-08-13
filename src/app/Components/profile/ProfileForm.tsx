@@ -202,7 +202,6 @@ export default function ProfileForm({ user, profile }: ProfileFormProps) {
   const handleAvatarUpload = async (file: File) => {
     // Prevent double uploads in React Strict Mode
     if (uploadInProgress.current) {
-      console.log("Upload already in progress, skipping...");
       return;
     }
 
@@ -211,20 +210,15 @@ export default function ProfileForm({ user, profile }: ProfileFormProps) {
     const toastId = toast.loading("Uploading avatar...");
 
     try {
-      console.log("Starting avatar upload for user:", user.id);
-
       // Smart compression with WebP preference and JPEG fallback
       const { file: compressedFile, format } = await compressImage(file);
-      console.log("Image compressed:", { format, size: compressedFile.size });
 
       // Create organized file path with optimal format: {user_id}/avatar_{timestamp}.{format}
       // This ensures unique URLs naturally without client-side cache busting
       const timestamp = Date.now();
       const filePath = `${user.id}/avatar_${timestamp}.${format}`;
-      console.log("Upload path:", filePath);
 
       // Upload compressed image to avatars bucket first
-      console.log("Starting upload to avatars bucket...");
       const { error: uploadError, data: uploadData } = await supabase.storage
         .from("avatars")
         .upload(filePath, compressedFile, {
@@ -237,14 +231,10 @@ export default function ProfileForm({ user, profile }: ProfileFormProps) {
         throw uploadError;
       }
 
-      console.log("Upload successful:", uploadData);
-
       // Get public URL for new upload
       const {
         data: { publicUrl },
       } = supabase.storage.from("avatars").getPublicUrl(filePath);
-
-      console.log("New avatar URL:", publicUrl);
 
       // Update local state immediately
       setAvatarUrl(publicUrl);
@@ -261,7 +251,6 @@ export default function ProfileForm({ user, profile }: ProfileFormProps) {
           );
           if (urlParts.length > 1) {
             const oldPath = urlParts[1];
-            console.log("Attempting to clean up old avatar:", oldPath);
 
             // Use setTimeout to make cleanup async and non-blocking
             setTimeout(async () => {
@@ -359,7 +348,9 @@ export default function ProfileForm({ user, profile }: ProfileFormProps) {
           onUpload={handleAvatarUpload}
           uploading={uploading}
           theme="dark"
-          fallbackInitials={getInitials(fullName || user.email?.split("@")[0] || "U")}
+          fallbackInitials={getInitials(
+            fullName || user.email?.split("@")[0] || "U",
+          )}
         />
       </FormSection>
 
@@ -376,7 +367,7 @@ export default function ProfileForm({ user, profile }: ProfileFormProps) {
           className="bg-stone-700/50 cursor-not-allowed text-white/70"
           helpText="Contact support to change your email address."
         />
-        
+
         <FormField
           id="memberSince"
           label="Member Since"
@@ -402,7 +393,7 @@ export default function ProfileForm({ user, profile }: ProfileFormProps) {
           placeholder="Enter your full name"
           theme="dark"
         />
-        
+
         <FormField
           id="location"
           name="location"
@@ -430,12 +421,8 @@ export default function ProfileForm({ user, profile }: ProfileFormProps) {
         </ActionButton>
 
         <Link href="/" className="flex-1">
-          <ActionButton
-            variant="secondary"
-            theme="dark"
-            fullWidth
-          >
-            Back to Hunt
+          <ActionButton variant="secondary" theme="dark" fullWidth>
+            Back to Hunting
           </ActionButton>
         </Link>
       </div>

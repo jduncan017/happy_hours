@@ -2,15 +2,11 @@
 import { useState } from "react";
 import Image from "next/image";
 import Link from "next/link";
-import { useModal } from "../../contexts/ModalContext";
 import HamburgerIcon from "./hamburgerMenu/hamburgerIcon";
-import ContactModal from "./modals/contactModal";
 import UserMenu from "./auth/UserMenu";
 
 const NavBar = () => {
   const [mobileActive, setMobileActive] = useState(false);
-
-  const { showModal } = useModal();
 
   function toggleMenu() {
     setMobileActive(!mobileActive);
@@ -19,43 +15,23 @@ const NavBar = () => {
   const links = [
     { text: "Find Your Happy Hour", href: "/search" },
     { text: "Submit Restaurant", href: "/submit" },
-    { text: "Contact" },
+    { text: "Contact", href: "/contact" },
   ];
 
   const renderMenu = () => {
     return (
       <div className="LinksContainer mt-6 flex flex-col gap-6 sm:mt-0 sm:flex-row sm:items-center sm:gap-8">
-        {links.map((link, index) => {
-          if (link.href) {
-            // Navigation link
-            return (
-              <Link
-                key={index}
-                href={link.href}
-                onClick={() => setMobileActive(false)}
-              >
-                <p className="AboutText font-medium tracking-wider text-white cursor-pointer transition-all duration-200 hover:scale-105 hover:text-po1">
-                  {link.text}
-                </p>
-              </Link>
-            );
-          } else {
-            // Modal trigger (Contact only now)
-            return (
-              <button
-                key={index}
-                onClick={() => {
-                  showModal(<ContactModal />);
-                  setMobileActive(false);
-                }}
-              >
-                <p className="AboutText w-fit font-medium tracking-wider text-white cursor-pointer transition-all duration-200 hover:scale-105 hover:text-po1">
-                  {link.text}
-                </p>
-              </button>
-            );
-          }
-        })}
+        {links.map((link, index) => (
+          <Link
+            key={index}
+            href={link.href}
+            onClick={() => setMobileActive(false)}
+          >
+            <p className="AboutText font-medium tracking-wider text-white cursor-pointer transition-all duration-200 hover:scale-105 hover:text-po1">
+              {link.text}
+            </p>
+          </Link>
+        ))}
         <UserMenu />
       </div>
     );

@@ -1,7 +1,14 @@
 type ButtonProps = {
   text: string;
-  rounded: boolean;
-  variant: "orange" | "yellow" | "red" | "white" | "gradient";
+  rounded?: boolean;
+  variant:
+    | "orange"
+    | "yellow"
+    | "red"
+    | "white"
+    | "gradient"
+    | "outline"
+    | "secondary";
   addClasses?: string;
   size?: "xs" | "sm" | "md" | "lg";
   onSubmit?: (event: React.MouseEvent<HTMLButtonElement>) => void;
@@ -11,7 +18,7 @@ type ButtonProps = {
 
 const SiteButton = ({
   text,
-  rounded,
+  rounded = true,
   variant,
   addClasses,
   size,
@@ -30,10 +37,10 @@ const SiteButton = ({
       buttonSize = "sm:px-4 sm:py-2 px-3 py-1";
       break;
     case "md":
-      buttonSize = "w-40 sm:py-3 py-3";
+      buttonSize = "w-40 py-3 px-5";
       break;
     case "lg":
-      buttonSize = "w-full h-[48px]";
+      buttonSize = "w-full px-6 py-4";
       break;
     default:
       buttonSize = "w-20 h-10";
@@ -55,6 +62,13 @@ const SiteButton = ({
     case "gradient":
       buttonColor =
         "bg-gradient-to-tr from-pr1 via-po1 to-py1 text-white font-medium";
+      break;
+    case "outline":
+      buttonColor =
+        "border-2 border-white text-white hover:bg-white hover:text-gray-900";
+      break;
+    case "secondary":
+      buttonColor = "bg-white text-gray-900 hover:bg-gray-100";
       break;
   }
 

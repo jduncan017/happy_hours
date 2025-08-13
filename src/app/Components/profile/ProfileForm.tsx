@@ -7,7 +7,7 @@ import { UserProfile } from "@/lib/types";
 import FormSection from "@/app/Components/SmallComponents/FormSection";
 import FormField from "@/app/Components/SmallComponents/FormField";
 import AvatarUpload from "@/app/Components/SmallComponents/AvatarUpload";
-import ActionButton from "@/app/Components/SmallComponents/ActionButton";
+import SiteButton from "@/app/Components/SmallComponents/siteButton";
 import { User2, MapPin, Camera, Mail, Calendar } from "lucide-react";
 import Link from "next/link";
 import toast from "react-hot-toast";
@@ -410,20 +410,20 @@ export default function ProfileForm({ user, profile }: ProfileFormProps) {
 
       {/* Action Buttons */}
       <div className="ProfileActions flex flex-col sm:flex-row gap-4 pt-4">
-        <ActionButton
+        <SiteButton
           type="submit"
-          variant="primary"
-          loading={loading}
-          theme="dark"
-          className="flex-1"
-        >
-          Save Profile
-        </ActionButton>
+          text={loading ? "Saving..." : "Save Profile"}
+          variant="orange"
+          disabled={loading}
+          addClasses="flex-1"
+        />
 
         <Link href="/" className="flex-1">
-          <ActionButton variant="secondary" theme="dark" fullWidth>
-            Back to Hunting
-          </ActionButton>
+          <SiteButton 
+            text="Back to Hunting"
+            variant="white"
+            addClasses="w-full"
+          />
         </Link>
       </div>
 

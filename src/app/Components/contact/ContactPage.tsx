@@ -32,7 +32,7 @@ export default function ContactPage() {
               Get in Touch
             </h1>
             <p className="text-xl text-gray-600 max-w-2xl mx-auto">
-              Have questions, suggestions, or want to report an issue? We'd love
+              Have questions, suggestions, or want to report an issue? We&apos;d love
               to hear from you!
             </p>
             <div className="flex items-center justify-center gap-2 text-sm text-gray-500">
@@ -54,7 +54,7 @@ export default function ContactPage() {
                     Send Us a Message
                   </h2>
                   <p className="text-gray-600">
-                    We'll get back to you as soon as possible
+                    We&apos;ll get back to you as soon as possible
                   </p>
                 </div>
               </div>
@@ -124,7 +124,7 @@ export default function ContactPage() {
                     </span>
                   </div>
                   <p className="text-gray-600">
-                    We're working on a comprehensive dashboard where restaurant
+                    We&apos;re working on a comprehensive dashboard where restaurant
                     owners can:
                   </p>
                   <ul className="text-left space-y-2 text-gray-600">
@@ -169,8 +169,8 @@ export default function ContactPage() {
                   Our Commitment
                 </h3>
                 <p className="text-gray-600 text-sm">
-                  We're dedicated to providing accurate, up-to-date information
-                  about Denver's best happy hour spots.
+                  We&apos;re dedicated to providing accurate, up-to-date information
+                  about Denver&apos;s best happy hour spots.
                 </p>
               </div>
               <div>

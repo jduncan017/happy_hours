@@ -376,7 +376,7 @@ export default function RestaurantSubmissionPageContent() {
               </div>
               <p className="text-gray-700">
                 <strong>Happy Hour URL:</strong> Provide a direct link to their
-                happy hour page, menu, or main website. We'll auto-detect the
+                happy hour page, menu, or main website. We&apos;ll auto-detect the
                 main website from this URL.
               </p>
             </div>
@@ -394,7 +394,7 @@ export default function RestaurantSubmissionPageContent() {
                 4
               </div>
               <p className="text-gray-700">
-                <strong>Submit for Review:</strong> We'll review and add your
+                <strong>Submit for Review:</strong> We&apos;ll review and add your
                 submission within 24-48 hours.
               </p>
             </div>

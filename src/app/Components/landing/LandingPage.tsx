@@ -35,9 +35,9 @@ const landingFAQs: FAQItem[] = [
       "We verify deals through restaurant websites, direct contact with establishments, and community feedback. Our team regularly updates listings, and we encourage users to report any changes they notice.",
   },
   {
-    question: "Can I suggest restaurants that aren't listed?",
+    question: "Can I suggest restaurants that aren&apos;t listed?",
     answer:
-      "Absolutely! We love community suggestions. Use our restaurant submission form to add new spots, and we'll review and add qualifying restaurants with active happy hour deals.",
+      "Absolutely! We love community suggestions. Use our restaurant submission form to add new spots, and we&apos;ll review and add qualifying restaurants with active happy hour deals.",
   },
   {
     question: "Do I need to create an account?",
@@ -47,7 +47,7 @@ const landingFAQs: FAQItem[] = [
   {
     question: "What areas of Denver do you cover?",
     answer:
-      "We cover the entire Denver metropolitan area including downtown, Capitol Hill, RiNo, LoHi, Cherry Creek, and surrounding neighborhoods. We're always expanding to new areas.",
+      "We cover the entire Denver metropolitan area including downtown, Capitol Hill, RiNo, LoHi, Cherry Creek, and surrounding neighborhoods. We&apos;re always expanding to new areas.",
   },
 ];
 
@@ -72,7 +72,7 @@ export default function LandingPage() {
                 Never Miss Happy Hour Again
               </h2>
               <p className="text-xl text-gray-600 max-w-3xl mx-auto">
-                Discover amazing deals, save money, and explore Denver's best
+                Discover amazing deals, save money, and explore Denver&apos;s best
                 restaurants and bars - all in one place
               </p>
             </div>
@@ -180,7 +180,7 @@ export default function LandingPage() {
                     Filter
                   </h3>
                   <p className="text-gray-600">
-                    Find exactly what you're craving with smart filters for
+                    Find exactly what you&apos;re craving with smart filters for
                     cuisine, price, and more
                   </p>
                 </div>
@@ -197,7 +197,7 @@ export default function LandingPage() {
                   <h3 className="text-xl font-semibold text-gray-900">Enjoy</h3>
                   <p className="text-gray-600">
                     Show up and save with verified, up-to-date deals from
-                    Denver's best spots
+                    Denver&apos;s best spots
                   </p>
                 </div>
               </div>
@@ -230,7 +230,7 @@ export default function LandingPage() {
               </h2>
               <p className="text-lg text-gray-600 max-w-2xl mx-auto">
                 Save your favorite restaurants, see who has happy hour when
-                you're planning to dine out, leave reviews, and quickly view
+                you&apos;re planning to dine out, leave reviews, and quickly view
                 happy hours around Denver
               </p>
             </div>
@@ -338,7 +338,7 @@ export default function LandingPage() {
                 Exciting Features Coming Soon
               </h2>
               <p className="text-lg text-gray-600 max-w-2xl mx-auto">
-                We're just getting started! Here's what's coming to make your
+                We&apos;re just getting started! Here&apos;s what&apos;s coming to make your
                 happy hour discovery even better
               </p>
             </div>
@@ -460,10 +460,10 @@ export default function LandingPage() {
           <div className="text-center space-y-8">
             <div className="space-y-4">
               <h2 className="text-3xl md:text-4xl font-bold text-po1">
-                Ready to Discover Denver's Best Happy Hours?
+                Ready to Discover Denver&apos;s Best Happy Hours?
               </h2>
               <p className="text-white/90 text-lg max-w-2xl mx-auto">
-                Join the community of Denver happy hour enthusiasts. It's
+                Join the community of Denver happy hour enthusiasts. It&apos;s
                 completely free and always will be.
               </p>
             </div>

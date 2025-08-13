@@ -169,7 +169,7 @@ export default function AdminPendingReview({}: AdminPendingReviewProps) {
       address: extractedData.address || '',
       area: extractedData.area || '',
       cuisineType: extractedData.cuisine_type || '',
-      priceCategory: '2', // Default to moderate
+      priceCategory: '2' as const, // Default to moderate
       website: extractedData.website || submission.website_url || '',
       menuUrl: extractedData.menu_url || '',
       heroImage: '',
@@ -190,7 +190,7 @@ export default function AdminPendingReview({}: AdminPendingReviewProps) {
       createdBy: submission.submitted_by,
       lastUpdated: new Date(submission.created_at),
       createdAt: new Date(submission.created_at),
-      coordinates: null
+      coordinates: undefined
     };
   };
 
@@ -346,7 +346,7 @@ export default function AdminPendingReview({}: AdminPendingReviewProps) {
                         <div className="flex items-center gap-4 text-sm text-white/60 mt-1">
                           <span className="flex items-center gap-1">
                             <User className="w-3 h-3" />
-                            Submitted by {submission.profiles?.full_name || 'Anonymous User'}
+                            Submitted by Anonymous User
                           </span>
                           <span className="flex items-center gap-1">
                             <Calendar className="w-3 h-3" />

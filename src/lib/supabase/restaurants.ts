@@ -64,10 +64,10 @@ function transformDatabaseRowToRestaurant(
     website: row.website || undefined,
     menuUrl: row.menu_url || undefined,
     heroImage: row.hero_image,
-    images: row.images,
+    images: row.images || [],
     happyHours: row.happy_hours as HappyHours, // Type assertion - data validated by database constraints
     deals: [], // Will be populated from separate query
-    notes: row.notes,
+    notes: row.notes || [],
     ratings: {
       food: 0,
       drink: 0,
@@ -77,10 +77,10 @@ function transformDatabaseRowToRestaurant(
       overall: 0,
       reviewCount: 0,
     }, // Will be populated from separate query
-    verified: row.verified,
+    verified: row.verified || false,
     createdBy: row.created_by || "system",
-    lastUpdated: new Date(row.updated_at),
-    createdAt: new Date(row.created_at),
+    lastUpdated: new Date(row.updated_at || new Date()),
+    createdAt: new Date(row.created_at || new Date()),
   };
 }
 

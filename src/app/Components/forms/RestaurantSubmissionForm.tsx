@@ -42,7 +42,7 @@ export default function RestaurantSubmissionForm({
     resolver: zodResolver(CreateSubmissionSchema),
   });
 
-  const websiteUrl = watch("website_url");
+  const websiteUrl = watch("manual_data.website");
 
   // Extract data from website URL
   const handleExtractData = async () => {
@@ -166,7 +166,7 @@ export default function RestaurantSubmissionForm({
             </label>
             <div className="flex gap-2">
               <input
-                {...register("website_url")}
+                {...register("manual_data.website")}
                 type="url"
                 placeholder="https://restaurant-website.com"
                 className="flex-1 px-4 py-3 bg-stone-700/50 border border-white/10 rounded-xl text-white placeholder-white/40 focus:outline-none focus:ring-2 focus:ring-po1 focus:border-po1"
@@ -184,10 +184,10 @@ export default function RestaurantSubmissionForm({
                 )}
               </button>
             </div>
-            {errors.website_url && (
+            {errors.manual_data?.website && (
               <p className="mt-1 text-sm text-red-400 flex items-center gap-1">
                 <AlertCircle className="w-4 h-4" />
-                {errors.website_url.message}
+                {errors.manual_data?.website?.message}
               </p>
             )}
 

@@ -1,4 +1,4 @@
-import { useState, useEffect } from "react";
+import { useState, useEffect, useRef } from "react";
 import TextInput from "./TextInput";
 import { Search } from "lucide-react";
 
@@ -16,31 +16,30 @@ export default function FilterSearchBar({
   value = "",
 }: FilterSearchBarProps) {
   const [query, setQuery] = useState(value);
-  const [debouncedQuery, setDebouncedQuery] = useState("");
 
-  // Update query when value prop changes (for clearing)
+  // Keep latest onSearch in a ref so the debounce effect doesn't fire
+  // every time the parent re-renders with a new function identity.
+  const onSearchRef = useRef(onSearch);
+  useEffect(() => {
+    onSearchRef.current = onSearch;
+  }, [onSearch]);
+
+  // Sync from parent-controlled value (e.g. clear-all)
   useEffect(() => {
     setQuery(value);
   }, [value]);
 
-  // Debounce the search query
+  // Debounce typing → fire onSearch once user pauses
   useEffect(() => {
     const timer = setTimeout(() => {
-      setDebouncedQuery(query);
-    }, 500); // Wait 500ms after user stops typing
-
+      onSearchRef.current(query);
+    }, 500);
     return () => clearTimeout(timer);
   }, [query]);
 
-  // Trigger search when debounced query changes
-  useEffect(() => {
-    onSearch(debouncedQuery);
-  }, [debouncedQuery, onSearch]);
-
   const handleSubmit = (e: React.FormEvent) => {
     e.preventDefault();
-    // Immediate search on form submit
-    onSearch(query);
+    onSearchRef.current(query);
   };
 
   const handleChange = (e: React.ChangeEvent<HTMLInputElement>) => {

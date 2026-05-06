@@ -1,4 +1,4 @@
-import { useState, useEffect } from 'react';
+import { useQuery } from '@tanstack/react-query';
 import { analyzeImageBrightness, type ImageAnalysisResult } from '@/utils/image/imageAnalysis';
 
 interface UseImageBackgroundReturn {
@@ -9,47 +9,34 @@ interface UseImageBackgroundReturn {
 }
 
 /**
- * Hook that analyzes an image and returns the optimal background class
+ * Analyzes an image to choose a contrasting background class.
+ * Cached per-URL via React Query so navigating away and back, or showing
+ * the same image in list + map, never re-runs the canvas pixel scan.
  */
 export const useImageBackground = (imageUrl: string | undefined): UseImageBackgroundReturn => {
-  const [backgroundClass, setBackgroundClass] = useState<string>('bg-stone-300');
-  const [isAnalyzing, setIsAnalyzing] = useState<boolean>(false);
-  const [analysisComplete, setAnalysisComplete] = useState<boolean>(false);
-  const [analysisResult, setAnalysisResult] = useState<ImageAnalysisResult | null>(null);
+  const { data, isLoading, isFetched } = useQuery({
+    queryKey: ['imageBackground', imageUrl],
+    queryFn: () => analyzeImageBrightness(imageUrl!),
+    enabled: !!imageUrl,
+    staleTime: Infinity,
+    gcTime: 1000 * 60 * 60 * 24,
+    retry: false,
+    refetchOnWindowFocus: false,
+  });
 
-  useEffect(() => {
-    if (!imageUrl) {
-      setBackgroundClass('bg-stone-300');
-      setIsAnalyzing(false);
-      setAnalysisComplete(true);
-      setAnalysisResult(null);
-      return;
-    }
-
-    setIsAnalyzing(true);
-    setAnalysisComplete(false);
-
-    analyzeImageBrightness(imageUrl)
-      .then((result) => {
-        setAnalysisResult(result);
-        setBackgroundClass(result.backgroundClass);
-        setAnalysisComplete(true);
-      })
-      .catch((error) => {
-        console.warn('Image analysis failed, using default background:', error);
-        setBackgroundClass('bg-stone-400');
-        setAnalysisComplete(true);
-        setAnalysisResult(null);
-      })
-      .finally(() => {
-        setIsAnalyzing(false);
-      });
-  }, [imageUrl]);
+  if (!imageUrl) {
+    return {
+      backgroundClass: 'bg-stone-300',
+      isAnalyzing: false,
+      analysisComplete: true,
+      analysisResult: null,
+    };
+  }
 
   return {
-    backgroundClass,
-    isAnalyzing,
-    analysisComplete,
-    analysisResult
+    backgroundClass: data?.backgroundClass ?? 'bg-stone-300',
+    isAnalyzing: isLoading,
+    analysisComplete: isFetched,
+    analysisResult: data ?? null,
   };
 };

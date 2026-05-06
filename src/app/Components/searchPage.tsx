@@ -22,9 +22,6 @@ import { performanceMonitor } from "@/utils/performance/performanceMonitor";
 export const SearchPage = forwardRef<HTMLDivElement>((_, ref) => {
   const [today, setToday] = useState("");
   const [filterOption, setFilterOption] = useState("all");
-  const [displayedRestaurants, setDisplayedRestaurants] = useState<
-    Restaurant[]
-  >([]);
   const [userLocation, setUserLocation] = useState<{
     lat: number;
     lng: number;
@@ -111,15 +108,6 @@ export const SearchPage = forwardRef<HTMLDivElement>((_, ref) => {
     return result;
   }, [filterOption, today, allRestaurants, advancedFilters, isLocationBased, timeFilter, searchQuery, timeFilters]);
 
-  // Update displayed restaurants when filtered results change, but prevent updates during loading
-  useEffect(() => {
-    if (isLoading) return; // Skip updates while loading
-    
-    if (!isLocationBased) {
-      setDisplayedRestaurants(filteredRestaurants);
-    }
-  }, [filteredRestaurants, isLocationBased, isLoading]);
-
   const handleBackToAll = () => {
     setIsLocationBased(false);
     setUserLocation(null);
@@ -162,7 +150,7 @@ export const SearchPage = forwardRef<HTMLDivElement>((_, ref) => {
 
       {/* Search Results with Map */}
       <SearchResults
-        restaurants={displayedRestaurants}
+        restaurants={filteredRestaurants}
         today={timeFilter ? timeFilter.dayOfWeek : today}
         userLocation={userLocation || undefined}
         isLocationBased={isLocationBased}

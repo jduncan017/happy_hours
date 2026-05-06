@@ -21,7 +21,8 @@
     "db:setup-remote": "tsx scripts/setup-remote-db.ts",
     "migrate": "tsx scripts/migrate-data.ts",
     "migrate:test": "tsx scripts/migrate-data-test.ts",
-    "test:geocoding": "tsx scripts/test-geocoding.ts"
+    "test:geocoding": "tsx scripts/test-geocoding.ts",
+    "migrate:images": "tsx scripts/migrate-images-to-storage.ts"
   },
   "dependencies": {
     "@formspark/use-formspark": "^0.1.42",
@@ -53,7 +54,7 @@
     "@types/google.maps": "^3.58.1",
     "@types/jest": "^30.0.0",
     "@types/node": "^24.1.0",
-    "@types/react": "^19.1.9",
+    "@types/react": "19.2.14",
     "@types/react-dom": "^19.1.7",
     "@types/uuid": "^10.0.0",
     "autoprefixer": "^10.4.21",
@@ -68,6 +69,6 @@
     "tailwindcss": "^4.1.11",
     "ts-jest": "^29.4.0",
     "tsx": "^4.20.3",
-    "typescript": "^5.8.3"
+    "typescript": "5.9.3"
   }
 }

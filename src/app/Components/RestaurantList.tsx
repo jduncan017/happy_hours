@@ -1,8 +1,8 @@
-import { useState } from "react";
+import { useCallback, useMemo, useState } from "react";
 import Link from "next/link";
 import type { Restaurant } from "@/lib/types";
 import RestaurantCard from "./RestaurantCard";
-import { Plus, Users } from "lucide-react";
+import { Users } from "lucide-react";
 import SiteButton from "./SmallComponents/siteButton";
 
 interface RestaurantListProps {
@@ -16,7 +16,7 @@ export default function RestaurantList({
 }: RestaurantListProps) {
   const [expanded, setExpanded] = useState<Set<string>>(new Set());
 
-  const toggleExpanded = (restaurantName: string) => {
+  const toggleExpanded = useCallback((restaurantName: string) => {
     setExpanded((prev) => {
       const newSet = new Set(prev);
       if (newSet.has(restaurantName)) {
@@ -26,7 +26,16 @@ export default function RestaurantList({
       }
       return newSet;
     });
-  };
+  }, []);
+
+  // Stable per-restaurant handlers so React.memo on RestaurantCard works.
+  const togglers = useMemo(() => {
+    const map = new Map<string, () => void>();
+    restaurants.forEach((r) => {
+      map.set(r.name, () => toggleExpanded(r.name));
+    });
+    return map;
+  }, [restaurants, toggleExpanded]);
 
   if (restaurants.length === 0) {
     return (
@@ -51,7 +60,7 @@ export default function RestaurantList({
             restaurant={restaurant}
             today={today}
             isExpanded={isExpanded}
-            onToggleExpanded={() => toggleExpanded(restaurant.name)}
+            onToggleExpanded={togglers.get(restaurant.name)!}
           />
         );
       })}

@@ -35,9 +35,9 @@ const landingFAQs: FAQItem[] = [
       "We verify deals through restaurant websites, direct contact with establishments, and community feedback. Our team regularly updates listings, and we encourage users to report any changes they notice.",
   },
   {
-    question: "Can I suggest restaurants that aren&apos;t listed?",
+    question: "Can I suggest restaurants that aren't listed?",
     answer:
-      "Absolutely! We love community suggestions. Use our restaurant submission form to add new spots, and we&apos;ll review and add qualifying restaurants with active happy hour deals.",
+      "Absolutely! We love community suggestions. Use our restaurant submission form to add new spots, and we'll review and add qualifying restaurants with active happy hour deals.",
   },
   {
     question: "Do I need to create an account?",
@@ -47,7 +47,7 @@ const landingFAQs: FAQItem[] = [
   {
     question: "What areas of Denver do you cover?",
     answer:
-      "We cover the entire Denver metropolitan area including downtown, Capitol Hill, RiNo, LoHi, Cherry Creek, and surrounding neighborhoods. We&apos;re always expanding to new areas.",
+      "We cover the entire Denver metropolitan area including downtown, Capitol Hill, RiNo, LoHi, Cherry Creek, and surrounding neighborhoods. We're always expanding to new areas.",
   },
 ];
 

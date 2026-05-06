@@ -1,4 +1,4 @@
-import { useState } from "react";
+import { useMemo, useState } from "react";
 import Image from "next/image";
 import { useGeolocation } from "@/hooks/useGeolocation";
 import { useModal } from "@/contexts/ModalContext";
@@ -50,57 +50,68 @@ export default function SearchFilters({
   const { error } = useGeolocation();
   const { showModal } = useModal();
 
-  // Extract unique values from restaurants for filter options
-  const uniqueAreas = Array.from(
-    new Set(
-      restaurants
-        .map((r) => r.area)
-        .filter(Boolean)
-        .sort(),
-    ),
-  ).map((area) => ({ value: area, label: area }));
+  // Cuisine keyword list — module-level constant would be cleaner, but keep
+  // it scoped here. The lookup is memoized below.
+  const cuisineKeywords = useMemo(
+    () => [
+      "Mexican",
+      "Italian",
+      "Chinese",
+      "Thai",
+      "Japanese",
+      "Korean",
+      "Indian",
+      "Mediterranean",
+      "American",
+      "Bar",
+      "Grill",
+      "Brewery",
+      "Steakhouse",
+      "Seafood",
+      "Pizza",
+      "Burgers",
+      "Wings",
+      "BBQ",
+      "Sushi",
+      "Tacos",
+      "Cafe",
+      "Pub",
+      "Bistro",
+      "Sports Bar",
+    ],
+    [],
+  );
 
-  // Extract cuisine types from restaurant names (basic heuristic)
-  const cuisineKeywords = [
-    "Mexican",
-    "Italian",
-    "Chinese",
-    "Thai",
-    "Japanese",
-    "Korean",
-    "Indian",
-    "Mediterranean",
-    "American",
-    "Bar",
-    "Grill",
-    "Brewery",
-    "Steakhouse",
-    "Seafood",
-    "Pizza",
-    "Burgers",
-    "Wings",
-    "BBQ",
-    "Sushi",
-    "Tacos",
-    "Cafe",
-    "Pub",
-    "Bistro",
-    "Sports Bar",
-  ];
+  const uniqueAreas = useMemo(
+    () =>
+      Array.from(
+        new Set(
+          restaurants
+            .map((r) => r.area)
+            .filter(Boolean)
+            .sort(),
+        ),
+      ).map((area) => ({ value: area, label: area })),
+    [restaurants],
+  );
 
-  const detectedCuisines = Array.from(
-    new Set(
-      restaurants
-        .map((r) => {
-          const name = r.name.toLowerCase();
-          return cuisineKeywords.find((cuisine) =>
-            name.includes(cuisine.toLowerCase()),
-          );
-        })
-        .filter((cuisine): cuisine is string => Boolean(cuisine))
-        .sort(),
-    ),
-  ).map((cuisine) => ({ value: cuisine, label: cuisine }));
+  const detectedCuisines = useMemo(
+    () =>
+      Array.from(
+        new Set(
+          restaurants
+            .map((r) => {
+              const name = r.name.toLowerCase();
+              return cuisineKeywords.find((cuisine) =>
+                name.includes(cuisine.toLowerCase()),
+              );
+            })
+            .filter((cuisine): cuisine is string => Boolean(cuisine))
+            .sort(),
+        ),
+      ).map((cuisine) => ({ value: cuisine, label: cuisine })),
+    [restaurants, cuisineKeywords],
+  );
 
   const handleAreaChange = (value: string | string[]) => {
     onAdvancedFiltersChange({

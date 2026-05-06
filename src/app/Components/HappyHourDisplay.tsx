@@ -1,4 +1,4 @@
-import React, { useMemo } from "react";
+import React, { useId, useMemo } from "react";
 import type { HappyHours, HappyHourTime } from "@/lib/types";
 import { formatTimeRange } from "@/utils/time/timeUtils";
 
@@ -15,50 +15,48 @@ const HappyHourDisplay = React.memo<HappyHourDisplayProps>(({
   isExpanded,
   onToggleExpanded,
 }) => {
-  const formatHappyHours = useMemo(
-    () => (times: HappyHours, isExpanded: boolean) => {
-      const daysToShow = isExpanded ? Object.keys(times) : [today];
+  const titleId = useId();
 
-      return daysToShow.map((day) => {
-        const timesForDay = times[day];
-        if (timesForDay) {
-          const timesFormatted = timesForDay.map((time: HappyHourTime) => 
-            formatTimeRange(time.Start, time.End)
-          );
+  const renderedDays = useMemo(() => {
+    const daysToShow = isExpanded ? Object.keys(happyHours) : [today];
 
-          return (
-            <li
-              key={day}
-              className="HappyHourTime tracking-wide text-gray-700 flex gap-1"
-              aria-label={`${day} happy hour: ${timesFormatted.join(', ')}`}
-            >
-              {isExpanded && <p className="HappyHourDay w-12">{`${day}:`}</p>}
-              <div className="HappyHourTimes flex flex-col">
-                {timesFormatted.map((timeFormatted, index) => (
-                  <p key={index}>{timeFormatted}</p>
-                ))}
-              </div>
-            </li>
-          );
-        }
-        return null;
-      });
-    },
-    [today],
-  );
+    return daysToShow.map((day) => {
+      const timesForDay = happyHours[day];
+      if (!timesForDay) return null;
+
+      const timesFormatted = timesForDay.map((time: HappyHourTime) =>
+        formatTimeRange(time.Start, time.End),
+      );
+
+      return (
+        <li
+          key={day}
+          className="HappyHourTime tracking-wide text-gray-700 flex gap-1"
+          aria-label={`${day} happy hour: ${timesFormatted.join(", ")}`}
+        >
+          {isExpanded && <p className="HappyHourDay w-12">{`${day}:`}</p>}
+          <div className="HappyHourTimes flex flex-col">
+            {timesFormatted.map((timeFormatted, index) => (
+              <p key={index}>{timeFormatted}</p>
+            ))}
+          </div>
+        </li>
+      );
+    });
+  }, [happyHours, today, isExpanded]);
 
   return (
     <div className="HHTimes w-full flex-grow" role="region" aria-label="Happy hour times">
-      <h3 className="TimeTitle font-sans font-semibold" id={`happy-hours-title`}>
+      <h3 className="TimeTitle font-sans font-semibold" id={titleId}>
         {isExpanded ? "All Happy Hours:" : `${today} Happy Hour:`}
       </h3>
-      <div aria-labelledby="happy-hours-title">
+      <ul aria-labelledby={titleId}>
         {happyHours[today] || isExpanded ? (
-          formatHappyHours(happyHours, isExpanded)
+          renderedDays
         ) : (
           <p className="text-gray-700" aria-live="polite">{`No Happy Hour Today :(`}</p>
         )}
-      </div>
+      </ul>
       <button
         onClick={onToggleExpanded}
         className="ShowMoreButton mt-1 cursor-pointer italic text-po1 hover:text-black bg-transparent border-none p-0 text-left"

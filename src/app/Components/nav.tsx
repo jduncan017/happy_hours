@@ -60,7 +60,7 @@ const NavBar = () => {
       <div
         className={` ${
           mobileActive ? "h-[260px] rounded-b-xl" : "h-[74px]"
-        } ${"MobileNav fixed z-30 flex w-full flex-col justify-center overflow-hidden bg-black px-4 py-3 font-sans transition-all duration-400 sm:hidden"} `}
+        } ${"MobileNav sticky top-0 z-30 flex w-full flex-col justify-center overflow-hidden bg-black px-4 py-3 font-sans transition-all duration-400 sm:hidden"} `}
       >
         <div className="NavBar flex w-full items-center justify-between gap-5">
           <div className="LogoSection flex h-full">

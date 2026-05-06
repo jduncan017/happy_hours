@@ -39,9 +39,16 @@ function GoogleMap({
   // Initialize Google Maps
   useEffect(() => {
     const initMap = async () => {
+      const apiKey = process.env.NEXT_PUBLIC_GOOGLE_MAPS_API_KEY;
+      if (!apiKey) {
+        setError(
+          "Missing NEXT_PUBLIC_GOOGLE_MAPS_API_KEY — set it in .env.local",
+        );
+        return;
+      }
       try {
         const loader = new Loader({
-          apiKey: process.env.NEXT_PUBLIC_GOOGLE_MAPS_API_KEY!,
+          apiKey,
           version: "weekly",
           libraries: ["places", "marker"],
         });
@@ -62,21 +69,27 @@ function GoogleMap({
     if (!isLoaded || !mapRef.current || mapInstanceRef.current) return;
 
     const mapID =
-      process.env.NEXT_PUBLIC_GOOGLE_MAPS_ID || "denver-happy-hour-map";
+      process.env.NEXT_PUBLIC_GOOGLE_MAPS_ID ||
+      process.env.NEXT_PUBLIC_GOOGLE_MAPS_STYLE_ID;
 
-    mapInstanceRef.current = new google.maps.Map(mapRef.current, {
+    const mapOptions: google.maps.MapOptions = {
       center,
       zoom,
-      maxZoom: 18, // Prevent over-zooming
-      mapId: mapID, // Required for AdvancedMarkerElement
-      // Cloud-styled map with hidden POIs - POI hiding must be configured in Google Cloud Console
-      // See CLAUDE.md for setup instructions
+      maxZoom: 18,
       mapTypeControl: false,
       streetViewControl: false,
       fullscreenControl: true,
-      gestureHandling: "greedy", // Allow scroll zoom without Cmd key
-      clickableIcons: false, // Minimal POI interaction disable (visual POIs still show without proper cloud styling)
-    });
+      gestureHandling: "cooperative",
+      clickableIcons: false,
+    };
+
+    // Only set mapId when a real Cloud Console ID is configured.
+    // An invalid mapId causes Google to render the "can't load correctly" overlay.
+    if (mapID) {
+      mapOptions.mapId = mapID;
+    }
+
+    mapInstanceRef.current = new google.maps.Map(mapRef.current, mapOptions);
 
     // Create info window
     infoWindowRef.current = new google.maps.InfoWindow();

@@ -23,37 +23,54 @@ const fetchRestaurantImage = async (restaurantId: string): Promise<string> => {
 };
 
 /**
- * Hook to fetch a single restaurant's image
+ * Hook to fetch a single restaurant's image.
+ * Skips the network call when the restaurant already has a stored heroImage.
  */
-export const useRestaurantImage = (restaurantId: string) => {
+export const useRestaurantImage = (
+  restaurantId: string,
+  heroImage?: string | null,
+) => {
+  const hasStored = !!(heroImage && heroImage.trim() !== "");
   return useQuery({
     queryKey: ["restaurantImage", restaurantId],
     queryFn: () => fetchRestaurantImage(restaurantId),
-    staleTime: 1000 * 60 * 60 * 24, // 24 hours - images don't change often
-    gcTime: 1000 * 60 * 60 * 24 * 7, // 7 days
+    initialData: hasStored ? heroImage! : undefined,
+    enabled: !hasStored,
+    staleTime: 1000 * 60 * 60 * 24,
+    gcTime: 1000 * 60 * 60 * 24 * 7,
     retry: 1,
     refetchOnWindowFocus: false,
   });
 };
 
 /**
- * Hook to pre-load images for multiple restaurants using React Query
- * Returns a record of restaurant IDs mapped to their image URLs
+ * Pre-load images for multiple restaurants. Restaurants with a stored
+ * heroImage skip the API entirely; only those missing one trigger fetches.
  */
 export const useRestaurantImages = (restaurants: Restaurant[]) => {
   const queries = useQueries({
-    queries: restaurants.map((restaurant) => ({
-      queryKey: ["restaurantImage", restaurant.id],
-      queryFn: () => fetchRestaurantImage(restaurant.id),
-      staleTime: 1000 * 60 * 60 * 24, // 24 hours - images don't change often
-      gcTime: 1000 * 60 * 60 * 24 * 7, // 7 days
-      retry: 1, // Simple retry once since we handle all errors gracefully
-      refetchOnWindowFocus: false,
-    })),
+    queries: restaurants.map((restaurant) => {
+      const hasStored = !!(
+        restaurant.heroImage && restaurant.heroImage.trim() !== ""
+      );
+      return {
+        queryKey: ["restaurantImage", restaurant.id],
+        queryFn: () => fetchRestaurantImage(restaurant.id),
+        initialData: hasStored ? restaurant.heroImage! : undefined,
+        enabled: !hasStored,
+        staleTime: 1000 * 60 * 60 * 24,
+        gcTime: 1000 * 60 * 60 * 24 * 7,
+        retry: 1,
+        refetchOnWindowFocus: false,
+      };
+    }),
   });
 
-  // Transform results into a record of restaurantId -> imageUrl
-  // Use useMemo to prevent object recreation on every render
+  // Build the URL map. useMemo deps include only the data signature so
+  // we don't churn on unrelated query-state changes.
+  const dataSignature = queries.map((q) => q.data ?? null).join("|");
+  const errorSignature = queries.map((q) => (q.isError ? "1" : "0")).join("");
+
   const restaurantImages = useMemo(() => {
     const images: Record<string, string> = {};
     queries.forEach((query, index) => {
@@ -61,13 +78,12 @@ export const useRestaurantImages = (restaurants: Restaurant[]) => {
       if (query.data) {
         images[restaurant.id] = query.data;
       } else if (query.isError) {
-        // Provide fallback for failed images
         images[restaurant.id] = "/photo-missing.webp";
       }
-      // If still loading, don't add to the object yet
     });
     return images;
-  }, [queries, restaurants]);
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [dataSignature, errorSignature, restaurants]);
 
   const isLoading = queries.some((query) => query.isLoading);
   const hasErrors = queries.some((query) => query.isError);
@@ -76,7 +92,6 @@ export const useRestaurantImages = (restaurants: Restaurant[]) => {
     restaurantImages,
     isLoading,
     hasErrors,
-    // Individual query states for debugging
     queries,
   };
 };

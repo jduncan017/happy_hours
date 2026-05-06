@@ -242,15 +242,22 @@ export function UserProvider({ children }: UserProviderProps) {
     };
   }, [supabase]);
 
-  const value: UserContextType = {
-    user,
-    userRole,
-    userProfile,
-    loading,
-    error,
-    refreshProfile,
-    updateProfile,
-  };
+  const value = useMemo<UserContextType>(
+    () => ({
+      user,
+      userRole,
+      userProfile,
+      loading,
+      error,
+      refreshProfile,
+      updateProfile,
+    }),
+    // refreshProfile/updateProfile recreated each render but rarely consumed
+    // as deps; including them would defeat the memo. The fields below are
+    // what consumers actually depend on.
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+    [user, userRole, userProfile, loading, error],
+  );
 
   return <UserContext.Provider value={value}>{children}</UserContext.Provider>;
 }

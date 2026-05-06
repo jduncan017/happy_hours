@@ -48,7 +48,11 @@ export default function FilterDropdown({
   return (
     <div className="FilterDropdown relative">
       <button
+        type="button"
         onClick={() => setIsOpen(!isOpen)}
+        aria-haspopup="listbox"
+        aria-expanded={isOpen}
+        aria-label={`${label} filter`}
         className="h-8 px-3 pr-8 bg-white border border-gray-300 rounded-full text-sm hover:border-gray-400 focus:border-stone-500 focus:outline-none focus:ring-1 focus:ring-stone-500 cursor-pointer min-w-[120px] flex items-center justify-between text-left"
       >
         <span className="text-gray-700 truncate font-medium">
@@ -70,14 +74,24 @@ export default function FilterDropdown({
       </button>
 
       {isOpen && (
-        <div className="absolute top-full left-0 mt-1 w-full bg-white border border-gray-300 rounded-lg shadow-lg z-50 max-h-80 overflow-y-auto">
+        <ul
+          role="listbox"
+          aria-multiselectable={multiple}
+          aria-label={`${label} options`}
+          className="absolute top-full left-0 mt-1 w-full bg-white border border-gray-300 rounded-lg shadow-lg z-50 max-h-80 overflow-y-auto list-none p-0"
+        >
           {!multiple && (
-            <button
-              onClick={() => handleOptionClick("")}
-              className="w-full px-3 py-2 text-left text-sm hover:bg-gray-100 focus:bg-gray-100 focus:outline-none"
-            >
-              {placeholder}
-            </button>
+            <li>
+              <button
+                type="button"
+                role="option"
+                aria-selected={!value}
+                onClick={() => handleOptionClick("")}
+                className="w-full px-3 py-2 text-left text-sm hover:bg-gray-100 focus:bg-gray-100 focus:outline-none"
+              >
+                {placeholder}
+              </button>
+            </li>
           )}
 
           {options.map((option) => {
@@ -86,38 +100,43 @@ export default function FilterDropdown({
               : value === option.value;
 
             return (
-              <button
-                key={option.value}
-                onClick={() => handleOptionClick(option.value)}
-                className={`w-full px-3 py-2 text-left text-sm border-b border-gray-200 hover:bg-gray-100 focus:bg-gray-100 focus:outline-none flex items-center justify-between ${
-                  isSelected ? "bg-stone-50" : ""
-                }`}
-              >
-                <span>{option.label}</span>
-                {multiple && isSelected && (
-                  <svg
-                    className="w-4 h-4 text-stone-600"
-                    fill="currentColor"
-                    viewBox="0 0 24 24"
-                  >
-                    <path d="M9 16.17L4.83 12l-1.42 1.41L9 19 21 7l-1.41-1.41z" />
-                  </svg>
-                )}
-              </button>
+              <li key={option.value}>
+                <button
+                  type="button"
+                  role="option"
+                  aria-selected={isSelected}
+                  onClick={() => handleOptionClick(option.value)}
+                  className={`w-full px-3 py-2 text-left text-sm border-b border-gray-200 hover:bg-gray-100 focus:bg-gray-100 focus:outline-none flex items-center justify-between ${
+                    isSelected ? "bg-stone-50" : ""
+                  }`}
+                >
+                  <span>{option.label}</span>
+                  {multiple && isSelected && (
+                    <svg
+                      className="w-4 h-4 text-stone-600"
+                      fill="currentColor"
+                      viewBox="0 0 24 24"
+                    >
+                      <path d="M9 16.17L4.83 12l-1.42 1.41L9 19 21 7l-1.41-1.41z" />
+                    </svg>
+                  )}
+                </button>
+              </li>
             );
           })}
 
           {multiple && (value as string[]).length > 0 && (
-            <div className="border-t border-gray-200 p-2">
+            <li className="border-t border-gray-200 p-2">
               <button
+                type="button"
                 onClick={handleClearAll}
                 className="w-full px-2 py-1 text-xs text-gray-600 hover:text-gray-800 hover:bg-gray-100 rounded focus:outline-none"
               >
                 Clear All
               </button>
-            </div>
+            </li>
           )}
-        </div>
+        </ul>
       )}
 
       {/* Click outside to close */}

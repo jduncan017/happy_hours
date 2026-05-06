@@ -132,7 +132,7 @@ const Footer = () => {
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
           <div className="flex flex-col sm:flex-row justify-between items-center gap-4">
             <div className="text-gray-400 text-sm text-center sm:text-left">
-              © 2024 Happy Hour Hunt Denver. All rights reserved.
+              © {new Date().getFullYear()} Happy Hour Hunt Denver. All rights reserved.
             </div>
             <div className="flex flex-wrap justify-center gap-4 text-sm">
               <Link

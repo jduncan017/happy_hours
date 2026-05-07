@@ -3,6 +3,7 @@
 import { useState } from "react";
 import { useGeolocation } from "@/hooks/useGeolocation";
 import type { Restaurant } from "@/lib/types";
+import { MapPin, Beer, Calendar, Loader2 } from "lucide-react";
 
 interface LocationSearchProps {
   restaurants: Restaurant[];
@@ -120,31 +121,39 @@ export default function LocationSearch({
         <button
           onClick={() => handleFindNearby('now')}
           disabled={isLoading}
-          className="LocationButton w-full bg-po1 text-white py-3 px-4 rounded-lg hover:bg-po1/90 disabled:opacity-50 disabled:cursor-not-allowed font-semibold transition-all duration-200 shadow-md hover:shadow-lg"
+          className="LocationButton w-full inline-flex items-center justify-center gap-2 bg-po1 text-white py-3 px-4 rounded-lg hover:bg-po1/90 disabled:opacity-50 disabled:cursor-not-allowed font-semibold transition-all duration-200 shadow-md hover:shadow-lg"
         >
-          {isLoading ? '📍 Getting Location...' : '🍻 Find Happy Hour NOW!'}
+          {isLoading ? (
+            <>
+              <Loader2 className="w-4 h-4 animate-spin" /> Getting location…
+            </>
+          ) : (
+            <>
+              <Beer className="w-4 h-4" /> Find happy hour now
+            </>
+          )}
         </button>
-        
+
         <button
           onClick={() => handleFindNearby('today')}
           disabled={isLoading}
-          className="LocationButton w-full bg-stone-100 text-stone-900 py-3 px-4 rounded-lg hover:bg-stone-200 disabled:opacity-50 disabled:cursor-not-allowed font-medium transition-all duration-200 border border-stone-300"
+          className="LocationButton w-full inline-flex items-center justify-center gap-2 bg-stone-100 text-stone-900 py-3 px-4 rounded-lg hover:bg-stone-200 disabled:opacity-50 disabled:cursor-not-allowed font-medium transition-all duration-200 border border-stone-300"
         >
-          📅 Happy Hours Today
+          <Calendar className="w-4 h-4" /> Today&apos;s deals
         </button>
-        
+
         <button
           onClick={() => handleFindNearby('all')}
           disabled={isLoading}
-          className="LocationButton w-full bg-stone-800 text-white py-3 px-4 rounded-lg hover:bg-stone-700 disabled:opacity-50 disabled:cursor-not-allowed font-medium transition-all duration-200"
+          className="LocationButton w-full inline-flex items-center justify-center gap-2 bg-stone-800 text-white py-3 px-4 rounded-lg hover:bg-stone-700 disabled:opacity-50 disabled:cursor-not-allowed font-medium transition-all duration-200"
         >
-          📍 All Nearby Restaurants
+          <MapPin className="w-4 h-4" /> All nearby restaurants
         </button>
       </div>
 
       {location && (
-        <p className="text-xs text-stone-500 mt-4 bg-stone-50 p-2 rounded">
-          📍 Using your location: {location.lat.toFixed(4)}, {location.lng.toFixed(4)}
+        <p className="inline-flex items-center gap-1.5 text-xs text-stone-500 mt-4 bg-stone-50 p-2 rounded">
+          <MapPin className="w-3 h-3" /> Using your location: {location.lat.toFixed(4)}, {location.lng.toFixed(4)}
         </p>
       )}
 

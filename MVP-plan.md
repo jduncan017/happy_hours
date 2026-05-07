@@ -249,4 +249,40 @@ Transform HappyHourHunt from a static Denver happy hour site into a dynamic, use
 1. Set up development environment with Supabase
 2. Create enhanced data models and migrations
 3. Begin Phase 1 implementation
+
+## Trust & Verification Surface
+
+The product hinges on listings being current — stale happy hour times are
+worse than no listing at all. Surface that work in the UI so users know we
+take it seriously.
+
+### Schema
+
+- [ ] Add `last_verified_at TIMESTAMPTZ NULL` column to `restaurants`
+  - Bumped whenever an admin (or weekly verification job) confirms the
+    listing's hours match the source-of-truth website
+  - `verified BOOLEAN` already exists — keep as the "this restaurant has
+    been hand-confirmed at least once" flag, separate from the freshness
+    timestamp
+
+### UI
+
+- [ ] **Verified pill** on each `RestaurantCard` when `verified = true`,
+      using lucide `BadgeCheck` icon. Subtle — small chip near the
+      restaurant name, not screaming.
+- [ ] **Last-verified caption** on the card: "Verified [N] days ago" where
+      `N = days since last_verified_at`. After 30 days surface a softer
+      "Last checked over a month ago" tone.
+- [ ] **Stale flag** on cards where `last_verified_at` is older than ~60
+      days, with a "report stale info" link that opens the contact form
+      pre-filled.
+
+### Workflow
+
+- [ ] Admin verification action: a "Mark verified" button on each
+      restaurant in the admin directory that bumps `last_verified_at = now()`
+      and sets `verified = true`.
+- [ ] Weekly cron: re-scrape each verified restaurant's source website,
+      diff against stored happy_hours, flag mismatches for admin review
+      rather than auto-overwriting (manual edits should win).
 4. Set up project management and tracking systems

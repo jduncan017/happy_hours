@@ -46,20 +46,20 @@ export default function HeroSection() {
             fetchPriority="high"
             sizes="(max-width: 640px) 332px, 380px"
           />
-          <h1 className="HeroTitle m-auto w-full text-center font-serif capitalize">
-            {`Your secret to the best dates, deals, & the happiest hours in Denver!`}
+          <h1 className="HeroTitle m-auto w-full text-center text-2xl sm:text-3xl font-bold leading-tight">
+            Denver&apos;s happy hours. Sorted by time, neighborhood, and what
+            you&apos;re actually craving.
           </h1>
         </div>
-        {/* <SearchBar /> */}
         <SiteButton
           variant="gradient"
-          text="Find Your Happy Hour"
+          text="Find a happy hour"
           rounded={true}
           addClasses="mx-auto w-60 h-12 z-10 cursor-pointer"
           onSubmit={() => router.push("/search")}
         />
-        <p className="BetaNote m-auto text-center capitalize italic text-gray-400">
-          {`Note: This site is in beta`}
+        <p className="BetaNote m-auto text-center italic text-gray-400">
+          Currently in beta · Verified weekly
         </p>
       </div>
     </div>

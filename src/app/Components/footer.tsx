@@ -24,9 +24,8 @@ const Footer = () => {
               />
             </Link>
             <p className="text-gray-300 text-center lg:text-left mb-6 max-w-md">
-              Denver&apos;s premier destination for discovering the best happy
-              hour deals. Find amazing food and drink specials at restaurants
-              and bars across the city.
+              Every Denver happy hour, sorted by time and neighborhood.
+              Verified weekly so you don&apos;t show up to expired deals.
             </p>
           </div>
 
@@ -132,7 +131,7 @@ const Footer = () => {
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
           <div className="flex flex-col sm:flex-row justify-between items-center gap-4">
             <div className="text-gray-400 text-sm text-center sm:text-left">
-              © {new Date().getFullYear()} Happy Hour Hunt Denver. All rights reserved.
+              Made in Denver · © {new Date().getFullYear()} HappyHourHunt
             </div>
             <div className="flex flex-wrap justify-center gap-4 text-sm">
               <Link

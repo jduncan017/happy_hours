@@ -6,28 +6,28 @@ import AnimatedGradientBackground from "@/app/Components/SmallComponents/Animate
 import CardWrapper from "@/app/Components/SmallComponents/CardWrapper";
 import FeatureList from "@/app/Components/SmallComponents/FeatureList";
 import Link from "next/link";
+import { MapPin, Star, Bookmark, Bell } from "lucide-react";
 
-// Features data for signup page
 const signupFeatures = [
   {
-    icon: "📍",
-    title: "Find Nearby Deals",
-    description: "Instant map of happy hours around you.",
+    icon: <MapPin className="w-4 h-4" />,
+    title: "Map view",
+    description: "See what's running near you, right now.",
   },
   {
-    icon: "⭐",
-    title: "Rate & Review",
-    description: "Share experiences with the community.",
+    icon: <Star className="w-4 h-4" />,
+    title: "Rate spots",
+    description: "Share which deals were worth it.",
   },
   {
-    icon: "📒",
-    title: "Save Favorites",
-    description: "Build your go‑to list for any neighborhood.",
+    icon: <Bookmark className="w-4 h-4" />,
+    title: "Save favorites",
+    description: "Build your go-to list by neighborhood.",
   },
   {
-    icon: "🔔",
-    title: "Get Updates",
-    description: "Never miss a limited‑time special.",
+    icon: <Bell className="w-4 h-4" />,
+    title: "Stay current",
+    description: "Verified weekly. No stale listings.",
   },
 ];
 
@@ -54,13 +54,12 @@ export default async function SignupPage() {
           className="hidden sm:flex flex-col border-r h-full"
         >
           <h2 className="SignupFeaturesTitle text-2xl sm:text-3xl font-serif font-bold leading-tight text-white mb-4">
-            Welcome to Denver&apos;s Happy Hour Scene
+            Plan your next happy hour.
           </h2>
 
           <p className="SignupFeaturesText text-white/70 max-w-prose mb-8">
-            Join locals discovering the best dates, deals, and late-afternoon
-            steals. Save favorites, rate spots, and get alerts before specials
-            end.
+            Save your favorite spots, browse by neighborhood, and skip the
+            full-price markup.
           </p>
 
           {/* Features List */}
@@ -79,10 +78,10 @@ export default async function SignupPage() {
           {/* Header */}
           <div className="SignupHeader mb-6">
             <h1 className="SignupTitle text-2xl sm:text-3xl font-serif font-bold text-white">
-              Join the Hunt
+              Create your account
             </h1>
             <p className="SignupSubtitle mt-1 text-white/70">
-              Discover Denver&apos;s best happy hours.
+              Free, no spam, takes ten seconds.
             </p>
           </div>
 

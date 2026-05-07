@@ -1,4 +1,5 @@
 import type { SupabaseClient } from "@supabase/supabase-js";
+import { normalizeImageUrl } from "@/utils/image/normalizeImageUrl";
 
 const BUCKET = "restaurant-images";
 
@@ -96,12 +97,19 @@ export async function downloadAndStoreRestaurantImage(
   restaurantName: string,
   sourceUrl: string,
 ): Promise<StoreResult> {
+  // Coerce protocol-relative URLs (//cdn/foo) to https. fetch() rejects
+  // them with "Invalid URL" otherwise.
+  const normalizedSource = normalizeImageUrl(sourceUrl, "");
+  if (!normalizedSource || !/^https?:\/\//i.test(normalizedSource)) {
+    throw new Error(`Source URL is not absolute: ${sourceUrl}`);
+  }
+
   const controller = new AbortController();
   const timer = setTimeout(() => controller.abort(), FETCH_TIMEOUT_MS);
 
   let res: Response;
   try {
-    res = await fetch(sourceUrl, {
+    res = await fetch(normalizedSource, {
       signal: controller.signal,
       redirect: "follow",
       headers: {

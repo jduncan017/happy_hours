@@ -5,6 +5,7 @@ import AnimatedGradientBackground from "@/app/Components/SmallComponents/Animate
 import ProfileForm from "@/app/Components/profile/ProfileForm";
 import ProfileStats from "@/app/Components/profile/ProfileStats";
 import CardWrapper from "../Components/SmallComponents/CardWrapper";
+import { Heart } from "lucide-react";
 
 export default async function ProfilePage() {
   const supabase = await createClient();
@@ -53,12 +54,11 @@ export default async function ProfilePage() {
         <div className="ProfileStatsPanel h-fit hidden lg:block flex-1">
           <CardWrapper variant="dark-glass" className="h-full flex flex-col">
             <h2 className="ProfileStatsTitle text-2xl sm:text-3xl font-serif font-bold leading-tight text-white mb-4">
-              Your Happy Hour Journey
+              Your saved spots
             </h2>
 
             <p className="ProfileStatsText text-white/70 max-w-prose mb-8">
-              Track your discoveries, reviews, and favorite spots as you explore
-              Denver&apos;s happy hour scene.
+              Everything you&apos;ve hearted, in one list.
             </p>
 
             {/* Stats Component */}
@@ -71,14 +71,14 @@ export default async function ProfilePage() {
       <div className="ProfileMobileStats lg:hidden flex justify-center px-4 pb-4">
         <div className="w-full max-w-2xl bg-stone-900/70 backdrop-blur rounded-3xl p-6 shadow-2xl border border-white/5">
           <div className="text-center mb-6">
-            <div className="ProfileStatsIcon h-12 w-12 mx-auto mb-4 rounded-2xl bg-gradient-to-br from-po1 to-py1 grid place-items-center text-stone-900 font-bold text-xl">
-              🎯
+            <div className="ProfileStatsIcon h-12 w-12 mx-auto mb-4 rounded-2xl bg-gradient-to-br from-po1 to-py1 grid place-items-center text-stone-900">
+              <Heart className="w-6 h-6" fill="currentColor" />
             </div>
             <h2 className="text-xl font-serif font-bold text-white mb-2">
-              Your Happy Hour Journey
+              Your saved spots
             </h2>
             <p className="text-white/70 text-sm">
-              Track your discoveries and reviews as you explore Denver.
+              The places you&apos;ve hearted, ready when you need them.
             </p>
           </div>
 

@@ -2,7 +2,7 @@
 
 /* Tailwind CSS v4 Theme Configuration */
 @theme {
-  --default-font-family: Montserrat, ui-sans-serif, system-ui, sans-serif;
+  --default-font-family: var(--font-inter), ui-sans-serif, system-ui, sans-serif;
 
   --color-n1: #fffbf4;
   --color-n2: #fff9ee;
@@ -12,7 +12,7 @@
   --color-pr1: #db3702;
   --color-blur-white: rgba(255, 255, 255, 0.5);
 
-  --font-family-sans: Montserrat, ui-sans-serif, system-ui, sans-serif;
+  --font-family-sans: var(--font-inter), ui-sans-serif, system-ui, sans-serif;
   --font-family-serif: Playfair, ui-serif, Georgia, serif;
   --font-family-allerta: Allerta, ui-sans-serif, system-ui, sans-serif;
 
@@ -120,15 +120,17 @@
   font-style: normal;
 }
 
-/* Apply the fonts globally */
-body,
+/* Body uses Inter by default (loaded via next/font in layout.tsx).
+   H1 and H2 use editorial Playfair; H3+ inherit Inter from body so the
+   site reads as one consistent sans-serif unless something explicitly
+   asks for the display serif. */
+body {
+  font-family: var(--font-inter), ui-sans-serif, system-ui, sans-serif;
+}
+
 h1,
-h2,
-h3,
-h4,
-h5,
-h6 {
-  font-family: "Montserrat", serif;
+h2 {
+  font-family: "Playfair", ui-serif, Georgia, serif;
 }
 
 a {
@@ -138,7 +140,7 @@ a {
 }
 
 a:hover {
-  cursor: point;
+  cursor: pointer;
   color: gray;
 }
 

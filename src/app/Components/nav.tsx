@@ -13,8 +13,8 @@ const NavBar = () => {
   }
 
   const links = [
-    { text: "Find Your Happy Hour", href: "/search" },
-    { text: "Submit Restaurant", href: "/submit" },
+    { text: "Search", href: "/search" },
+    { text: "Submit", href: "/submit" },
     { text: "Contact", href: "/contact" },
   ];
 

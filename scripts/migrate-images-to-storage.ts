@@ -25,6 +25,7 @@ import {
   downloadAndStoreRestaurantImage,
   extractStoragePath,
 } from "../src/lib/storage/restaurantImages";
+import { normalizeImageUrl } from "../src/utils/image/normalizeImageUrl";
 
 config({ path: ".env.local" });
 
@@ -108,8 +109,11 @@ async function processOne(
     };
   }
 
-  // Source URL we'll download from. Storage public URL or external — both work.
-  const sourceUrl = url.startsWith("http") ? url : null;
+  // Source URL we'll download from. Normalize protocol-relative URLs first
+  // (a few rows had `//cdn/foo` from old OG scrapes).
+  const normalized = normalizeImageUrl(url, "");
+  const sourceUrl =
+    normalized && /^https?:\/\//i.test(normalized) ? normalized : null;
   if (!sourceUrl) {
     return {
       id: row.id,

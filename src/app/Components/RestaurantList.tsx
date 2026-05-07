@@ -2,7 +2,7 @@ import { useCallback, useMemo, useState } from "react";
 import Link from "next/link";
 import type { Restaurant } from "@/lib/types";
 import RestaurantCard from "./RestaurantCard";
-import { Users } from "lucide-react";
+import { Users, SearchX } from "lucide-react";
 import SiteButton from "./SmallComponents/siteButton";
 
 interface RestaurantListProps {
@@ -40,9 +40,13 @@ export default function RestaurantList({
   if (restaurants.length === 0) {
     return (
       <div className="RestaurantList w-full">
-        <div className="NoRestaurants bg-white rounded-lg shadow-themeShadow px-10 py-12 text-center">
-          <p className="text-stone-600 text-lg">
-            Sadly, There are no happy hours that match these filters. 😔
+        <div className="NoRestaurants bg-white rounded-lg shadow-themeShadow px-10 py-12 text-center flex flex-col items-center gap-3">
+          <SearchX className="w-8 h-8 text-stone-400" aria-hidden="true" />
+          <p className="text-stone-700 text-lg font-medium">
+            No spots match these filters.
+          </p>
+          <p className="text-stone-500 text-sm">
+            Try clearing one or two — there&apos;s usually something nearby.
           </p>
         </div>
       </div>
@@ -73,7 +77,7 @@ export default function RestaurantList({
               <Users className="w-8 h-8 text-po1" />
             </div>
           </div>
-          <h3 className="text-xl font-serif font-bold text-gray-900 mb-2">
+          <h3 className="text-xl font-bold text-gray-900 mb-2">
             Know a Great Happy Hour Spot?
           </h3>
           <p className="text-gray-700 mb-6 max-w-md mx-auto">

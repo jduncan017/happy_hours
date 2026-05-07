@@ -3,6 +3,7 @@ import Loader from "./PreLoader";
 import Image from "next/image";
 import { useRestaurantImage } from "@/hooks/useRestaurantImages";
 import { useImageBackground } from "@/hooks/useImageBackground";
+import { normalizeImageUrl } from "@/utils/image/normalizeImageUrl";
 import type { Restaurant } from "@/lib/types";
 
 interface ImageLoadingWrapperProps {
@@ -21,7 +22,8 @@ const ImageLoadingWrapper: React.FC<ImageLoadingWrapperProps> = ({
     restaurant.heroImage,
   );
   const [loadFailed, setLoadFailed] = useState(false);
-  const resolvedUrl = imageUrl && !loadFailed ? imageUrl : FALLBACK;
+  const resolvedUrl =
+    imageUrl && !loadFailed ? normalizeImageUrl(imageUrl, FALLBACK) : FALLBACK;
   const { backgroundClass, isAnalyzing } = useImageBackground(resolvedUrl);
 
   if (isLoading) return <Loader />;

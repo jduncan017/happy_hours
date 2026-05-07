@@ -32,7 +32,7 @@ export default function UserMenu() {
   const handleSignOut = async () => {
     await signOut(supabase);
     setIsOpen(false);
-    router.push("/");
+    router.push("/search");
   };
 
   if (loading) {

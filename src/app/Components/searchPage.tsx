@@ -15,6 +15,8 @@ import { useAllRestaurants } from "@/hooks/useRestaurants";
 import SearchFilters, { type AdvancedFilterOptions } from "./SearchFilters";
 import { type TimeFilter } from "./modals/TimeFilterModal";
 import { SearchResults } from "./SearchResults";
+import OnboardingBanner from "./onboarding/OnboardingBanner";
+import { useFavorites } from "@/hooks/useFavorites";
 import { getCurrentDayOfWeek } from "@/utils/time/timeUtils";
 import { useTimeBasedFiltering } from "@/hooks/useTimeBasedFiltering";
 import { performanceMonitor } from "@/utils/performance/performanceMonitor";
@@ -41,9 +43,11 @@ export const SearchPage = forwardRef<HTMLDivElement>((_, ref) => {
   );
   const [timeFilter, setTimeFilter] = useState<TimeFilter | null>(null);
   const [searchQuery, setSearchQuery] = useState("");
+  const [favoritesOnly, setFavoritesOnly] = useState(false);
 
   // Use React Query to fetch restaurants
   const { data: allRestaurants = [], isLoading, error } = useAllRestaurants();
+  const { favoriteIds, isSignedIn } = useFavorites();
 
   // Time-based filtering hook
   const timeFilters = useTimeBasedFiltering(allRestaurants);
@@ -104,9 +108,14 @@ export const SearchPage = forwardRef<HTMLDivElement>((_, ref) => {
       result = applyAdvancedFilters(result, advancedFilters);
     }
 
+    // Apply favorites-only filter (no-op when signed out)
+    if (favoritesOnly && isSignedIn) {
+      result = result.filter((r) => favoriteIds.has(r.id));
+    }
+
     perfTracker.end();
     return result;
-  }, [filterOption, today, allRestaurants, advancedFilters, isLocationBased, timeFilter, searchQuery, timeFilters]);
+  }, [filterOption, today, allRestaurants, advancedFilters, isLocationBased, timeFilter, searchQuery, timeFilters, favoritesOnly, favoriteIds, isSignedIn]);
 
   const handleBackToAll = () => {
     setIsLocationBased(false);
@@ -127,6 +136,7 @@ export const SearchPage = forwardRef<HTMLDivElement>((_, ref) => {
     setIsLocationBased(false);
     setUserLocation(null);
     setSearchQuery("");
+    setFavoritesOnly(false);
   };
 
   const handleSearchQuery = (query: string) => {
@@ -134,7 +144,8 @@ export const SearchPage = forwardRef<HTMLDivElement>((_, ref) => {
   };
 
   return (
-    <div ref={ref} className="SearchContainer w-full">
+    <div ref={ref} className="SearchContainer relative w-full">
+      <OnboardingBanner />
       {/* Full Width Search Filters */}
       <SearchFilters
         filterOption={filterOption}
@@ -145,6 +156,8 @@ export const SearchPage = forwardRef<HTMLDivElement>((_, ref) => {
         onTimeFilter={handleTimeFilter}
         onClearAllFilters={handleClearAllFilters}
         onSearchQuery={handleSearchQuery}
+        favoritesOnly={favoritesOnly}
+        onToggleFavoritesOnly={isSignedIn ? setFavoritesOnly : undefined}
         onError={(error) => console.error("Search filter error:", error)}
       />
 

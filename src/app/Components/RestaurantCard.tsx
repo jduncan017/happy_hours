@@ -2,12 +2,14 @@ import React from "react";
 import type { Restaurant } from "@/lib/types";
 import ImageLoadingWrapper from "@/utils/image/PreLoader/ImageLoadingWrapper";
 import SiteButton from "./SmallComponents/siteButton";
+import FavoriteButton from "./SmallComponents/FavoriteButton";
 import generateGoogleMapsUrl from "@/utils/geo/generateMapsURL";
 import HappyHourDisplay from "./HappyHourDisplay";
 import ErrorBoundary from "./ErrorBoundary/ErrorBoundary";
 import ImageErrorFallback from "./ErrorBoundary/ImageErrorFallback";
 import MaxWidthContainer from "./Layout/MaxWidthContainer";
 import FlexContainer from "./Layout/FlexContainer";
+import { Footprints } from "lucide-react";
 
 interface RestaurantWithDistance extends Restaurant {
   distance?: number;
@@ -44,25 +46,32 @@ const RestaurantCard = React.memo<RestaurantCardProps>(
           </div>
         </FlexContainer>
         <div className="RightColumn flex w-full flex-col gap-2 overflow-hidden">
-          <div className="Name&Address">
-            <h2
-              className="RestaurantName font-sans truncate text-xl font-semibold"
-              title={restaurant.name}
-            >
-              <span className="Name align-baseline">{restaurant.name}</span>
-              {restaurant.area && (
-                <span className="Area ml-2 align-baseline text-sm text-gray-600">
-                  {restaurant.area}
-                </span>
-              )}
-            </h2>
-            <p
-              className="AddressText flex w-fit items-center gap-1 italic text-stone-600"
-              title={restaurant.address}
-              aria-label={`Address: ${restaurant.address}`}
-            >
-              {restaurant.address}
-            </p>
+          <div className="Name&Address flex items-start gap-3">
+            <div className="flex-1 min-w-0">
+              <h2
+                className="RestaurantName font-sans truncate text-xl font-semibold"
+                title={restaurant.name}
+              >
+                <span className="Name align-baseline">{restaurant.name}</span>
+                {restaurant.area && (
+                  <span className="Area ml-2 align-baseline text-sm text-gray-600">
+                    {restaurant.area}
+                  </span>
+                )}
+              </h2>
+              <p
+                className="AddressText flex w-fit items-center gap-1 italic text-stone-600"
+                title={restaurant.address}
+                aria-label={`Address: ${restaurant.address}`}
+              >
+                {restaurant.address}
+              </p>
+            </div>
+            <FavoriteButton
+              restaurantId={restaurant.id}
+              restaurantName={restaurant.name}
+              className="flex-shrink-0 mt-1"
+            />
           </div>
           <div className="HHAndNotes flex flex-col gap-3 md:flex-row md:items-start md:justify-between">
             <div className="HappyHourWrapper flex-1 min-w-0">
@@ -101,11 +110,12 @@ const RestaurantCard = React.memo<RestaurantCardProps>(
                   </a>
                 )}
                 {restaurant.distance && (
-                  <span 
+                  <span
                     className="Distance inline-flex items-center gap-1 rounded-full bg-po1/10 px-2 py-1 text-xs font-medium text-po1"
                     aria-label={`Distance: ${restaurant.distance.toFixed(1)} miles away`}
                   >
-                    🚶 {restaurant.distance.toFixed(1)} miles
+                    <Footprints className="w-3 h-3" />
+                    {restaurant.distance.toFixed(1)} mi
                   </span>
                 )}
               </div>

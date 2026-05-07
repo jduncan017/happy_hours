@@ -8,6 +8,7 @@ import FilterButton from "./SmallComponents/FilterButton";
 import FilterSearchBar from "./SmallComponents/FilterSearchBar";
 import TimeFilterModal, { type TimeFilter } from "./modals/TimeFilterModal";
 import Link from "next/link";
+import { Clock, Calendar, Beer, Heart, X } from "lucide-react";
 
 export interface AdvancedFilterOptions {
   areas: string[];
@@ -30,6 +31,8 @@ interface SearchFiltersProps {
   onClearAllFilters?: () => void;
   onError?: (error: string) => void;
   onSearchQuery?: (query: string) => void;
+  favoritesOnly?: boolean;
+  onToggleFavoritesOnly?: (next: boolean) => void;
 }
 
 export default function SearchFilters({
@@ -42,6 +45,8 @@ export default function SearchFilters({
   onClearAllFilters,
   onError,
   onSearchQuery,
+  favoritesOnly = false,
+  onToggleFavoritesOnly,
 }: SearchFiltersProps) {
   const [searchQuery, setSearchQuery] = useState("");
   const [currentTimeFilter, setCurrentTimeFilter] = useState<TimeFilter | null>(
@@ -218,14 +223,44 @@ export default function SearchFilters({
             filterOption === "today"
           }
         >
-          {currentTimeFilter
-            ? `🕐 ${currentTimeFilter.dayOfWeek} ${new Date(`1970-01-01T${currentTimeFilter.startTime}`).toLocaleTimeString([], { hour: "numeric", minute: "2-digit", hour12: true })}`
-            : filterOption === "now"
-              ? "🍻 Happy Hour Now"
-              : filterOption === "today"
-                ? "📅 Happy Hour Today"
-                : "🕐 Filter by Time"}
+          <span className="inline-flex items-center gap-1.5">
+            {filterOption === "now" ? (
+              <Beer className="w-4 h-4" />
+            ) : filterOption === "today" ? (
+              <Calendar className="w-4 h-4" />
+            ) : (
+              <Clock className="w-4 h-4" />
+            )}
+            {currentTimeFilter
+              ? `${currentTimeFilter.dayOfWeek} ${new Date(`1970-01-01T${currentTimeFilter.startTime}`).toLocaleTimeString([], { hour: "numeric", minute: "2-digit", hour12: true })}`
+              : filterOption === "now"
+                ? "Happening Now"
+                : filterOption === "today"
+                  ? "Today"
+                  : "Filter by Time"}
+          </span>
         </FilterButton>
+
+        {/* Favorites Only Filter */}
+        {onToggleFavoritesOnly && (
+          <FilterButton
+            active={favoritesOnly}
+            onClick={() => onToggleFavoritesOnly(!favoritesOnly)}
+            aria-label={
+              favoritesOnly ? "Show all restaurants" : "Show only favorites"
+            }
+            aria-pressed={favoritesOnly}
+          >
+            <span className="inline-flex items-center gap-1.5">
+              <Heart
+                className="w-4 h-4"
+                fill={favoritesOnly ? "currentColor" : "none"}
+                strokeWidth={favoritesOnly ? 0 : 2}
+              />
+              Favorites
+            </span>
+          </FilterButton>
+        )}
 
         {/* Area Filter */}
         {uniqueAreas.length > 0 && (
@@ -254,13 +289,17 @@ export default function SearchFilters({
           advancedFilters.cuisineTypes.length > 0 ||
           currentTimeFilter ||
           filterOption !== "all" ||
-          searchQuery) && (
+          searchQuery ||
+          favoritesOnly) && (
           <FilterButton
             active={false}
             onClick={handleClearAllFilters}
             aria-label="Clear all active filters"
           >
-            ✕ Clear Filters
+            <span className="inline-flex items-center gap-1.5">
+              <X className="w-4 h-4" />
+              Clear filters
+            </span>
           </FilterButton>
         )}
 

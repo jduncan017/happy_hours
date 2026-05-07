@@ -1,4 +1,5 @@
 import "./globals.css";
+import { Inter } from "next/font/google";
 import { Analytics } from "@vercel/analytics/react";
 import { Toaster } from "react-hot-toast";
 import Footer from "./Components/footer";
@@ -7,6 +8,12 @@ import { UserProvider } from "../contexts/UserContext";
 import { QueryProvider } from "../providers/QueryProvider";
 import StructuredData from "./Components/StructuredData";
 import Navbar from "./Components/nav";
+
+const inter = Inter({
+  subsets: ["latin"],
+  display: "swap",
+  variable: "--font-inter",
+});
 
 if (!process.env.NEXT_PUBLIC_BASE_URL) {
   throw new Error("NEXT_PUBLIC_BASE_URL is not defined");
@@ -78,18 +85,8 @@ export default function RootLayout({
   children: React.ReactNode;
 }) {
   return (
-    <html lang="en" className="bg-black">
-      <head>
-        {/* Preload critical fonts */}
-        <link
-          rel="preload"
-          href="/fonts/Montserrat-VariableFont_wght.ttf"
-          as="font"
-          type="font/ttf"
-          crossOrigin="anonymous"
-        />
-      </head>
-      <body className="Body h-fit overflow-x-hidden bg-black">
+    <html lang="en" className={`bg-black ${inter.variable}`}>
+      <body className="Body h-fit overflow-x-hidden bg-black font-sans">
         {/* Skip navigation for screen readers and keyboard users */}
         <a href="#main-content" className="skip-link">
           Skip to main content

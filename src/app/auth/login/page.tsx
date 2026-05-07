@@ -6,28 +6,28 @@ import AnimatedGradientBackground from "@/app/Components/SmallComponents/Animate
 import CardWrapper from "@/app/Components/SmallComponents/CardWrapper";
 import FeatureList from "@/app/Components/SmallComponents/FeatureList";
 import Link from "next/link";
+import { Heart, Zap, Sparkles, MessageSquare } from "lucide-react";
 
-// Features data for login page
 const loginFeatures = [
   {
-    icon: "❤️",
-    title: "Your Saved Spots",
-    description: "Access your favorite happy hour locations.",
+    icon: <Heart className="w-4 h-4" />,
+    title: "Your favorites",
+    description: "Quick access to spots you've saved.",
   },
   {
-    icon: "⚡",
-    title: "Live Updates",
-    description: "Real-time deals and new restaurant alerts.",
+    icon: <Zap className="w-4 h-4" />,
+    title: "Fresh deals",
+    description: "We verify happy hour times every week.",
   },
   {
-    icon: "🎯",
-    title: "Personalized Picks",
-    description: "Recommendations based on your preferences.",
+    icon: <Sparkles className="w-4 h-4" />,
+    title: "Picks for you",
+    description: "Suggestions based on what you like.",
   },
   {
-    icon: "📊",
-    title: "Your Reviews",
-    description: "Track your experiences and share insights.",
+    icon: <MessageSquare className="w-4 h-4" />,
+    title: "Your reviews",
+    description: "Help other Denverites pick well.",
   },
 ];
 
@@ -54,13 +54,12 @@ export default async function LoginPage() {
           className="hidden sm:flex flex-col border-r h-full"
         >
           <h2 className="LoginFeaturesTitle text-2xl sm:text-3xl font-serif font-bold leading-tight text-white mb-4">
-            Ready for Your Next Adventure?
+            Welcome back.
           </h2>
 
           <p className="LoginFeaturesText text-white/70 max-w-prose mb-8">
-            Welcome back! Your saved spots, reviews, and personalized
-            recommendations are waiting. Let&apos;s discover what&apos;s
-            happening in Denver today.
+            Your saved spots and weekly-verified deals are right where you
+            left them.
           </p>
 
           {/* Features List */}
@@ -79,10 +78,10 @@ export default async function LoginPage() {
           {/* Header */}
           <div className="LoginHeader mb-6">
             <h1 className="LoginTitle text-2xl sm:text-3xl font-serif font-bold text-white">
-              Welcome Back, Hunter
+              Sign in
             </h1>
             <p className="LoginSubtitle mt-1 text-white/70">
-              Your Denver happy hour adventure continues.
+              Pick up where you left off.
             </p>
           </div>
 
@@ -99,7 +98,7 @@ export default async function LoginPage() {
                 href="/auth/signup"
                 className="text-po1 hover:underline font-semibold"
               >
-                Join the hunt
+                Sign up
               </Link>
             </p>
             <p className="text-xs text-white/50">

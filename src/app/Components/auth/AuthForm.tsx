@@ -48,11 +48,14 @@ export default function AuthForm({ mode, onSuccess }: AuthFormProps) {
         if (error) {
           setError(error.message);
         } else if (user) {
-          setSuccess("🎉 Account created! Check your email to confirm.");
-          // Reset form
-          setEmail("");
-          setPassword("");
-          setFullName("");
+          setSuccess("Account created. Setting things up...");
+          setTimeout(() => {
+            if (onSuccess) {
+              onSuccess();
+            } else {
+              router.push("/welcome");
+            }
+          }, 1000);
         }
       } else {
         const { user, error } = await signIn(supabase, email, password);
@@ -60,7 +63,7 @@ export default function AuthForm({ mode, onSuccess }: AuthFormProps) {
         if (error) {
           setError(error.message);
         } else if (user) {
-          setSuccess("🍻 Welcome back! Redirecting...");
+          setSuccess("Welcome back. One sec...");
           setTimeout(() => {
             if (onSuccess) {
               onSuccess();

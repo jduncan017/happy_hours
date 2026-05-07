@@ -1,5 +1,7 @@
+import { ReactNode } from "react";
+
 interface Feature {
-  icon: string;
+  icon: ReactNode;
   title: string;
   description: string;
 }
@@ -21,7 +23,7 @@ export default function FeatureList({
           className="FeatureItem rounded-2xl bg-stone-800/70 border border-white/5 p-4 sm:p-5 hover:bg-stone-800/90 transition"
         >
           <div className="flex items-start gap-4">
-            <div className="FeatureIcon h-9 w-9 shrink-0 rounded-xl bg-po1/20 grid place-items-center text-py1">
+            <div className="FeatureIcon h-9 w-9 shrink-0 rounded-xl bg-po1/20 grid place-items-center text-po1">
               {feature.icon}
             </div>
             <div>

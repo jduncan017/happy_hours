@@ -3,6 +3,7 @@ import { createAdminClient } from '@/lib/supabase/admin';
 import { NextResponse } from 'next/server';
 import { fetchOgImage } from '@/utils/fetchOgImage';
 import { downloadAndStoreRestaurantImage } from '@/lib/storage/restaurantImages';
+import { normalizeImageUrl } from '@/utils/image/normalizeImageUrl';
 
 const FALLBACK_URL = '/photo-missing.webp';
 
@@ -51,7 +52,9 @@ export async function GET(
     try {
       const scraped = await fetchOgImage(restaurant.website);
       if (scraped && scraped !== 'Image Not Found') {
-        ogImageUrl = scraped;
+        // Some sites serve protocol-relative URLs (//cdn/foo). Coerce to https.
+        const normalized = normalizeImageUrl(scraped, '');
+        ogImageUrl = normalized || null;
       }
     } catch (error) {
       console.error('Error fetching OG image:', error);

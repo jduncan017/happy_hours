@@ -4,6 +4,7 @@ import Image from "next/image";
 import Link from "next/link";
 import HamburgerIcon from "./hamburgerMenu/hamburgerIcon";
 import UserMenu from "./auth/UserMenu";
+import InstallAppButton from "./SmallComponents/InstallAppButton";
 
 const NavBar = () => {
   const [mobileActive, setMobileActive] = useState(false);
@@ -62,7 +63,7 @@ const NavBar = () => {
           mobileActive ? "h-[260px] rounded-b-xl" : "h-[74px]"
         } ${"MobileNav sticky top-0 z-30 flex w-full flex-col justify-center overflow-hidden bg-black px-4 py-3 font-sans transition-all duration-400 sm:hidden"} `}
       >
-        <div className="NavBar flex w-full items-center justify-between gap-5">
+        <div className="NavBar flex w-full items-center justify-between gap-3">
           <div className="LogoSection flex h-full">
             <Link
               href="/"
@@ -77,7 +78,10 @@ const NavBar = () => {
               />
             </Link>
           </div>
-          <HamburgerIcon onToggleMenu={toggleMenu} menuOpen={mobileActive} />
+          <div className="flex items-center gap-2">
+            <InstallAppButton />
+            <HamburgerIcon onToggleMenu={toggleMenu} menuOpen={mobileActive} />
+          </div>
         </div>
         {mobileActive && renderMenu()}
       </div>

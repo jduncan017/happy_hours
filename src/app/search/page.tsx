@@ -5,11 +5,11 @@ import type { Metadata } from 'next';
 // Since SearchPage uses "use client", we need to handle metadata differently
 // The layout.tsx template will handle the title
 export const metadata: Metadata = {
-  title: "Search Happy Hours",
+  title: "Happy Hour Finder",
   description:
-    "Search and filter Denver's best happy hour deals. Find restaurants and bars by current time, today's specials, location, and cuisine type. 90+ venues to explore!",
+    "Filter Denver happy hours by time, neighborhood, and cuisine. Find what's open right now across 90+ verified bars and restaurants.",
   alternates: {
-    canonical: '/search',
+    canonical: "/search",
   },
 };
 

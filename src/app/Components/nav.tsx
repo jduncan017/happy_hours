@@ -19,7 +19,7 @@ const NavBar = () => {
     { text: "Contact", href: "/contact" },
   ];
 
-  const renderMenu = () => {
+  const renderMenu = ({ showInstall = false }: { showInstall?: boolean } = {}) => {
     return (
       <div className="LinksContainer mt-6 flex flex-col gap-6 sm:mt-0 sm:flex-row sm:items-center sm:gap-8">
         {links.map((link, index) => (
@@ -34,6 +34,11 @@ const NavBar = () => {
           </Link>
         ))}
         <UserMenu />
+        {showInstall && (
+          <div className="sm:hidden">
+            <InstallAppButton />
+          </div>
+        )}
       </div>
     );
   };
@@ -60,7 +65,7 @@ const NavBar = () => {
       {/* Mobile Menu */}
       <div
         className={` ${
-          mobileActive ? "h-[260px] rounded-b-xl" : "h-[74px]"
+          mobileActive ? "h-[310px] rounded-b-xl" : "h-[74px]"
         } ${"MobileNav sticky top-0 z-30 flex w-full flex-col justify-center overflow-hidden bg-black px-4 py-3 font-sans transition-all duration-400 sm:hidden"} `}
       >
         <div className="NavBar flex w-full items-center justify-between gap-3">
@@ -79,11 +84,10 @@ const NavBar = () => {
             </Link>
           </div>
           <div className="flex items-center gap-2">
-            <InstallAppButton />
             <HamburgerIcon onToggleMenu={toggleMenu} menuOpen={mobileActive} />
           </div>
         </div>
-        {mobileActive && renderMenu()}
+        {mobileActive && renderMenu({ showInstall: true })}
       </div>
     </nav>
   );

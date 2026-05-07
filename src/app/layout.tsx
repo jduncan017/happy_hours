@@ -58,6 +58,19 @@ export const metadata = {
     },
   },
   category: "food and drink",
+  icons: {
+    icon: [
+      { url: "/icons/icon-32.png", media: "(prefers-color-scheme: light)" },
+      { url: "/icons/icon-32-dark.png", media: "(prefers-color-scheme: dark)" },
+    ],
+    apple: [
+      { url: "/apple-icon.png" },
+      {
+        url: "/icons/apple-icon-dark.png",
+        media: "(prefers-color-scheme: dark)",
+      },
+    ],
+  },
   openGraph: {
     type: "website",
     locale: "en_US",

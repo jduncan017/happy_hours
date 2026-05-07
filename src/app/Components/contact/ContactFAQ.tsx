@@ -117,6 +117,8 @@ export function FAQSection({
             >
               <button
                 onClick={() => toggleItem(index)}
+                aria-expanded={isOpen}
+                aria-controls={`faq-panel-${index}`}
                 className="w-full px-6 py-4 text-left flex items-center justify-between bg-white hover:bg-gray-50 transition-colors"
               >
                 <h3 className="font-semibold text-gray-900 pr-4">
@@ -128,13 +130,17 @@ export function FAQSection({
                   <ChevronDown className="w-5 h-5 text-gray-500 flex-shrink-0" />
                 )}
               </button>
-              {isOpen && (
-                <div className="px-6 pb-4 bg-gray-50">
-                  <p className="text-gray-600 leading-relaxed text-start">
-                    {item.answer}
-                  </p>
-                </div>
-              )}
+              <div
+                id={`faq-panel-${index}`}
+                role="region"
+                className={`bg-gray-50 overflow-hidden transition-all duration-200 ${
+                  isOpen ? "max-h-[500px] px-6 pb-4 pt-0" : "max-h-0"
+                }`}
+              >
+                <p className="text-gray-600 leading-relaxed text-start">
+                  {item.answer}
+                </p>
+              </div>
             </div>
           );
         })}

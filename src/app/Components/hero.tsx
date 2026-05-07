@@ -59,7 +59,7 @@ export default function HeroSection() {
           onSubmit={() => router.push("/search")}
         />
         <p className="BetaNote m-auto text-center italic text-gray-400">
-          Currently in beta · Verified weekly
+          Verified weekly
         </p>
       </div>
     </div>

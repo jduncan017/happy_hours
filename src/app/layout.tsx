@@ -19,18 +19,30 @@ if (!process.env.NEXT_PUBLIC_BASE_URL) {
   throw new Error("NEXT_PUBLIC_BASE_URL is not defined");
 }
 
+const siteDescription =
+  "Every Denver happy hour, sorted by time, neighborhood, and what you're craving. Verified weekly. Free, no signup.";
+
 export const metadata = {
   metadataBase: new URL(process.env.NEXT_PUBLIC_BASE_URL),
   title: {
-    default: "HappyHourHunt Denver | Find Denver Happy Hours",
-    template: "%s | HappyHourHunt Denver",
+    default: "HappyHourHunt Denver — Find Denver Happy Hours",
+    template: "%s · HappyHourHunt Denver",
   },
-  // Note: Meta keywords are ignored by modern search engines
   authors: [{ name: "Joshua Duncan" }],
   creator: "Joshua Duncan",
   publisher: "DigitalNova LLC",
-  description:
-    "Find the best happy hour deals in Denver! Search 90+ restaurants and bars by location, time, and cuisine. Currently featuring downtown, LoDo, RiNo, and Capitol Hill locations.",
+  description: siteDescription,
+  applicationName: "HappyHourHunt Denver",
+  keywords: [
+    "Denver happy hour",
+    "happy hour Denver",
+    "Denver bars",
+    "Denver restaurants",
+    "LoDo happy hour",
+    "RiNo happy hour",
+    "Capitol Hill happy hour",
+    "drink specials Denver",
+  ],
   alternates: {
     canonical: "/",
   },
@@ -45,37 +57,28 @@ export const metadata = {
       "max-snippet": -1,
     },
   },
-  verification: {
-    // google: 'your-google-verification-code', // Add when you set up Google Search Console
-  },
   category: "food and drink",
   openGraph: {
     type: "website",
     locale: "en_US",
     url: process.env.NEXT_PUBLIC_BASE_URL,
-    siteName: "Happy Hour Hunt Denver",
-    title: "Happy Hour Hunt Denver | Find Happy Hours & Drink Specials",
-    description:
-      "Find the best happy hour deals in Denver! Search 90+ restaurants and bars by location, time, and cuisine. Downtown, LoDo, RiNo, Capitol Hill & more.",
+    siteName: "HappyHourHunt Denver",
+    title: "HappyHourHunt Denver — Find Denver Happy Hours",
+    description: siteDescription,
     images: [
       {
         url: `${process.env.NEXT_PUBLIC_BASE_URL}/opengraph.png`,
         width: 1200,
         height: 630,
-        alt: "Happy Hour Hunt Denver - Find the best happy hour deals",
+        alt: "HappyHourHunt Denver — find the best happy hour deals in Denver",
       },
     ],
   },
   twitter: {
     card: "summary_large_image",
-    title: "Happy Hour Hunt Denver | Find Happy Hours & Drink Specials",
-    description:
-      "Find the best happy hour deals in Denver! Search 90+ restaurants and bars by location, time, and cuisine.",
+    title: "HappyHourHunt Denver — Find Denver Happy Hours",
+    description: siteDescription,
     images: [`${process.env.NEXT_PUBLIC_BASE_URL}/opengraph.png`],
-    creator: "@your_twitter_handle", // Add your Twitter handle
-  },
-  other: {
-    "google-site-verification": "pending", // Add when you set up Google Search Console
   },
 };
 

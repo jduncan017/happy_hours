@@ -7,7 +7,10 @@ export default function robots(): MetadataRoute.Robots {
     rules: {
       userAgent: '*',
       allow: '/',
-      disallow: ['/api/', '/admin/'], // Block API routes and any admin routes
+      // Block transactional/private surfaces. /api and /admin shouldn't be
+      // crawled at all; auth/profile/welcome are user-state-dependent so
+      // they have no useful index value and just dilute crawl budget.
+      disallow: ['/api/', '/admin/', '/auth/', '/profile/', '/welcome/'],
     },
     sitemap: `${baseUrl}/sitemap.xml`,
   };

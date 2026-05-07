@@ -20,9 +20,9 @@ const landingFAQs: FAQItem[] = [
       "We verify happy hour times against each restaurant's website weekly, and Denverites can flag stale info from any listing. Restaurants change their hours — we keep up.",
   },
   {
-    question: "Why isn't [my favorite spot] listed?",
+    question: "Why isn't my favorite spot listed?",
     answer:
-      "We add restaurants on request. Submit one — if it has a real, recurring happy hour, it'll show up after a quick review.",
+      "We add restaurants on request. Submit one through the contact form — if it has a real, recurring happy hour, it'll show up after a quick review.",
   },
   {
     question: "Do happy hours really change that often?",
@@ -63,7 +63,7 @@ export default function LandingPage() {
               <SiteButton text="Find a happy hour" variant="orange" size="lg" />
             </Link>
             <Link href="/submit">
-              <SiteButton text="Submit a spot" variant="outline" size="lg" />
+              <SiteButton text="Submit a spot" variant="white" size="lg" />
             </Link>
           </div>
         </div>
